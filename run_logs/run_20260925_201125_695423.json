@@ -1,0 +1,1765 @@
+{
+  "run_id": "20260925_201125_695423",
+  "started_at": "2026-09-25T14:41:25.695455+00:00",
+  "finished_at": "2026-09-25T14:43:12.580963+00:00",
+  "project_dir": "/Users/rahulrg/Kea-Data/DuckLake/POC2",
+  "data_location": "/Users/rahulrg/Kea-Data/DuckLake/POC2/simulation/lake_data",
+  "ducklake_metadata_location": "/Users/rahulrg/Kea-Data/DuckLake/POC2/simulation/simulation.ducklake",
+  "overall_status": "passed",
+  "steps": [
+    {
+      "name": "Install dbt-duckdb",
+      "command": [
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-03c2y6do/venv/bin/python",
+        "-m",
+        "pip",
+        "install",
+        "dbt-duckdb"
+      ],
+      "return_code": 0,
+      "status": "passed",
+      "duration_seconds": 93.66836158296792,
+      "error": null
+    },
+    {
+      "name": "Clone DuckLake metadata catalog",
+      "command": [
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-03c2y6do/venv/bin/python",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-03c2y6do/clone_ducklake_catalog.py",
+        "/Users/rahulrg/Kea-Data/DuckLake/POC2/simulation/simulation.ducklake",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-03c2y6do/simulation.ducklake"
+      ],
+      "return_code": 0,
+      "status": "passed",
+      "duration_seconds": 0.5030046249739826,
+      "error": null
+    },
+    {
+      "name": "Install project packages (dbt deps)",
+      "command": [
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-03c2y6do/venv/bin/dbt",
+        "deps",
+        "--project-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-03c2y6do/project",
+        "--profiles-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-03c2y6do/profiles",
+        "--log-path",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-03c2y6do/dbt_logs"
+      ],
+      "return_code": 0,
+      "status": "passed",
+      "duration_seconds": 2.630604666948784,
+      "error": null
+    },
+    {
+      "name": "Parse dbt DAG",
+      "command": [
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-03c2y6do/venv/bin/dbt",
+        "parse",
+        "--project-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-03c2y6do/project",
+        "--profiles-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-03c2y6do/profiles",
+        "--log-path",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-03c2y6do/dbt_logs"
+      ],
+      "return_code": 0,
+      "status": "passed",
+      "duration_seconds": 1.647202665975783,
+      "error": null
+    },
+    {
+      "name": "Validate rerun-safe materializations",
+      "command": [],
+      "return_code": 0,
+      "status": "passed",
+      "duration_seconds": 0.0,
+      "error": null
+    },
+    {
+      "name": "Materialize dbt seeds",
+      "command": [
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-03c2y6do/venv/bin/dbt",
+        "seed",
+        "--project-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-03c2y6do/project",
+        "--profiles-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-03c2y6do/profiles",
+        "--log-path",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-03c2y6do/dbt_logs"
+      ],
+      "return_code": 0,
+      "status": "passed",
+      "duration_seconds": 1.2448897500289604,
+      "error": null
+    },
+    {
+      "name": "Materialize dbt models (single dbt run)",
+      "command": [
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-03c2y6do/venv/bin/dbt",
+        "run",
+        "--project-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-03c2y6do/project",
+        "--profiles-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-03c2y6do/profiles",
+        "--log-path",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-03c2y6do/dbt_logs"
+      ],
+      "return_code": 0,
+      "status": "passed",
+      "duration_seconds": 1.4583571249968372,
+      "error": null
+    },
+    {
+      "name": "Materialize dbt snapshots",
+      "command": [
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-03c2y6do/venv/bin/dbt",
+        "snapshot",
+        "--project-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-03c2y6do/project",
+        "--profiles-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-03c2y6do/profiles",
+        "--log-path",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-03c2y6do/dbt_logs"
+      ],
+      "return_code": 0,
+      "status": "passed",
+      "duration_seconds": 1.0787080420413986,
+      "error": null
+    },
+    {
+      "name": "Run dbt tests",
+      "command": [
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-03c2y6do/venv/bin/dbt",
+        "test",
+        "--project-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-03c2y6do/project",
+        "--profiles-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-03c2y6do/profiles",
+        "--log-path",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-03c2y6do/dbt_logs"
+      ],
+      "return_code": 0,
+      "status": "passed",
+      "duration_seconds": 1.7123318340163678,
+      "error": null
+    },
+    {
+      "name": "Inspect materialized catalog (dbt docs generate)",
+      "command": [
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-03c2y6do/venv/bin/dbt",
+        "docs",
+        "generate",
+        "--project-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-03c2y6do/project",
+        "--profiles-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-03c2y6do/profiles",
+        "--log-path",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-03c2y6do/dbt_logs"
+      ],
+      "return_code": 0,
+      "status": "passed",
+      "duration_seconds": 1.3791205419693142,
+      "error": null
+    }
+  ],
+  "model_test_results": [
+    {
+      "node": "seed.store_poc.store_orders",
+      "model": "store_orders",
+      "resource_type": "seed",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "main.store_orders",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.038465023040771484,
+      "message": "INSERT 20",
+      "error_message": ""
+    },
+    {
+      "node": "model.store_poc.stg_store_orders",
+      "model": "stg_store_orders",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"stg_store_orders\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.06580400466918945,
+      "message": "OK",
+      "error_message": ""
+    },
+    {
+      "node": "model.store_poc.dim_customer",
+      "model": "dim_customer",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"dim_customer\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.028928041458129883,
+      "message": "OK",
+      "error_message": ""
+    },
+    {
+      "node": "model.store_poc.dim_date",
+      "model": "dim_date",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"dim_date\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.030035972595214844,
+      "message": "OK",
+      "error_message": ""
+    },
+    {
+      "node": "model.store_poc.dim_payment_method",
+      "model": "dim_payment_method",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"dim_payment_method\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.028176069259643555,
+      "message": "OK",
+      "error_message": ""
+    },
+    {
+      "node": "model.store_poc.dim_product",
+      "model": "dim_product",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"dim_product\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.028124094009399414,
+      "message": "OK",
+      "error_message": ""
+    },
+    {
+      "node": "model.store_poc.dim_store",
+      "model": "dim_store",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"dim_store\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.02849578857421875,
+      "message": "OK",
+      "error_message": ""
+    },
+    {
+      "node": "model.store_poc.fact_order",
+      "model": "fact_order",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"fact_order\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.03802990913391113,
+      "message": "OK",
+      "error_message": ""
+    },
+    {
+      "node": "model.store_poc.fact_sales_line",
+      "model": "fact_sales_line",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"fact_sales_line\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.03927206993103027,
+      "message": "OK",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.not_null_dim_customer_customer_city.98bef70201",
+      "model": "not_null_dim_customer_customer_city",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_dim_customer_customer_city",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.018758058547973633,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.not_null_dim_customer_customer_id.9775012dfc",
+      "model": "not_null_dim_customer_customer_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_dim_customer_customer_id",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.00621485710144043,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.not_null_dim_customer_customer_name.a25ec89461",
+      "model": "not_null_dim_customer_customer_name",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_dim_customer_customer_name",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.005640268325805664,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.not_null_dim_date_order_date.c74c6a4671",
+      "model": "not_null_dim_date_order_date",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_dim_date_order_date",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.00616908073425293,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.not_null_dim_payment_method_payment_method.f126149731",
+      "model": "not_null_dim_payment_method_payment_method",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_dim_payment_method_payment_method",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.005846977233886719,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.not_null_dim_product_product_category.942011c723",
+      "model": "not_null_dim_product_product_category",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_dim_product_product_category",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.00613093376159668,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.not_null_dim_product_product_id.02b1f06816",
+      "model": "not_null_dim_product_product_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_dim_product_product_id",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.005568981170654297,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.not_null_dim_product_product_name.1b672622d5",
+      "model": "not_null_dim_product_product_name",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_dim_product_product_name",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.0065310001373291016,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.not_null_dim_store_store_id.8cb7c6ace0",
+      "model": "not_null_dim_store_store_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_dim_store_store_id",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.006011009216308594,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.not_null_dim_store_store_name.95e36bff74",
+      "model": "not_null_dim_store_store_name",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_dim_store_store_name",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.006174802780151367,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.not_null_fact_order_customer_id.e16387900a",
+      "model": "not_null_fact_order_customer_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_fact_order_customer_id",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.0056798458099365234,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.not_null_fact_order_line_count.5042c269c7",
+      "model": "not_null_fact_order_line_count",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_fact_order_line_count",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.0058553218841552734,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.not_null_fact_order_order_date.16ef740db0",
+      "model": "not_null_fact_order_order_date",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_fact_order_order_date",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.006094217300415039,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.not_null_fact_order_order_id.cc67e0bb93",
+      "model": "not_null_fact_order_order_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_fact_order_order_id",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.0070459842681884766,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.not_null_fact_order_order_total.f67622bff7",
+      "model": "not_null_fact_order_order_total",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_fact_order_order_total",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.00558781623840332,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.not_null_fact_order_payment_method.0664a70c71",
+      "model": "not_null_fact_order_payment_method",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_fact_order_payment_method",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.005728006362915039,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.not_null_fact_order_store_id.fffb69163c",
+      "model": "not_null_fact_order_store_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_fact_order_store_id",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.005588054656982422,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.not_null_fact_order_total_quantity.f10f6ec193",
+      "model": "not_null_fact_order_total_quantity",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_fact_order_total_quantity",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.012803077697753906,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.not_null_fact_sales_line_customer_id.8c79aee610",
+      "model": "not_null_fact_sales_line_customer_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_fact_sales_line_customer_id",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.005982875823974609,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.not_null_fact_sales_line_line_amount.64ab66e944",
+      "model": "not_null_fact_sales_line_line_amount",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_fact_sales_line_line_amount",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.005795001983642578,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.not_null_fact_sales_line_order_date.0af6b2bc1d",
+      "model": "not_null_fact_sales_line_order_date",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_fact_sales_line_order_date",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.005675077438354492,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.not_null_fact_sales_line_order_id.e47bfcd7b1",
+      "model": "not_null_fact_sales_line_order_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_fact_sales_line_order_id",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.006044149398803711,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.not_null_fact_sales_line_payment_method.814d3d2c74",
+      "model": "not_null_fact_sales_line_payment_method",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_fact_sales_line_payment_method",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.00577998161315918,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.not_null_fact_sales_line_product_id.2461c0a7fe",
+      "model": "not_null_fact_sales_line_product_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_fact_sales_line_product_id",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.0059909820556640625,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.not_null_fact_sales_line_quantity.361807e91f",
+      "model": "not_null_fact_sales_line_quantity",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_fact_sales_line_quantity",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.005637168884277344,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.not_null_fact_sales_line_store_id.c0d34fd5ec",
+      "model": "not_null_fact_sales_line_store_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_fact_sales_line_store_id",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.005784034729003906,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.not_null_fact_sales_line_unit_price.faa85feb68",
+      "model": "not_null_fact_sales_line_unit_price",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_fact_sales_line_unit_price",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.00569605827331543,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.not_null_stg_store_orders_customer_id.26e75fad89",
+      "model": "not_null_stg_store_orders_customer_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_stg_store_orders_customer_id",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.0060536861419677734,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.not_null_stg_store_orders_customer_name.30bcc65e6a",
+      "model": "not_null_stg_store_orders_customer_name",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_stg_store_orders_customer_name",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.005403995513916016,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.not_null_stg_store_orders_line_amount.6354f264c6",
+      "model": "not_null_stg_store_orders_line_amount",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_stg_store_orders_line_amount",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.00569915771484375,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.not_null_stg_store_orders_order_date.558096dada",
+      "model": "not_null_stg_store_orders_order_date",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_stg_store_orders_order_date",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.005564212799072266,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.not_null_stg_store_orders_order_id.4bcaf5b15d",
+      "model": "not_null_stg_store_orders_order_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_stg_store_orders_order_id",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.0063550472259521484,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.not_null_stg_store_orders_payment_method.709a65a0da",
+      "model": "not_null_stg_store_orders_payment_method",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_stg_store_orders_payment_method",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.0056629180908203125,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.not_null_stg_store_orders_product_id.e32a992d9a",
+      "model": "not_null_stg_store_orders_product_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_stg_store_orders_product_id",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.005923748016357422,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.not_null_stg_store_orders_product_name.06e01213a3",
+      "model": "not_null_stg_store_orders_product_name",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_stg_store_orders_product_name",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.0054149627685546875,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.not_null_stg_store_orders_quantity.927f7c0df1",
+      "model": "not_null_stg_store_orders_quantity",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_stg_store_orders_quantity",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.0058100223541259766,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.not_null_stg_store_orders_store_id.dde8699ab7",
+      "model": "not_null_stg_store_orders_store_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_stg_store_orders_store_id",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.0059337615966796875,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.not_null_stg_store_orders_unit_price.e9b9e82214",
+      "model": "not_null_stg_store_orders_unit_price",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_stg_store_orders_unit_price",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.006685018539428711,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.order_total_matches_lines",
+      "model": "order_total_matches_lines",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.order_total_matches_lines",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.011720895767211914,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.relationships_fact_order_customer_id__customer_id__ref_dim_customer_.abf31da454",
+      "model": "relationships_fact_order_3115c41e81fe34567bb59c38c0ac7921",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.relationships_fact_order_3115c41e81fe34567bb59c38c0ac7921",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.01750326156616211,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.relationships_fact_order_order_date__order_date__ref_dim_date_.060ac10f9a",
+      "model": "relationships_fact_order_order_date__order_date__ref_dim_date_",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.relationships_fact_order_order_date__order_date__ref_dim_date_",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.015485286712646484,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.relationships_fact_order_payment_method__payment_method__ref_dim_payment_method_.91553d22b0",
+      "model": "relationships_fact_order_3e934fa0fba4335e05a0251ca6c26f41",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.relationships_fact_order_3e934fa0fba4335e05a0251ca6c26f41",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.015239953994750977,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.relationships_fact_order_store_id__store_id__ref_dim_store_.b0ea2ba535",
+      "model": "relationships_fact_order_store_id__store_id__ref_dim_store_",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.relationships_fact_order_store_id__store_id__ref_dim_store_",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.014842033386230469,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.relationships_fact_sales_line_customer_id__customer_id__ref_dim_customer_.3edc8b6f14",
+      "model": "relationships_fact_sales_line_d35ceef1bda0b1910e05d283ccb6b333",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.relationships_fact_sales_line_d35ceef1bda0b1910e05d283ccb6b333",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.010133028030395508,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.relationships_fact_sales_line_order_date__order_date__ref_dim_date_.db9435a392",
+      "model": "relationships_fact_sales_line_0e37472cafb57c8ab24a550b52961aa7",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.relationships_fact_sales_line_0e37472cafb57c8ab24a550b52961aa7",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.009840965270996094,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.relationships_fact_sales_line_payment_method__payment_method__ref_dim_payment_method_.48f1ebb4ee",
+      "model": "relationships_fact_sales_line_003c1011fa26f2277d57a6c1349eeeeb",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.relationships_fact_sales_line_003c1011fa26f2277d57a6c1349eeeeb",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.00927424430847168,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.relationships_fact_sales_line_product_id__product_id__ref_dim_product_.7e858b40c3",
+      "model": "relationships_fact_sales_line_531fc253359e26f0077bd700527d3e2d",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.relationships_fact_sales_line_531fc253359e26f0077bd700527d3e2d",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.015707731246948242,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.relationships_fact_sales_line_store_id__store_id__ref_dim_store_.74580f7944",
+      "model": "relationships_fact_sales_line_dfebb816cfedab48ee942c3a3200b079",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.relationships_fact_sales_line_dfebb816cfedab48ee942c3a3200b079",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.009783029556274414,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.unique_dim_customer_customer_id.b42affccd1",
+      "model": "unique_dim_customer_customer_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.unique_dim_customer_customer_id",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.007531166076660156,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.unique_dim_date_order_date.da0adae723",
+      "model": "unique_dim_date_order_date",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.unique_dim_date_order_date",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.006657123565673828,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.unique_dim_payment_method_payment_method.32f7241d9a",
+      "model": "unique_dim_payment_method_payment_method",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.unique_dim_payment_method_payment_method",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.006525993347167969,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.unique_dim_product_product_id.46495bf7fe",
+      "model": "unique_dim_product_product_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.unique_dim_product_product_id",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.006555795669555664,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.unique_dim_store_store_id.90e408e197",
+      "model": "unique_dim_store_store_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.unique_dim_store_store_id",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.0068361759185791016,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "test.store_poc.unique_fact_order_order_id.1ffa56411b",
+      "model": "unique_fact_order_order_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.unique_fact_order_order_id",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.006694793701171875,
+      "message": "",
+      "error_message": ""
+    },
+    {
+      "node": "unit_test.store_poc.fact_order.fact_order_sums_line_amounts",
+      "model": "unit_test.store_poc.fact_order.fact_order_sums_line_amounts",
+      "resource_type": "unit_test",
+      "object_type": "unit_test",
+      "database": "",
+      "schema": "",
+      "relation_name": "unit_test.store_poc.fact_order.fact_order_sums_line_amounts",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.06917715072631836,
+      "message": "",
+      "error_message": ""
+    }
+  ],
+  "model_executions": [
+    {
+      "node": "seed.store_poc.store_orders",
+      "model": "store_orders",
+      "resource_type": "seed",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "main.store_orders",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.038465023040771484,
+      "message": "INSERT 20",
+      "error_message": ""
+    },
+    {
+      "node": "model.store_poc.stg_store_orders",
+      "model": "stg_store_orders",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"stg_store_orders\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.06580400466918945,
+      "message": "OK",
+      "error_message": ""
+    },
+    {
+      "node": "model.store_poc.dim_customer",
+      "model": "dim_customer",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"dim_customer\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.028928041458129883,
+      "message": "OK",
+      "error_message": ""
+    },
+    {
+      "node": "model.store_poc.dim_date",
+      "model": "dim_date",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"dim_date\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.030035972595214844,
+      "message": "OK",
+      "error_message": ""
+    },
+    {
+      "node": "model.store_poc.dim_payment_method",
+      "model": "dim_payment_method",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"dim_payment_method\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.028176069259643555,
+      "message": "OK",
+      "error_message": ""
+    },
+    {
+      "node": "model.store_poc.dim_product",
+      "model": "dim_product",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"dim_product\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.028124094009399414,
+      "message": "OK",
+      "error_message": ""
+    },
+    {
+      "node": "model.store_poc.dim_store",
+      "model": "dim_store",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"dim_store\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.02849578857421875,
+      "message": "OK",
+      "error_message": ""
+    },
+    {
+      "node": "model.store_poc.fact_order",
+      "model": "fact_order",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"fact_order\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.03802990913391113,
+      "message": "OK",
+      "error_message": ""
+    },
+    {
+      "node": "model.store_poc.fact_sales_line",
+      "model": "fact_sales_line",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"fact_sales_line\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.03927206993103027,
+      "message": "OK",
+      "error_message": ""
+    }
+  ],
+  "log_file": "/Users/rahulrg/Kea-Data/dbt_runner/run_logs/run_20260925_201125_695423.log",
+  "structured_log_file": "/Users/rahulrg/Kea-Data/dbt_runner/run_logs/run_20260925_201125_695423.events.jsonl",
+  "report_file": "/Users/rahulrg/Kea-Data/dbt_runner/run_logs/run_20260925_201125_695423.json",
+  "config_file": "/Users/rahulrg/Kea-Data/dbt_runner/runner_config.json",
+  "rerun_policy": "isolated clone of the source DuckLake catalog per run",
+  "sandbox_workspace": "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-03c2y6do",
+  "sandbox_cleanup_status": "cleaned",
+  "sandbox_catalog_status": "source catalog clone passed DAG validation",
+  "object_validation": {
+    "status": "passed",
+    "expected_objects": [
+      {
+        "unique_id": "model.store_poc.stg_store_orders",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "stg_store_orders",
+        "materialized": "table",
+        "expected_type": "table",
+        "columns": [
+          {
+            "name": "order_id",
+            "data_type": ""
+          },
+          {
+            "name": "order_date",
+            "data_type": ""
+          },
+          {
+            "name": "customer_id",
+            "data_type": ""
+          },
+          {
+            "name": "customer_name",
+            "data_type": ""
+          },
+          {
+            "name": "product_id",
+            "data_type": ""
+          },
+          {
+            "name": "product_name",
+            "data_type": ""
+          },
+          {
+            "name": "unit_price",
+            "data_type": ""
+          },
+          {
+            "name": "quantity",
+            "data_type": ""
+          },
+          {
+            "name": "store_id",
+            "data_type": ""
+          },
+          {
+            "name": "payment_method",
+            "data_type": ""
+          },
+          {
+            "name": "line_amount",
+            "data_type": ""
+          }
+        ]
+      },
+      {
+        "unique_id": "model.store_poc.dim_product",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "dim_product",
+        "materialized": "table",
+        "expected_type": "table",
+        "columns": [
+          {
+            "name": "product_id",
+            "data_type": ""
+          },
+          {
+            "name": "product_name",
+            "data_type": ""
+          },
+          {
+            "name": "product_category",
+            "data_type": ""
+          }
+        ]
+      },
+      {
+        "unique_id": "model.store_poc.fact_order",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "fact_order",
+        "materialized": "table",
+        "expected_type": "table",
+        "columns": [
+          {
+            "name": "order_id",
+            "data_type": ""
+          },
+          {
+            "name": "order_date",
+            "data_type": "date"
+          },
+          {
+            "name": "customer_id",
+            "data_type": ""
+          },
+          {
+            "name": "store_id",
+            "data_type": ""
+          },
+          {
+            "name": "payment_method",
+            "data_type": ""
+          },
+          {
+            "name": "line_count",
+            "data_type": ""
+          },
+          {
+            "name": "total_quantity",
+            "data_type": ""
+          },
+          {
+            "name": "order_total",
+            "data_type": ""
+          }
+        ]
+      },
+      {
+        "unique_id": "model.store_poc.dim_customer",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "dim_customer",
+        "materialized": "table",
+        "expected_type": "table",
+        "columns": [
+          {
+            "name": "customer_id",
+            "data_type": ""
+          },
+          {
+            "name": "customer_name",
+            "data_type": ""
+          },
+          {
+            "name": "customer_city",
+            "data_type": ""
+          }
+        ]
+      },
+      {
+        "unique_id": "model.store_poc.fact_sales_line",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "fact_sales_line",
+        "materialized": "table",
+        "expected_type": "table",
+        "columns": [
+          {
+            "name": "order_id",
+            "data_type": ""
+          },
+          {
+            "name": "order_date",
+            "data_type": "date"
+          },
+          {
+            "name": "customer_id",
+            "data_type": ""
+          },
+          {
+            "name": "product_id",
+            "data_type": ""
+          },
+          {
+            "name": "store_id",
+            "data_type": ""
+          },
+          {
+            "name": "payment_method",
+            "data_type": ""
+          },
+          {
+            "name": "quantity",
+            "data_type": ""
+          },
+          {
+            "name": "unit_price",
+            "data_type": ""
+          },
+          {
+            "name": "line_amount",
+            "data_type": ""
+          }
+        ]
+      },
+      {
+        "unique_id": "model.store_poc.dim_payment_method",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "dim_payment_method",
+        "materialized": "table",
+        "expected_type": "table",
+        "columns": [
+          {
+            "name": "payment_method",
+            "data_type": ""
+          }
+        ]
+      },
+      {
+        "unique_id": "model.store_poc.dim_date",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "dim_date",
+        "materialized": "table",
+        "expected_type": "table",
+        "columns": [
+          {
+            "name": "order_date",
+            "data_type": "date"
+          }
+        ]
+      },
+      {
+        "unique_id": "model.store_poc.dim_store",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "dim_store",
+        "materialized": "table",
+        "expected_type": "table",
+        "columns": [
+          {
+            "name": "store_id",
+            "data_type": ""
+          },
+          {
+            "name": "store_name",
+            "data_type": ""
+          }
+        ]
+      },
+      {
+        "unique_id": "seed.store_poc.store_orders",
+        "resource_type": "seed",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "store_orders",
+        "materialized": "seed",
+        "expected_type": "table",
+        "columns": []
+      }
+    ],
+    "actual_objects": [
+      {
+        "unique_id": "model.store_poc.dim_customer",
+        "resource_type": "",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "dim_customer",
+        "relation_type": "BASE TABLE",
+        "columns": [
+          {
+            "name": "customer_id",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "customer_name",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "customer_city",
+            "data_type": "VARCHAR"
+          }
+        ]
+      },
+      {
+        "unique_id": "model.store_poc.dim_date",
+        "resource_type": "",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "dim_date",
+        "relation_type": "BASE TABLE",
+        "columns": [
+          {
+            "name": "order_date",
+            "data_type": "DATE"
+          }
+        ]
+      },
+      {
+        "unique_id": "model.store_poc.dim_payment_method",
+        "resource_type": "",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "dim_payment_method",
+        "relation_type": "BASE TABLE",
+        "columns": [
+          {
+            "name": "payment_method",
+            "data_type": "VARCHAR"
+          }
+        ]
+      },
+      {
+        "unique_id": "model.store_poc.dim_product",
+        "resource_type": "",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "dim_product",
+        "relation_type": "BASE TABLE",
+        "columns": [
+          {
+            "name": "product_id",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "product_name",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "product_category",
+            "data_type": "VARCHAR"
+          }
+        ]
+      },
+      {
+        "unique_id": "model.store_poc.dim_store",
+        "resource_type": "",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "dim_store",
+        "relation_type": "BASE TABLE",
+        "columns": [
+          {
+            "name": "store_id",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "store_name",
+            "data_type": "VARCHAR"
+          }
+        ]
+      },
+      {
+        "unique_id": "model.store_poc.fact_order",
+        "resource_type": "",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "fact_order",
+        "relation_type": "BASE TABLE",
+        "columns": [
+          {
+            "name": "order_id",
+            "data_type": "INTEGER"
+          },
+          {
+            "name": "order_date",
+            "data_type": "DATE"
+          },
+          {
+            "name": "customer_id",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "store_id",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "payment_method",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "line_count",
+            "data_type": "BIGINT"
+          },
+          {
+            "name": "total_quantity",
+            "data_type": "HUGEINT"
+          },
+          {
+            "name": "order_total",
+            "data_type": "DECIMAL(38,2)"
+          }
+        ]
+      },
+      {
+        "unique_id": "model.store_poc.fact_sales_line",
+        "resource_type": "",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "fact_sales_line",
+        "relation_type": "BASE TABLE",
+        "columns": [
+          {
+            "name": "order_id",
+            "data_type": "INTEGER"
+          },
+          {
+            "name": "order_date",
+            "data_type": "DATE"
+          },
+          {
+            "name": "customer_id",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "product_id",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "store_id",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "payment_method",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "quantity",
+            "data_type": "INTEGER"
+          },
+          {
+            "name": "unit_price",
+            "data_type": "DECIMAL(10,2)"
+          },
+          {
+            "name": "line_amount",
+            "data_type": "DECIMAL(10,2)"
+          }
+        ]
+      },
+      {
+        "unique_id": "model.store_poc.stg_store_orders",
+        "resource_type": "",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "stg_store_orders",
+        "relation_type": "BASE TABLE",
+        "columns": [
+          {
+            "name": "order_id",
+            "data_type": "INTEGER"
+          },
+          {
+            "name": "order_date",
+            "data_type": "DATE"
+          },
+          {
+            "name": "customer_id",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "customer_name",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "customer_city",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "product_id",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "product_name",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "product_category",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "unit_price",
+            "data_type": "DECIMAL(10,2)"
+          },
+          {
+            "name": "quantity",
+            "data_type": "INTEGER"
+          },
+          {
+            "name": "store_id",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "store_name",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "payment_method",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "line_amount",
+            "data_type": "DECIMAL(10,2)"
+          }
+        ]
+      },
+      {
+        "unique_id": "seed.store_poc.store_orders",
+        "resource_type": "",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "store_orders",
+        "relation_type": "BASE TABLE",
+        "columns": [
+          {
+            "name": "order_id",
+            "data_type": "BIGINT"
+          },
+          {
+            "name": "order_date",
+            "data_type": "DATE"
+          },
+          {
+            "name": "customer_id",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "customer_name",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "customer_city",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "product_id",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "product_name",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "product_category",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "unit_price",
+            "data_type": "DOUBLE"
+          },
+          {
+            "name": "quantity",
+            "data_type": "BIGINT"
+          },
+          {
+            "name": "store_id",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "store_name",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "payment_method",
+            "data_type": "VARCHAR"
+          }
+        ]
+      }
+    ],
+    "failures": []
+  },
+  "failure_details": []
+}

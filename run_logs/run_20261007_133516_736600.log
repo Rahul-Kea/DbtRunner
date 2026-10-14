@@ -1,0 +1,31 @@
+dbt runner execution 20261007_133516_736600
+Project input: /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261007_133516_736600/project/dbt_project
+Database input: /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261007_133516_736600/lake.ducklake (ducklake)
+Data input: /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261007_133516_736600/lake_data
+Execution mode: isolated temporary sandbox with safe repeated execution verification.
+
+--- Clone DuckLake metadata catalog ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-38uw3709/clone_ducklake_catalog.py /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261007_133516_736600/lake.ducklake /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-38uw3709/simulation.ducklake
+Cloned DuckLake metadata catalog to /private/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-38uw3709/simulation.ducklake
+
+[exit code: 0; duration: 0.10s]
+
+--- Parse dbt DAG ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/dbt --no-version-check parse --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-38uw3709/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-38uw3709/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-38uw3709/dbt_logs
+[0m08:05:19  Running with dbt=1.12.5
+[0m08:05:19  Registered adapter: duckdb=1.11.0
+[0m08:05:19  Unable to do partial parsing because saved manifest not found. Starting full parse.
+[0m08:05:20  Performance info: /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-38uw3709/target/perf_info.json
+
+[exit code: 0; duration: 2.27s]
+
+--- Compile dbt models & validate references (dbt compile) ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/dbt --no-version-check compile --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-38uw3709/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-38uw3709/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-38uw3709/dbt_logs
+[0m08:05:21  Running with dbt=1.12.5
+[0m08:05:21  Registered adapter: duckdb=1.11.0
+[0m08:05:22  Found 18 models, 5 sources, 500 macros
+[0m08:05:22  
+[0m08:05:22  Concurrency: 1 threads (target='runner')
+[0m08:05:22  
+
+[exit code: 0; duration: 1.68s]

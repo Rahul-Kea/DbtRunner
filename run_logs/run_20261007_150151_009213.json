@@ -1,0 +1,792 @@
+{
+  "run_id": "20261007_150151_009213",
+  "started_at": "2026-10-07T09:31:52.700690+00:00",
+  "finished_at": "2026-10-07T09:32:00.406717+00:00",
+  "project_dir": "/Users/rahulrg/Kea-Data/dbt_runner/uploads/20261007_150151_009213/project",
+  "data_location": "/Users/rahulrg/Kea-Data/dbt_runner/uploads/20261007_150151_009213/lake_data",
+  "ducklake_metadata_location": "/Users/rahulrg/Kea-Data/dbt_runner/uploads/20261007_150151_009213/lake.ducklake",
+  "overall_status": "passed",
+  "steps": [
+    {
+      "name": "Clone DuckLake metadata catalog",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.13/bin/python3",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-v565ip40/clone_ducklake_catalog.py",
+        "/Users/rahulrg/Kea-Data/dbt_runner/uploads/20261007_150151_009213/lake.ducklake",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-v565ip40/simulation.ducklake"
+      ],
+      "return_code": 0,
+      "status": "passed",
+      "duration_seconds": 0.1397024169564247,
+      "error": null
+    },
+    {
+      "name": "Install project packages (dbt deps)",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.13/bin/dbt",
+        "--no-version-check",
+        "deps",
+        "--project-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-v565ip40/project",
+        "--profiles-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-v565ip40/profiles",
+        "--log-path",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-v565ip40/dbt_logs"
+      ],
+      "return_code": 0,
+      "status": "passed",
+      "duration_seconds": 2.6276410829741508,
+      "error": null
+    },
+    {
+      "name": "Parse dbt DAG",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.13/bin/dbt",
+        "--no-version-check",
+        "parse",
+        "--project-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-v565ip40/project",
+        "--profiles-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-v565ip40/profiles",
+        "--log-path",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-v565ip40/dbt_logs"
+      ],
+      "return_code": 0,
+      "status": "passed",
+      "duration_seconds": 2.6587642920203507,
+      "error": null
+    },
+    {
+      "name": "Validate rerun-safe materializations",
+      "command": [],
+      "return_code": 0,
+      "status": "passed",
+      "duration_seconds": 0.0,
+      "error": null
+    },
+    {
+      "name": "Compile dbt models & validate references (dbt compile)",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.13/bin/dbt",
+        "--no-version-check",
+        "compile",
+        "--project-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-v565ip40/project",
+        "--profiles-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-v565ip40/profiles",
+        "--log-path",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-v565ip40/dbt_logs"
+      ],
+      "return_code": 0,
+      "status": "passed",
+      "duration_seconds": 2.1934632499469444,
+      "error": null
+    }
+  ],
+  "model_test_results": [
+    {
+      "node": "model.saas_revenue_ops.dim_month",
+      "model": "dim_month",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"dim_month\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.003857851028442383,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.saas_revenue_ops.stg_events",
+      "model": "stg_events",
+      "resource_type": "model",
+      "object_type": "view",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"stg_events\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.0016927719116210938,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.saas_revenue_ops.stg_subscriptions",
+      "model": "stg_subscriptions",
+      "resource_type": "model",
+      "object_type": "view",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"stg_subscriptions\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.0024328231811523438,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.saas_revenue_ops.stg_users",
+      "model": "stg_users",
+      "resource_type": "model",
+      "object_type": "view",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"stg_users\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.00185394287109375,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.saas_revenue_ops.not_null_dim_month_month_start_date.2ac637467a",
+      "model": "not_null_dim_month_month_start_date",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_dim_month_month_start_date",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.0070149898529052734,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.saas_revenue_ops.unique_dim_month_month_start_date.9ed75372a9",
+      "model": "unique_dim_month_month_start_date",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.unique_dim_month_month_start_date",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.004274845123291016,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.saas_revenue_ops.not_null_stg_events_event_date.f160b8d054",
+      "model": "not_null_stg_events_event_date",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_stg_events_event_date",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.003793001174926758,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.saas_revenue_ops.not_null_stg_events_user_id.63ec98fbc4",
+      "model": "not_null_stg_events_user_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_stg_events_user_id",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.0029897689819335938,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.saas_revenue_ops.not_null_stg_subscriptions_user_id.3c73aaf4e2",
+      "model": "not_null_stg_subscriptions_user_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_stg_subscriptions_user_id",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.0030422210693359375,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.saas_revenue_ops.unique_stg_subscriptions_user_id.268ec30dae",
+      "model": "unique_stg_subscriptions_user_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.unique_stg_subscriptions_user_id",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.003468751907348633,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.saas_revenue_ops.int_subscription_users",
+      "model": "int_subscription_users",
+      "resource_type": "model",
+      "object_type": "view",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"int_subscription_users\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.0017681121826171875,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.saas_revenue_ops.not_null_stg_users_user_id.980dfc1b77",
+      "model": "not_null_stg_users_user_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_stg_users_user_id",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.0035278797149658203,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.saas_revenue_ops.unique_stg_users_user_id.c2ff477e6b",
+      "model": "unique_stg_users_user_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.unique_stg_users_user_id",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.0036857128143310547,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.saas_revenue_ops.fct_mrr",
+      "model": "fct_mrr",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"fct_mrr\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.0015859603881835938,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.saas_revenue_ops.not_null_int_subscription_users_signup_date.6373328da6",
+      "model": "not_null_int_subscription_users_signup_date",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_int_subscription_users_signup_date",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.003401041030883789,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.saas_revenue_ops.not_null_int_subscription_users_subscription_plan.36a2f86f1c",
+      "model": "not_null_int_subscription_users_subscription_plan",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_int_subscription_users_subscription_plan",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.003078937530517578,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.saas_revenue_ops.not_null_int_subscription_users_user_id.3a0b2f42b9",
+      "model": "not_null_int_subscription_users_user_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_int_subscription_users_user_id",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.003512144088745117,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.saas_revenue_ops.unique_int_subscription_users_user_id.625d211118",
+      "model": "unique_int_subscription_users_user_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.unique_int_subscription_users_user_id",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.003705263137817383,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.saas_revenue_ops.dbt_utils_unique_combination_of_columns_fct_mrr_financial_month__user_id.9d00732b24",
+      "model": "dbt_utils_unique_combination_o_0a11e1b69f08021758a9ae1e7d7f5b33",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.dbt_utils_unique_combination_o_0a11e1b69f08021758a9ae1e7d7f5b33",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.010390043258666992,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.saas_revenue_ops.not_null_fct_mrr_financial_month.7e53df0d1f",
+      "model": "not_null_fct_mrr_financial_month",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_fct_mrr_financial_month",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.0038678646087646484,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.saas_revenue_ops.not_null_fct_mrr_mrr.a571fc7a77",
+      "model": "not_null_fct_mrr_mrr",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_fct_mrr_mrr",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.003173828125,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.saas_revenue_ops.not_null_fct_mrr_subscription_plan.97916f14cd",
+      "model": "not_null_fct_mrr_subscription_plan",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_fct_mrr_subscription_plan",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.0036211013793945312,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.saas_revenue_ops.not_null_fct_mrr_user_id.5cd9c9505f",
+      "model": "not_null_fct_mrr_user_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_fct_mrr_user_id",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.003183126449584961,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    }
+  ],
+  "model_executions": [
+    {
+      "node": "model.saas_revenue_ops.dim_month",
+      "model": "dim_month",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"dim_month\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.003857851028442383,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.saas_revenue_ops.stg_events",
+      "model": "stg_events",
+      "resource_type": "model",
+      "object_type": "view",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"stg_events\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.0016927719116210938,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.saas_revenue_ops.stg_subscriptions",
+      "model": "stg_subscriptions",
+      "resource_type": "model",
+      "object_type": "view",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"stg_subscriptions\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.0024328231811523438,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.saas_revenue_ops.stg_users",
+      "model": "stg_users",
+      "resource_type": "model",
+      "object_type": "view",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"stg_users\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.00185394287109375,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.saas_revenue_ops.int_subscription_users",
+      "model": "int_subscription_users",
+      "resource_type": "model",
+      "object_type": "view",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"int_subscription_users\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.0017681121826171875,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.saas_revenue_ops.fct_mrr",
+      "model": "fct_mrr",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"fct_mrr\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.0015859603881835938,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    }
+  ],
+  "log_file": "/Users/rahulrg/Kea-Data/dbt_runner/run_logs/run_20261007_150151_009213.log",
+  "structured_log_file": "/Users/rahulrg/Kea-Data/dbt_runner/run_logs/run_20261007_150151_009213.events.jsonl",
+  "report_file": "/Users/rahulrg/Kea-Data/dbt_runner/run_logs/run_20261007_150151_009213.json",
+  "config_file": "/Users/rahulrg/Kea-Data/dbt_runner/runner_config.json",
+  "rerun_policy": "dry-run syntax and DAG topology verification (no data mutations)",
+  "sandbox_workspace": "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-v565ip40",
+  "sandbox_cleanup_status": "cleaned",
+  "object_validation": {
+    "status": "passed",
+    "expected_objects": [
+      {
+        "unique_id": "model.saas_revenue_ops.stg_users",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "stg_users",
+        "materialized": "view",
+        "expected_type": "view",
+        "columns": [
+          {
+            "name": "user_id",
+            "data_type": ""
+          }
+        ]
+      },
+      {
+        "unique_id": "model.saas_revenue_ops.stg_subscriptions",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "stg_subscriptions",
+        "materialized": "view",
+        "expected_type": "view",
+        "columns": [
+          {
+            "name": "user_id",
+            "data_type": ""
+          }
+        ]
+      },
+      {
+        "unique_id": "model.saas_revenue_ops.stg_events",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "stg_events",
+        "materialized": "view",
+        "expected_type": "view",
+        "columns": [
+          {
+            "name": "user_id",
+            "data_type": ""
+          },
+          {
+            "name": "event_date",
+            "data_type": ""
+          }
+        ]
+      },
+      {
+        "unique_id": "model.saas_revenue_ops.fct_mrr",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "fct_mrr",
+        "materialized": "table",
+        "expected_type": "table",
+        "columns": [
+          {
+            "name": "financial_month",
+            "data_type": ""
+          },
+          {
+            "name": "user_id",
+            "data_type": ""
+          },
+          {
+            "name": "subscription_plan",
+            "data_type": ""
+          },
+          {
+            "name": "mrr",
+            "data_type": ""
+          }
+        ]
+      },
+      {
+        "unique_id": "model.saas_revenue_ops.dim_month",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "dim_month",
+        "materialized": "table",
+        "expected_type": "table",
+        "columns": [
+          {
+            "name": "month_start_date",
+            "data_type": ""
+          }
+        ]
+      },
+      {
+        "unique_id": "model.saas_revenue_ops.int_subscription_users",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "int_subscription_users",
+        "materialized": "view",
+        "expected_type": "view",
+        "columns": [
+          {
+            "name": "user_id",
+            "data_type": ""
+          },
+          {
+            "name": "signup_date",
+            "data_type": ""
+          },
+          {
+            "name": "subscription_plan",
+            "data_type": ""
+          }
+        ]
+      }
+    ],
+    "actual_objects": [
+      {
+        "unique_id": "model.saas_revenue_ops.stg_users",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "stg_users",
+        "materialized": "view",
+        "expected_type": "view",
+        "columns": [
+          {
+            "name": "user_id",
+            "data_type": ""
+          }
+        ]
+      },
+      {
+        "unique_id": "model.saas_revenue_ops.stg_subscriptions",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "stg_subscriptions",
+        "materialized": "view",
+        "expected_type": "view",
+        "columns": [
+          {
+            "name": "user_id",
+            "data_type": ""
+          }
+        ]
+      },
+      {
+        "unique_id": "model.saas_revenue_ops.stg_events",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "stg_events",
+        "materialized": "view",
+        "expected_type": "view",
+        "columns": [
+          {
+            "name": "user_id",
+            "data_type": ""
+          },
+          {
+            "name": "event_date",
+            "data_type": ""
+          }
+        ]
+      },
+      {
+        "unique_id": "model.saas_revenue_ops.fct_mrr",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "fct_mrr",
+        "materialized": "table",
+        "expected_type": "table",
+        "columns": [
+          {
+            "name": "financial_month",
+            "data_type": ""
+          },
+          {
+            "name": "user_id",
+            "data_type": ""
+          },
+          {
+            "name": "subscription_plan",
+            "data_type": ""
+          },
+          {
+            "name": "mrr",
+            "data_type": ""
+          }
+        ]
+      },
+      {
+        "unique_id": "model.saas_revenue_ops.dim_month",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "dim_month",
+        "materialized": "table",
+        "expected_type": "table",
+        "columns": [
+          {
+            "name": "month_start_date",
+            "data_type": ""
+          }
+        ]
+      },
+      {
+        "unique_id": "model.saas_revenue_ops.int_subscription_users",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "int_subscription_users",
+        "materialized": "view",
+        "expected_type": "view",
+        "columns": [
+          {
+            "name": "user_id",
+            "data_type": ""
+          },
+          {
+            "name": "signup_date",
+            "data_type": ""
+          },
+          {
+            "name": "subscription_plan",
+            "data_type": ""
+          }
+        ]
+      }
+    ],
+    "failures": [],
+    "additional_or_preexisting_objects": []
+  },
+  "dag_validation": {
+    "status": "passed",
+    "models_count": 6,
+    "models_by_materialization": {
+      "view": 4,
+      "table": 2
+    },
+    "seeds_count": 0,
+    "snapshots_count": 0,
+    "tests_count": 17,
+    "sources_count": 3,
+    "dependencies_checked": 24,
+    "failures": []
+  },
+  "rerun_verification": {
+    "status": "passed",
+    "duration_seconds": 0.0,
+    "message": "Compilation & DAG verification mode: models and sequence verified without data."
+  },
+  "database_type": "ducklake",
+  "execution_mode": "compile_only",
+  "failure_details": [],
+  "warning_details": []
+}

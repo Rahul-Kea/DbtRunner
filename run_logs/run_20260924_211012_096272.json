@@ -1,0 +1,67 @@
+{
+  "run_id": "20260924_211012_096272",
+  "started_at": "2026-09-24T15:40:12.096297+00:00",
+  "finished_at": "2026-09-24T15:42:58.849352+00:00",
+  "project_dir": "/Users/rahulrg/Kea-Data/DuckLake/POC2",
+  "data_location": "/Users/rahulrg/Kea-Data/DuckLake/POC2/simulation/lake_data",
+  "ducklake_metadata_location": "/Users/rahulrg/Kea-Data/DuckLake/POC2/simulation/simulation.ducklake",
+  "overall_status": "failed",
+  "steps": [
+    {
+      "name": "Install dbt-duckdb",
+      "command": [
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-jooceobz/venv/bin/python",
+        "-m",
+        "pip",
+        "install",
+        "dbt-duckdb"
+      ],
+      "return_code": 0,
+      "status": "passed",
+      "duration_seconds": 161.1358875000151,
+      "error": null
+    },
+    {
+      "name": "Install project packages (dbt deps)",
+      "command": [
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-jooceobz/venv/bin/dbt",
+        "deps",
+        "--project-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-jooceobz/project",
+        "--profiles-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-jooceobz/profiles",
+        "--log-path",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-jooceobz/dbt_logs"
+      ],
+      "return_code": 0,
+      "status": "passed",
+      "duration_seconds": 1.8703493750072084,
+      "error": null
+    },
+    {
+      "name": "Build project and run tests (dbt build)",
+      "command": [
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-jooceobz/venv/bin/dbt",
+        "build",
+        "--project-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-jooceobz/project",
+        "--profiles-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-jooceobz/profiles",
+        "--log-path",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-jooceobz/dbt_logs"
+      ],
+      "return_code": 2,
+      "status": "failed",
+      "duration_seconds": 2.16674266703194,
+      "error": null
+    }
+  ],
+  "model_test_results": [],
+  "log_file": "/Users/rahulrg/Kea-Data/dbt_runner/run_logs/run_20260924_211012_096272.log",
+  "report_file": "/Users/rahulrg/Kea-Data/dbt_runner/run_logs/run_20260924_211012_096272.json",
+  "sandbox_workspace": "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-jooceobz",
+  "sandbox_cleanup_status": "cleaned",
+  "failure_details": [
+    "Build project and run tests (dbt build) failed (exit code 2)"
+  ]
+}

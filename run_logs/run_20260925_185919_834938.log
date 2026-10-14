@@ -1,0 +1,27 @@
+dbt runner execution 20260925_185919_834938
+Project input: /Users/rahulrg/Kea-Data/DuckLake/POC2
+DuckLake data input: /Users/rahulrg/Kea-Data/DuckLake/POC2/simulation/lake_data
+DuckLake metadata input: /Users/rahulrg/Kea-Data/DuckLake/POC2/simulation/simulation.ducklake
+Execution mode: isolated temporary sandbox with a fresh DuckLake catalog per run.
+
+Temporary sandbox: /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-i7x2m_b6
+Copying project and DuckLake inputs into sandbox.
+
+Generated profile: /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-i7x2m_b6/profiles/profiles.yml
+
+--- Install dbt-duckdb ---
+$ /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-i7x2m_b6/venv/bin/python -m pip install dbt-duckdb
+WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x1074ccec0>: Failed to establish a new connection: [Errno 8] nodename nor servname provided, or not known')': /simple/dbt-duckdb/
+WARNING: Retrying (Retry(total=3, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x107459950>: Failed to establish a new connection: [Errno 8] nodename nor servname provided, or not known')': /simple/dbt-duckdb/
+WARNING: Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x107459bd0>: Failed to establish a new connection: [Errno 8] nodename nor servname provided, or not known')': /simple/dbt-duckdb/
+WARNING: Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x107459e50>: Failed to establish a new connection: [Errno 8] nodename nor servname provided, or not known')': /simple/dbt-duckdb/
+WARNING: Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x10745a0d0>: Failed to establish a new connection: [Errno 8] nodename nor servname provided, or not known')': /simple/dbt-duckdb/
+ERROR: Could not find a version that satisfies the requirement dbt-duckdb (from versions: none)
+ERROR: No matching distribution found for dbt-duckdb
+
+[exit code: 1; duration: 7.91s]
+
+Temporary sandbox cleanup: cleaned
+
+Run status: failed
+Report: /Users/rahulrg/Kea-Data/dbt_runner/run_logs/run_20260925_185919_834938.json

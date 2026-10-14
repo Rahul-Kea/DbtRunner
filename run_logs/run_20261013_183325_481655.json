@@ -1,0 +1,2854 @@
+{
+  "run_id": "20261013_183325_481655",
+  "started_at": "2026-10-13T13:03:25.777564+00:00",
+  "finished_at": "2026-10-13T13:03:43.052126+00:00",
+  "project_dir": "/Users/rahulrg/Kea-Data/dbt_runner/uploads/20261013_183325_481655/project/POC2",
+  "data_location": "/Users/rahulrg/Kea-Data/dbt_runner/uploads/20261013_183325_481655/lake_data",
+  "ducklake_metadata_location": "/Users/rahulrg/Kea-Data/dbt_runner/uploads/20261013_183325_481655/lake.ducklake",
+  "overall_status": "passed",
+  "steps": [
+    {
+      "name": "Clone DuckLake metadata catalog",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.13/bin/python3",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6mkud_p8/clone_ducklake_catalog.py",
+        "/Users/rahulrg/Kea-Data/dbt_runner/uploads/20261013_183325_481655/lake.ducklake",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6mkud_p8/simulation.ducklake"
+      ],
+      "return_code": 0,
+      "status": "passed",
+      "duration_seconds": 0.1622880829963833,
+      "error": null
+    },
+    {
+      "name": "Parse dbt DAG",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.13/bin/dbt",
+        "--no-version-check",
+        "parse",
+        "--project-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6mkud_p8/project",
+        "--profiles-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6mkud_p8/profiles",
+        "--log-path",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6mkud_p8/dbt_logs"
+      ],
+      "return_code": 0,
+      "status": "passed",
+      "duration_seconds": 3.2055990420049056,
+      "error": null
+    },
+    {
+      "name": "Validate rerun-safe materializations",
+      "command": [],
+      "return_code": 0,
+      "status": "passed",
+      "duration_seconds": 0.0,
+      "error": null
+    },
+    {
+      "name": "Materialize dbt seeds",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.13/bin/dbt",
+        "--no-version-check",
+        "seed",
+        "--project-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6mkud_p8/project",
+        "--profiles-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6mkud_p8/profiles",
+        "--log-path",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6mkud_p8/dbt_logs"
+      ],
+      "return_code": 0,
+      "status": "passed",
+      "duration_seconds": 2.0512307500466704,
+      "error": null
+    },
+    {
+      "name": "Materialize dbt models (dbt run)",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.13/bin/dbt",
+        "--no-version-check",
+        "run",
+        "--project-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6mkud_p8/project",
+        "--profiles-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6mkud_p8/profiles",
+        "--log-path",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6mkud_p8/dbt_logs"
+      ],
+      "return_code": 0,
+      "status": "passed",
+      "duration_seconds": 2.4257651660591364,
+      "error": null
+    },
+    {
+      "name": "Run dbt tests",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.13/bin/dbt",
+        "--no-version-check",
+        "test",
+        "--project-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6mkud_p8/project",
+        "--profiles-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6mkud_p8/profiles",
+        "--log-path",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6mkud_p8/dbt_logs"
+      ],
+      "return_code": 0,
+      "status": "passed",
+      "duration_seconds": 3.0442200830439106,
+      "error": null
+    },
+    {
+      "name": "Generate dbt docs & catalog",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.13/bin/dbt",
+        "--no-version-check",
+        "docs",
+        "generate",
+        "--project-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6mkud_p8/project",
+        "--profiles-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6mkud_p8/profiles",
+        "--log-path",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6mkud_p8/dbt_logs"
+      ],
+      "return_code": 0,
+      "status": "passed",
+      "duration_seconds": 2.3106129170628265,
+      "error": null
+    },
+    {
+      "name": "Safe repeated execution (dbt run rerun)",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.13/bin/dbt",
+        "--no-version-check",
+        "run",
+        "--project-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6mkud_p8/project",
+        "--profiles-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6mkud_p8/profiles",
+        "--log-path",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6mkud_p8/dbt_logs"
+      ],
+      "return_code": 0,
+      "status": "passed",
+      "duration_seconds": 2.693410167004913,
+      "error": null
+    }
+  ],
+  "model_test_results": [
+    {
+      "node": "seed.store_poc.store_orders",
+      "model": "store_orders",
+      "resource_type": "seed",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "main.store_orders",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.04676198959350586,
+      "message": "INSERT 20",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.store_poc.stg_store_orders",
+      "model": "stg_store_orders",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"stg_store_orders\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.07033491134643555,
+      "message": "OK",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.store_poc.dim_customer",
+      "model": "dim_customer",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"dim_customer\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.03284811973571777,
+      "message": "OK",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.store_poc.dim_date",
+      "model": "dim_date",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"dim_date\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.03288078308105469,
+      "message": "OK",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.store_poc.dim_payment_method",
+      "model": "dim_payment_method",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"dim_payment_method\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.026035070419311523,
+      "message": "OK",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.store_poc.dim_product",
+      "model": "dim_product",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"dim_product\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.027354955673217773,
+      "message": "OK",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.store_poc.dim_store",
+      "model": "dim_store",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"dim_store\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.025187253952026367,
+      "message": "OK",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.store_poc.fact_order",
+      "model": "fact_order",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"fact_order\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.04188799858093262,
+      "message": "OK",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.store_poc.fact_sales_line",
+      "model": "fact_sales_line",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"fact_sales_line\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.03725123405456543,
+      "message": "OK",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.not_null_dim_customer_customer_city.98bef70201",
+      "model": "not_null_dim_customer_customer_city",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_dim_customer_customer_city",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.022496700286865234,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.not_null_dim_customer_customer_id.9775012dfc",
+      "model": "not_null_dim_customer_customer_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_dim_customer_customer_id",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.007999897003173828,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.not_null_dim_customer_customer_name.a25ec89461",
+      "model": "not_null_dim_customer_customer_name",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_dim_customer_customer_name",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.00747990608215332,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.not_null_dim_date_order_date.c74c6a4671",
+      "model": "not_null_dim_date_order_date",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_dim_date_order_date",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.009872913360595703,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.not_null_dim_payment_method_payment_method.f126149731",
+      "model": "not_null_dim_payment_method_payment_method",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_dim_payment_method_payment_method",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.008694887161254883,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.not_null_dim_product_product_category.942011c723",
+      "model": "not_null_dim_product_product_category",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_dim_product_product_category",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.008719921112060547,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.not_null_dim_product_product_id.02b1f06816",
+      "model": "not_null_dim_product_product_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_dim_product_product_id",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.007699012756347656,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.not_null_dim_product_product_name.1b672622d5",
+      "model": "not_null_dim_product_product_name",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_dim_product_product_name",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.007618904113769531,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.not_null_dim_store_store_id.8cb7c6ace0",
+      "model": "not_null_dim_store_store_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_dim_store_store_id",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.008989095687866211,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.not_null_dim_store_store_name.95e36bff74",
+      "model": "not_null_dim_store_store_name",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_dim_store_store_name",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.0081939697265625,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.not_null_fact_order_customer_id.e16387900a",
+      "model": "not_null_fact_order_customer_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_fact_order_customer_id",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.008126258850097656,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.not_null_fact_order_line_count.5042c269c7",
+      "model": "not_null_fact_order_line_count",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_fact_order_line_count",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.008294105529785156,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.not_null_fact_order_order_date.16ef740db0",
+      "model": "not_null_fact_order_order_date",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_fact_order_order_date",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.008460044860839844,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.not_null_fact_order_order_id.cc67e0bb93",
+      "model": "not_null_fact_order_order_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_fact_order_order_id",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.007696866989135742,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.not_null_fact_order_order_total.f67622bff7",
+      "model": "not_null_fact_order_order_total",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_fact_order_order_total",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.007252931594848633,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.not_null_fact_order_payment_method.0664a70c71",
+      "model": "not_null_fact_order_payment_method",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_fact_order_payment_method",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.00816798210144043,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.not_null_fact_order_store_id.fffb69163c",
+      "model": "not_null_fact_order_store_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_fact_order_store_id",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.008779048919677734,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.not_null_fact_order_total_quantity.f10f6ec193",
+      "model": "not_null_fact_order_total_quantity",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_fact_order_total_quantity",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.08196187019348145,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.not_null_fact_sales_line_customer_id.8c79aee610",
+      "model": "not_null_fact_sales_line_customer_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_fact_sales_line_customer_id",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.02508091926574707,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.not_null_fact_sales_line_line_amount.64ab66e944",
+      "model": "not_null_fact_sales_line_line_amount",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_fact_sales_line_line_amount",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.10028910636901855,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.not_null_fact_sales_line_order_date.0af6b2bc1d",
+      "model": "not_null_fact_sales_line_order_date",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_fact_sales_line_order_date",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.025523900985717773,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.not_null_fact_sales_line_order_id.e47bfcd7b1",
+      "model": "not_null_fact_sales_line_order_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_fact_sales_line_order_id",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.03872370719909668,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.not_null_fact_sales_line_payment_method.814d3d2c74",
+      "model": "not_null_fact_sales_line_payment_method",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_fact_sales_line_payment_method",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.022037982940673828,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.not_null_fact_sales_line_product_id.2461c0a7fe",
+      "model": "not_null_fact_sales_line_product_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_fact_sales_line_product_id",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.007997989654541016,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.not_null_fact_sales_line_quantity.361807e91f",
+      "model": "not_null_fact_sales_line_quantity",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_fact_sales_line_quantity",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.008749008178710938,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.not_null_fact_sales_line_store_id.c0d34fd5ec",
+      "model": "not_null_fact_sales_line_store_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_fact_sales_line_store_id",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.007927656173706055,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.not_null_fact_sales_line_unit_price.faa85feb68",
+      "model": "not_null_fact_sales_line_unit_price",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_fact_sales_line_unit_price",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.007111787796020508,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.not_null_stg_store_orders_customer_id.26e75fad89",
+      "model": "not_null_stg_store_orders_customer_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_stg_store_orders_customer_id",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.010653972625732422,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.not_null_stg_store_orders_customer_name.30bcc65e6a",
+      "model": "not_null_stg_store_orders_customer_name",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_stg_store_orders_customer_name",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.008764982223510742,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.not_null_stg_store_orders_line_amount.6354f264c6",
+      "model": "not_null_stg_store_orders_line_amount",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_stg_store_orders_line_amount",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.008500099182128906,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.not_null_stg_store_orders_order_date.558096dada",
+      "model": "not_null_stg_store_orders_order_date",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_stg_store_orders_order_date",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.008866071701049805,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.not_null_stg_store_orders_order_id.4bcaf5b15d",
+      "model": "not_null_stg_store_orders_order_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_stg_store_orders_order_id",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.009502887725830078,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.not_null_stg_store_orders_payment_method.709a65a0da",
+      "model": "not_null_stg_store_orders_payment_method",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_stg_store_orders_payment_method",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.0076999664306640625,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.not_null_stg_store_orders_product_id.e32a992d9a",
+      "model": "not_null_stg_store_orders_product_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_stg_store_orders_product_id",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.00800013542175293,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.not_null_stg_store_orders_product_name.06e01213a3",
+      "model": "not_null_stg_store_orders_product_name",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_stg_store_orders_product_name",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.00954127311706543,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.not_null_stg_store_orders_quantity.927f7c0df1",
+      "model": "not_null_stg_store_orders_quantity",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_stg_store_orders_quantity",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.00841379165649414,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.not_null_stg_store_orders_store_id.dde8699ab7",
+      "model": "not_null_stg_store_orders_store_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_stg_store_orders_store_id",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.007903099060058594,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.not_null_stg_store_orders_unit_price.e9b9e82214",
+      "model": "not_null_stg_store_orders_unit_price",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_stg_store_orders_unit_price",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.00943303108215332,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.order_total_matches_lines",
+      "model": "order_total_matches_lines",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.order_total_matches_lines",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.01638627052307129,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.relationships_fact_order_customer_id__customer_id__ref_dim_customer_.abf31da454",
+      "model": "relationships_fact_order_3115c41e81fe34567bb59c38c0ac7921",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.relationships_fact_order_3115c41e81fe34567bb59c38c0ac7921",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.022346019744873047,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.relationships_fact_order_order_date__order_date__ref_dim_date_.060ac10f9a",
+      "model": "relationships_fact_order_order_date__order_date__ref_dim_date_",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.relationships_fact_order_order_date__order_date__ref_dim_date_",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.020646095275878906,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.relationships_fact_order_payment_method__payment_method__ref_dim_payment_method_.91553d22b0",
+      "model": "relationships_fact_order_3e934fa0fba4335e05a0251ca6c26f41",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.relationships_fact_order_3e934fa0fba4335e05a0251ca6c26f41",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.02147507667541504,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.relationships_fact_order_store_id__store_id__ref_dim_store_.b0ea2ba535",
+      "model": "relationships_fact_order_store_id__store_id__ref_dim_store_",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.relationships_fact_order_store_id__store_id__ref_dim_store_",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.019257068634033203,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.relationships_fact_sales_line_customer_id__customer_id__ref_dim_customer_.3edc8b6f14",
+      "model": "relationships_fact_sales_line_d35ceef1bda0b1910e05d283ccb6b333",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.relationships_fact_sales_line_d35ceef1bda0b1910e05d283ccb6b333",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.013130903244018555,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.relationships_fact_sales_line_order_date__order_date__ref_dim_date_.db9435a392",
+      "model": "relationships_fact_sales_line_0e37472cafb57c8ab24a550b52961aa7",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.relationships_fact_sales_line_0e37472cafb57c8ab24a550b52961aa7",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.01415705680847168,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.relationships_fact_sales_line_payment_method__payment_method__ref_dim_payment_method_.48f1ebb4ee",
+      "model": "relationships_fact_sales_line_003c1011fa26f2277d57a6c1349eeeeb",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.relationships_fact_sales_line_003c1011fa26f2277d57a6c1349eeeeb",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.013147830963134766,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.relationships_fact_sales_line_product_id__product_id__ref_dim_product_.7e858b40c3",
+      "model": "relationships_fact_sales_line_531fc253359e26f0077bd700527d3e2d",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.relationships_fact_sales_line_531fc253359e26f0077bd700527d3e2d",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.02185797691345215,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.relationships_fact_sales_line_store_id__store_id__ref_dim_store_.74580f7944",
+      "model": "relationships_fact_sales_line_dfebb816cfedab48ee942c3a3200b079",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.relationships_fact_sales_line_dfebb816cfedab48ee942c3a3200b079",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.019717931747436523,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.unique_dim_customer_customer_id.b42affccd1",
+      "model": "unique_dim_customer_customer_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.unique_dim_customer_customer_id",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.012472152709960938,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.unique_dim_date_order_date.da0adae723",
+      "model": "unique_dim_date_order_date",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.unique_dim_date_order_date",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.011147022247314453,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.unique_dim_payment_method_payment_method.32f7241d9a",
+      "model": "unique_dim_payment_method_payment_method",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.unique_dim_payment_method_payment_method",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.008774042129516602,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.unique_dim_product_product_id.46495bf7fe",
+      "model": "unique_dim_product_product_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.unique_dim_product_product_id",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.01091313362121582,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.unique_dim_store_store_id.90e408e197",
+      "model": "unique_dim_store_store_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.unique_dim_store_store_id",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.00875997543334961,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.store_poc.unique_fact_order_order_id.1ffa56411b",
+      "model": "unique_fact_order_order_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.unique_fact_order_order_id",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.009091854095458984,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "unit_test.store_poc.fact_order.fact_order_sums_line_amounts",
+      "model": "unit_test.store_poc.fact_order.fact_order_sums_line_amounts",
+      "resource_type": "unit_test",
+      "object_type": "unit_test",
+      "database": "",
+      "schema": "",
+      "relation_name": "unit_test.store_poc.fact_order.fact_order_sums_line_amounts",
+      "status": "pass",
+      "execution_status": "pass",
+      "duration_seconds": 0.08246588706970215,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    }
+  ],
+  "model_executions": [
+    {
+      "node": "seed.store_poc.store_orders",
+      "model": "store_orders",
+      "resource_type": "seed",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "main.store_orders",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.04676198959350586,
+      "message": "INSERT 20",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.store_poc.stg_store_orders",
+      "model": "stg_store_orders",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"stg_store_orders\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.07033491134643555,
+      "message": "OK",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.store_poc.dim_customer",
+      "model": "dim_customer",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"dim_customer\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.03284811973571777,
+      "message": "OK",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.store_poc.dim_date",
+      "model": "dim_date",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"dim_date\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.03288078308105469,
+      "message": "OK",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.store_poc.dim_payment_method",
+      "model": "dim_payment_method",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"dim_payment_method\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.026035070419311523,
+      "message": "OK",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.store_poc.dim_product",
+      "model": "dim_product",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"dim_product\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.027354955673217773,
+      "message": "OK",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.store_poc.dim_store",
+      "model": "dim_store",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"dim_store\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.025187253952026367,
+      "message": "OK",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.store_poc.fact_order",
+      "model": "fact_order",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"fact_order\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.04188799858093262,
+      "message": "OK",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.store_poc.fact_sales_line",
+      "model": "fact_sales_line",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"fact_sales_line\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.03725123405456543,
+      "message": "OK",
+      "error_message": "",
+      "is_warning": false
+    }
+  ],
+  "log_file": "/Users/rahulrg/Kea-Data/dbt_runner/run_logs/run_20261013_183325_481655.log",
+  "structured_log_file": "/Users/rahulrg/Kea-Data/dbt_runner/run_logs/run_20261013_183325_481655.events.jsonl",
+  "report_file": "/Users/rahulrg/Kea-Data/dbt_runner/run_logs/run_20261013_183325_481655.json",
+  "config_file": "/Users/rahulrg/Kea-Data/dbt_runner/runner_config.json",
+  "rerun_policy": "isolated clone of the database/lake per run with idempotency validation",
+  "sandbox_workspace": "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6mkud_p8",
+  "sandbox_cleanup_status": "cleaned",
+  "object_validation": {
+    "status": "passed",
+    "expected_objects": [
+      {
+        "unique_id": "model.store_poc.stg_store_orders",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "stg_store_orders",
+        "materialized": "table",
+        "expected_type": "table",
+        "columns": [
+          {
+            "name": "order_id",
+            "data_type": ""
+          },
+          {
+            "name": "order_date",
+            "data_type": ""
+          },
+          {
+            "name": "customer_id",
+            "data_type": ""
+          },
+          {
+            "name": "customer_name",
+            "data_type": ""
+          },
+          {
+            "name": "product_id",
+            "data_type": ""
+          },
+          {
+            "name": "product_name",
+            "data_type": ""
+          },
+          {
+            "name": "unit_price",
+            "data_type": ""
+          },
+          {
+            "name": "quantity",
+            "data_type": ""
+          },
+          {
+            "name": "store_id",
+            "data_type": ""
+          },
+          {
+            "name": "payment_method",
+            "data_type": ""
+          },
+          {
+            "name": "line_amount",
+            "data_type": ""
+          }
+        ]
+      },
+      {
+        "unique_id": "model.store_poc.dim_product",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "dim_product",
+        "materialized": "table",
+        "expected_type": "table",
+        "columns": [
+          {
+            "name": "product_id",
+            "data_type": ""
+          },
+          {
+            "name": "product_name",
+            "data_type": ""
+          },
+          {
+            "name": "product_category",
+            "data_type": ""
+          }
+        ]
+      },
+      {
+        "unique_id": "model.store_poc.fact_order",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "fact_order",
+        "materialized": "table",
+        "expected_type": "table",
+        "columns": [
+          {
+            "name": "order_id",
+            "data_type": ""
+          },
+          {
+            "name": "order_date",
+            "data_type": "date"
+          },
+          {
+            "name": "customer_id",
+            "data_type": ""
+          },
+          {
+            "name": "store_id",
+            "data_type": ""
+          },
+          {
+            "name": "payment_method",
+            "data_type": ""
+          },
+          {
+            "name": "line_count",
+            "data_type": ""
+          },
+          {
+            "name": "total_quantity",
+            "data_type": ""
+          },
+          {
+            "name": "order_total",
+            "data_type": ""
+          }
+        ]
+      },
+      {
+        "unique_id": "model.store_poc.dim_customer",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "dim_customer",
+        "materialized": "table",
+        "expected_type": "table",
+        "columns": [
+          {
+            "name": "customer_id",
+            "data_type": ""
+          },
+          {
+            "name": "customer_name",
+            "data_type": ""
+          },
+          {
+            "name": "customer_city",
+            "data_type": ""
+          }
+        ]
+      },
+      {
+        "unique_id": "model.store_poc.fact_sales_line",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "fact_sales_line",
+        "materialized": "table",
+        "expected_type": "table",
+        "columns": [
+          {
+            "name": "order_id",
+            "data_type": ""
+          },
+          {
+            "name": "order_date",
+            "data_type": "date"
+          },
+          {
+            "name": "customer_id",
+            "data_type": ""
+          },
+          {
+            "name": "product_id",
+            "data_type": ""
+          },
+          {
+            "name": "store_id",
+            "data_type": ""
+          },
+          {
+            "name": "payment_method",
+            "data_type": ""
+          },
+          {
+            "name": "quantity",
+            "data_type": ""
+          },
+          {
+            "name": "unit_price",
+            "data_type": ""
+          },
+          {
+            "name": "line_amount",
+            "data_type": ""
+          }
+        ]
+      },
+      {
+        "unique_id": "model.store_poc.dim_payment_method",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "dim_payment_method",
+        "materialized": "table",
+        "expected_type": "table",
+        "columns": [
+          {
+            "name": "payment_method",
+            "data_type": ""
+          }
+        ]
+      },
+      {
+        "unique_id": "model.store_poc.dim_date",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "dim_date",
+        "materialized": "table",
+        "expected_type": "table",
+        "columns": [
+          {
+            "name": "order_date",
+            "data_type": "date"
+          }
+        ]
+      },
+      {
+        "unique_id": "model.store_poc.dim_store",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "dim_store",
+        "materialized": "table",
+        "expected_type": "table",
+        "columns": [
+          {
+            "name": "store_id",
+            "data_type": ""
+          },
+          {
+            "name": "store_name",
+            "data_type": ""
+          }
+        ]
+      },
+      {
+        "unique_id": "seed.store_poc.store_orders",
+        "resource_type": "seed",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "store_orders",
+        "materialized": "seed",
+        "expected_type": "table",
+        "columns": []
+      }
+    ],
+    "actual_objects": [
+      {
+        "unique_id": "model.store_poc.dim_customer",
+        "resource_type": "",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "dim_customer",
+        "relation_type": "BASE TABLE",
+        "columns": [
+          {
+            "name": "customer_id",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "customer_name",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "customer_city",
+            "data_type": "VARCHAR"
+          }
+        ],
+        "row_count": 10,
+        "sample_columns": [
+          "customer_id",
+          "customer_name",
+          "customer_city"
+        ],
+        "sample_rows": [
+          {
+            "customer_id": "C003",
+            "customer_name": "Maya Singh",
+            "customer_city": "Seattle"
+          },
+          {
+            "customer_id": "C007",
+            "customer_name": "Sophia Wilson",
+            "customer_city": "Seattle"
+          },
+          {
+            "customer_id": "C009",
+            "customer_name": "Amara Johnson",
+            "customer_city": "Seattle"
+          },
+          {
+            "customer_id": "C004",
+            "customer_name": "Noah Kim",
+            "customer_city": "Tacoma"
+          },
+          {
+            "customer_id": "C008",
+            "customer_name": "Ethan Moore",
+            "customer_city": "Portland"
+          },
+          {
+            "customer_id": "C002",
+            "customer_name": "Leo Chen",
+            "customer_city": "Portland"
+          },
+          {
+            "customer_id": "C006",
+            "customer_name": "Oliver Brown",
+            "customer_city": "Tacoma"
+          },
+          {
+            "customer_id": "C010",
+            "customer_name": "Liam Garcia",
+            "customer_city": "Tacoma"
+          },
+          {
+            "customer_id": "C001",
+            "customer_name": "Asha Patel",
+            "customer_city": "Seattle"
+          },
+          {
+            "customer_id": "C005",
+            "customer_name": "Emma Davis",
+            "customer_city": "Portland"
+          }
+        ]
+      },
+      {
+        "unique_id": "model.store_poc.dim_date",
+        "resource_type": "",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "dim_date",
+        "relation_type": "BASE TABLE",
+        "columns": [
+          {
+            "name": "order_date",
+            "data_type": "DATE"
+          }
+        ],
+        "row_count": 15,
+        "sample_columns": [
+          "order_date"
+        ],
+        "sample_rows": [
+          {
+            "order_date": "2025-01-16"
+          },
+          {
+            "order_date": "2025-01-18"
+          },
+          {
+            "order_date": "2025-01-20"
+          },
+          {
+            "order_date": "2025-01-06"
+          },
+          {
+            "order_date": "2025-01-04"
+          },
+          {
+            "order_date": "2025-01-08"
+          },
+          {
+            "order_date": "2025-01-09"
+          },
+          {
+            "order_date": "2025-01-05"
+          },
+          {
+            "order_date": "2025-01-12"
+          },
+          {
+            "order_date": "2025-01-28"
+          },
+          {
+            "order_date": "2025-01-14"
+          },
+          {
+            "order_date": "2025-01-22"
+          },
+          {
+            "order_date": "2025-01-10"
+          },
+          {
+            "order_date": "2025-01-03"
+          },
+          {
+            "order_date": "2025-01-25"
+          }
+        ]
+      },
+      {
+        "unique_id": "model.store_poc.dim_payment_method",
+        "resource_type": "",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "dim_payment_method",
+        "relation_type": "BASE TABLE",
+        "columns": [
+          {
+            "name": "payment_method",
+            "data_type": "VARCHAR"
+          }
+        ],
+        "row_count": 3,
+        "sample_columns": [
+          "payment_method"
+        ],
+        "sample_rows": [
+          {
+            "payment_method": "Cash"
+          },
+          {
+            "payment_method": "Mobile Pay"
+          },
+          {
+            "payment_method": "Card"
+          }
+        ]
+      },
+      {
+        "unique_id": "model.store_poc.dim_product",
+        "resource_type": "",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "dim_product",
+        "relation_type": "BASE TABLE",
+        "columns": [
+          {
+            "name": "product_id",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "product_name",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "product_category",
+            "data_type": "VARCHAR"
+          }
+        ],
+        "row_count": 5,
+        "sample_columns": [
+          "product_id",
+          "product_name",
+          "product_category"
+        ],
+        "sample_rows": [
+          {
+            "product_id": "P520",
+            "product_name": "Tote Bag",
+            "product_category": "Accessories"
+          },
+          {
+            "product_id": "P410",
+            "product_name": "Water Bottle",
+            "product_category": "Outdoors"
+          },
+          {
+            "product_id": "P101",
+            "product_name": "Everyday Mug",
+            "product_category": "Kitchen"
+          },
+          {
+            "product_id": "P204",
+            "product_name": "Notebook",
+            "product_category": "Stationery"
+          },
+          {
+            "product_id": "P305",
+            "product_name": "Desk Lamp",
+            "product_category": "Home"
+          }
+        ]
+      },
+      {
+        "unique_id": "model.store_poc.dim_store",
+        "resource_type": "",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "dim_store",
+        "relation_type": "BASE TABLE",
+        "columns": [
+          {
+            "name": "store_id",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "store_name",
+            "data_type": "VARCHAR"
+          }
+        ],
+        "row_count": 3,
+        "sample_columns": [
+          "store_id",
+          "store_name"
+        ],
+        "sample_rows": [
+          {
+            "store_id": "S01",
+            "store_name": "Downtown"
+          },
+          {
+            "store_id": "S03",
+            "store_name": "Hilltop"
+          },
+          {
+            "store_id": "S02",
+            "store_name": "Riverside"
+          }
+        ]
+      },
+      {
+        "unique_id": "model.store_poc.fact_order",
+        "resource_type": "",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "fact_order",
+        "relation_type": "BASE TABLE",
+        "columns": [
+          {
+            "name": "order_id",
+            "data_type": "INTEGER"
+          },
+          {
+            "name": "order_date",
+            "data_type": "DATE"
+          },
+          {
+            "name": "customer_id",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "store_id",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "payment_method",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "line_count",
+            "data_type": "BIGINT"
+          },
+          {
+            "name": "total_quantity",
+            "data_type": "HUGEINT"
+          },
+          {
+            "name": "order_total",
+            "data_type": "DECIMAL(38,2)"
+          }
+        ],
+        "row_count": 15,
+        "sample_columns": [
+          "order_id",
+          "order_date",
+          "customer_id",
+          "store_id",
+          "payment_method",
+          "line_count",
+          "total_quantity",
+          "order_total"
+        ],
+        "sample_rows": [
+          {
+            "order_id": 1011,
+            "order_date": "2025-01-18",
+            "customer_id": "C009",
+            "store_id": "S01",
+            "payment_method": "Card",
+            "line_count": 2,
+            "total_quantity": 3,
+            "order_total": "40.00"
+          },
+          {
+            "order_id": 1014,
+            "order_date": "2025-01-25",
+            "customer_id": "C005",
+            "store_id": "S02",
+            "payment_method": "Mobile Pay",
+            "line_count": 1,
+            "total_quantity": 2,
+            "order_total": "36.00"
+          },
+          {
+            "order_id": 1013,
+            "order_date": "2025-01-22",
+            "customer_id": "C004",
+            "store_id": "S03",
+            "payment_method": "Card",
+            "line_count": 1,
+            "total_quantity": 1,
+            "order_total": "34.99"
+          },
+          {
+            "order_id": 1015,
+            "order_date": "2025-01-28",
+            "customer_id": "C007",
+            "store_id": "S01",
+            "payment_method": "Card",
+            "line_count": 1,
+            "total_quantity": 3,
+            "order_total": "45.00"
+          },
+          {
+            "order_id": 1006,
+            "order_date": "2025-01-09",
+            "customer_id": "C001",
+            "store_id": "S01",
+            "payment_method": "Mobile Pay",
+            "line_count": 1,
+            "total_quantity": 1,
+            "order_total": "18.00"
+          },
+          {
+            "order_id": 1009,
+            "order_date": "2025-01-14",
+            "customer_id": "C008",
+            "store_id": "S02",
+            "payment_method": "Mobile Pay",
+            "line_count": 1,
+            "total_quantity": 2,
+            "order_total": "69.98"
+          },
+          {
+            "order_id": 1012,
+            "order_date": "2025-01-20",
+            "customer_id": "C010",
+            "store_id": "S03",
+            "payment_method": "Cash",
+            "line_count": 1,
+            "total_quantity": 4,
+            "order_total": "24.00"
+          },
+          {
+            "order_id": 1001,
+            "order_date": "2025-01-03",
+            "customer_id": "C001",
+            "store_id": "S01",
+            "payment_method": "Card",
+            "line_count": 2,
+            "total_quantity": 5,
+            "order_total": "43.00"
+          },
+          {
+            "order_id": 1010,
+            "order_date": "2025-01-16",
+            "customer_id": "C002",
+            "store_id": "S02",
+            "payment_method": "Card",
+            "line_count": 1,
+            "total_quantity": 3,
+            "order_total": "54.00"
+          },
+          {
+            "order_id": 1002,
+            "order_date": "2025-01-04",
+            "customer_id": "C002",
+            "store_id": "S02",
+            "payment_method": "Mobile Pay",
+            "line_count": 1,
+            "total_quantity": 1,
+            "order_total": "34.99"
+          },
+          {
+            "order_id": 1008,
+            "order_date": "2025-01-12",
+            "customer_id": "C007",
+            "store_id": "S01",
+            "payment_method": "Card",
+            "line_count": 2,
+            "total_quantity": 3,
+            "order_total": "27.00"
+          },
+          {
+            "order_id": 1003,
+            "order_date": "2025-01-05",
+            "customer_id": "C003",
+            "store_id": "S01",
+            "payment_method": "Cash",
+            "line_count": 2,
+            "total_quantity": 3,
+            "order_total": "48.50"
+          },
+          {
+            "order_id": 1004,
+            "order_date": "2025-01-06",
+            "customer_id": "C004",
+            "store_id": "S03",
+            "payment_method": "Card",
+            "line_count": 1,
+            "total_quantity": 5,
+            "order_total": "30.00"
+          },
+          {
+            "order_id": 1005,
+            "order_date": "2025-01-08",
+            "customer_id": "C005",
+            "store_id": "S02",
+            "payment_method": "Card",
+            "line_count": 2,
+            "total_quantity": 3,
+            "order_total": "64.99"
+          },
+          {
+            "order_id": 1007,
+            "order_date": "2025-01-10",
+            "customer_id": "C006",
+            "store_id": "S03",
+            "payment_method": "Cash",
+            "line_count": 1,
+            "total_quantity": 4,
+            "order_total": "50.00"
+          }
+        ]
+      },
+      {
+        "unique_id": "model.store_poc.fact_sales_line",
+        "resource_type": "",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "fact_sales_line",
+        "relation_type": "BASE TABLE",
+        "columns": [
+          {
+            "name": "order_id",
+            "data_type": "INTEGER"
+          },
+          {
+            "name": "order_date",
+            "data_type": "DATE"
+          },
+          {
+            "name": "customer_id",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "product_id",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "store_id",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "payment_method",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "quantity",
+            "data_type": "INTEGER"
+          },
+          {
+            "name": "unit_price",
+            "data_type": "DECIMAL(10,2)"
+          },
+          {
+            "name": "line_amount",
+            "data_type": "DECIMAL(10,2)"
+          }
+        ],
+        "row_count": 20,
+        "sample_columns": [
+          "order_id",
+          "order_date",
+          "customer_id",
+          "product_id",
+          "store_id",
+          "payment_method",
+          "quantity",
+          "unit_price",
+          "line_amount"
+        ],
+        "sample_rows": [
+          {
+            "order_id": 1001,
+            "order_date": "2025-01-03",
+            "customer_id": "C001",
+            "product_id": "P101",
+            "store_id": "S01",
+            "payment_method": "Card",
+            "quantity": 2,
+            "unit_price": "12.50",
+            "line_amount": "25.00"
+          },
+          {
+            "order_id": 1001,
+            "order_date": "2025-01-03",
+            "customer_id": "C001",
+            "product_id": "P204",
+            "store_id": "S01",
+            "payment_method": "Card",
+            "quantity": 3,
+            "unit_price": "6.00",
+            "line_amount": "18.00"
+          },
+          {
+            "order_id": 1002,
+            "order_date": "2025-01-04",
+            "customer_id": "C002",
+            "product_id": "P305",
+            "store_id": "S02",
+            "payment_method": "Mobile Pay",
+            "quantity": 1,
+            "unit_price": "34.99",
+            "line_amount": "34.99"
+          },
+          {
+            "order_id": 1003,
+            "order_date": "2025-01-05",
+            "customer_id": "C003",
+            "product_id": "P101",
+            "store_id": "S01",
+            "payment_method": "Cash",
+            "quantity": 1,
+            "unit_price": "12.50",
+            "line_amount": "12.50"
+          },
+          {
+            "order_id": 1003,
+            "order_date": "2025-01-05",
+            "customer_id": "C003",
+            "product_id": "P410",
+            "store_id": "S01",
+            "payment_method": "Cash",
+            "quantity": 2,
+            "unit_price": "18.00",
+            "line_amount": "36.00"
+          },
+          {
+            "order_id": 1004,
+            "order_date": "2025-01-06",
+            "customer_id": "C004",
+            "product_id": "P204",
+            "store_id": "S03",
+            "payment_method": "Card",
+            "quantity": 5,
+            "unit_price": "6.00",
+            "line_amount": "30.00"
+          },
+          {
+            "order_id": 1005,
+            "order_date": "2025-01-08",
+            "customer_id": "C005",
+            "product_id": "P520",
+            "store_id": "S02",
+            "payment_method": "Card",
+            "quantity": 2,
+            "unit_price": "15.00",
+            "line_amount": "30.00"
+          },
+          {
+            "order_id": 1005,
+            "order_date": "2025-01-08",
+            "customer_id": "C005",
+            "product_id": "P305",
+            "store_id": "S02",
+            "payment_method": "Card",
+            "quantity": 1,
+            "unit_price": "34.99",
+            "line_amount": "34.99"
+          },
+          {
+            "order_id": 1006,
+            "order_date": "2025-01-09",
+            "customer_id": "C001",
+            "product_id": "P410",
+            "store_id": "S01",
+            "payment_method": "Mobile Pay",
+            "quantity": 1,
+            "unit_price": "18.00",
+            "line_amount": "18.00"
+          },
+          {
+            "order_id": 1007,
+            "order_date": "2025-01-10",
+            "customer_id": "C006",
+            "product_id": "P101",
+            "store_id": "S03",
+            "payment_method": "Cash",
+            "quantity": 4,
+            "unit_price": "12.50",
+            "line_amount": "50.00"
+          },
+          {
+            "order_id": 1008,
+            "order_date": "2025-01-12",
+            "customer_id": "C007",
+            "product_id": "P520",
+            "store_id": "S01",
+            "payment_method": "Card",
+            "quantity": 1,
+            "unit_price": "15.00",
+            "line_amount": "15.00"
+          },
+          {
+            "order_id": 1008,
+            "order_date": "2025-01-12",
+            "customer_id": "C007",
+            "product_id": "P204",
+            "store_id": "S01",
+            "payment_method": "Card",
+            "quantity": 2,
+            "unit_price": "6.00",
+            "line_amount": "12.00"
+          },
+          {
+            "order_id": 1009,
+            "order_date": "2025-01-14",
+            "customer_id": "C008",
+            "product_id": "P305",
+            "store_id": "S02",
+            "payment_method": "Mobile Pay",
+            "quantity": 2,
+            "unit_price": "34.99",
+            "line_amount": "69.98"
+          },
+          {
+            "order_id": 1010,
+            "order_date": "2025-01-16",
+            "customer_id": "C002",
+            "product_id": "P410",
+            "store_id": "S02",
+            "payment_method": "Card",
+            "quantity": 3,
+            "unit_price": "18.00",
+            "line_amount": "54.00"
+          },
+          {
+            "order_id": 1011,
+            "order_date": "2025-01-18",
+            "customer_id": "C009",
+            "product_id": "P101",
+            "store_id": "S01",
+            "payment_method": "Card",
+            "quantity": 2,
+            "unit_price": "12.50",
+            "line_amount": "25.00"
+          }
+        ]
+      },
+      {
+        "unique_id": "model.store_poc.stg_store_orders",
+        "resource_type": "",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "stg_store_orders",
+        "relation_type": "BASE TABLE",
+        "columns": [
+          {
+            "name": "order_id",
+            "data_type": "INTEGER"
+          },
+          {
+            "name": "order_date",
+            "data_type": "DATE"
+          },
+          {
+            "name": "customer_id",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "customer_name",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "customer_city",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "product_id",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "product_name",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "product_category",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "unit_price",
+            "data_type": "DECIMAL(10,2)"
+          },
+          {
+            "name": "quantity",
+            "data_type": "INTEGER"
+          },
+          {
+            "name": "store_id",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "store_name",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "payment_method",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "line_amount",
+            "data_type": "DECIMAL(10,2)"
+          }
+        ],
+        "row_count": 20,
+        "sample_columns": [
+          "order_id",
+          "order_date",
+          "customer_id",
+          "customer_name",
+          "customer_city",
+          "product_id",
+          "product_name",
+          "product_category",
+          "unit_price",
+          "quantity",
+          "store_id",
+          "store_name",
+          "payment_method",
+          "line_amount"
+        ],
+        "sample_rows": [
+          {
+            "order_id": 1001,
+            "order_date": "2025-01-03",
+            "customer_id": "C001",
+            "customer_name": "Asha Patel",
+            "customer_city": "Seattle",
+            "product_id": "P101",
+            "product_name": "Everyday Mug",
+            "product_category": "Kitchen",
+            "unit_price": "12.50",
+            "quantity": 2,
+            "store_id": "S01",
+            "store_name": "Downtown",
+            "payment_method": "Card",
+            "line_amount": "25.00"
+          },
+          {
+            "order_id": 1001,
+            "order_date": "2025-01-03",
+            "customer_id": "C001",
+            "customer_name": "Asha Patel",
+            "customer_city": "Seattle",
+            "product_id": "P204",
+            "product_name": "Notebook",
+            "product_category": "Stationery",
+            "unit_price": "6.00",
+            "quantity": 3,
+            "store_id": "S01",
+            "store_name": "Downtown",
+            "payment_method": "Card",
+            "line_amount": "18.00"
+          },
+          {
+            "order_id": 1002,
+            "order_date": "2025-01-04",
+            "customer_id": "C002",
+            "customer_name": "Leo Chen",
+            "customer_city": "Portland",
+            "product_id": "P305",
+            "product_name": "Desk Lamp",
+            "product_category": "Home",
+            "unit_price": "34.99",
+            "quantity": 1,
+            "store_id": "S02",
+            "store_name": "Riverside",
+            "payment_method": "Mobile Pay",
+            "line_amount": "34.99"
+          },
+          {
+            "order_id": 1003,
+            "order_date": "2025-01-05",
+            "customer_id": "C003",
+            "customer_name": "Maya Singh",
+            "customer_city": "Seattle",
+            "product_id": "P101",
+            "product_name": "Everyday Mug",
+            "product_category": "Kitchen",
+            "unit_price": "12.50",
+            "quantity": 1,
+            "store_id": "S01",
+            "store_name": "Downtown",
+            "payment_method": "Cash",
+            "line_amount": "12.50"
+          },
+          {
+            "order_id": 1003,
+            "order_date": "2025-01-05",
+            "customer_id": "C003",
+            "customer_name": "Maya Singh",
+            "customer_city": "Seattle",
+            "product_id": "P410",
+            "product_name": "Water Bottle",
+            "product_category": "Outdoors",
+            "unit_price": "18.00",
+            "quantity": 2,
+            "store_id": "S01",
+            "store_name": "Downtown",
+            "payment_method": "Cash",
+            "line_amount": "36.00"
+          },
+          {
+            "order_id": 1004,
+            "order_date": "2025-01-06",
+            "customer_id": "C004",
+            "customer_name": "Noah Kim",
+            "customer_city": "Tacoma",
+            "product_id": "P204",
+            "product_name": "Notebook",
+            "product_category": "Stationery",
+            "unit_price": "6.00",
+            "quantity": 5,
+            "store_id": "S03",
+            "store_name": "Hilltop",
+            "payment_method": "Card",
+            "line_amount": "30.00"
+          },
+          {
+            "order_id": 1005,
+            "order_date": "2025-01-08",
+            "customer_id": "C005",
+            "customer_name": "Emma Davis",
+            "customer_city": "Portland",
+            "product_id": "P520",
+            "product_name": "Tote Bag",
+            "product_category": "Accessories",
+            "unit_price": "15.00",
+            "quantity": 2,
+            "store_id": "S02",
+            "store_name": "Riverside",
+            "payment_method": "Card",
+            "line_amount": "30.00"
+          },
+          {
+            "order_id": 1005,
+            "order_date": "2025-01-08",
+            "customer_id": "C005",
+            "customer_name": "Emma Davis",
+            "customer_city": "Portland",
+            "product_id": "P305",
+            "product_name": "Desk Lamp",
+            "product_category": "Home",
+            "unit_price": "34.99",
+            "quantity": 1,
+            "store_id": "S02",
+            "store_name": "Riverside",
+            "payment_method": "Card",
+            "line_amount": "34.99"
+          },
+          {
+            "order_id": 1006,
+            "order_date": "2025-01-09",
+            "customer_id": "C001",
+            "customer_name": "Asha Patel",
+            "customer_city": "Seattle",
+            "product_id": "P410",
+            "product_name": "Water Bottle",
+            "product_category": "Outdoors",
+            "unit_price": "18.00",
+            "quantity": 1,
+            "store_id": "S01",
+            "store_name": "Downtown",
+            "payment_method": "Mobile Pay",
+            "line_amount": "18.00"
+          },
+          {
+            "order_id": 1007,
+            "order_date": "2025-01-10",
+            "customer_id": "C006",
+            "customer_name": "Oliver Brown",
+            "customer_city": "Tacoma",
+            "product_id": "P101",
+            "product_name": "Everyday Mug",
+            "product_category": "Kitchen",
+            "unit_price": "12.50",
+            "quantity": 4,
+            "store_id": "S03",
+            "store_name": "Hilltop",
+            "payment_method": "Cash",
+            "line_amount": "50.00"
+          },
+          {
+            "order_id": 1008,
+            "order_date": "2025-01-12",
+            "customer_id": "C007",
+            "customer_name": "Sophia Wilson",
+            "customer_city": "Seattle",
+            "product_id": "P520",
+            "product_name": "Tote Bag",
+            "product_category": "Accessories",
+            "unit_price": "15.00",
+            "quantity": 1,
+            "store_id": "S01",
+            "store_name": "Downtown",
+            "payment_method": "Card",
+            "line_amount": "15.00"
+          },
+          {
+            "order_id": 1008,
+            "order_date": "2025-01-12",
+            "customer_id": "C007",
+            "customer_name": "Sophia Wilson",
+            "customer_city": "Seattle",
+            "product_id": "P204",
+            "product_name": "Notebook",
+            "product_category": "Stationery",
+            "unit_price": "6.00",
+            "quantity": 2,
+            "store_id": "S01",
+            "store_name": "Downtown",
+            "payment_method": "Card",
+            "line_amount": "12.00"
+          },
+          {
+            "order_id": 1009,
+            "order_date": "2025-01-14",
+            "customer_id": "C008",
+            "customer_name": "Ethan Moore",
+            "customer_city": "Portland",
+            "product_id": "P305",
+            "product_name": "Desk Lamp",
+            "product_category": "Home",
+            "unit_price": "34.99",
+            "quantity": 2,
+            "store_id": "S02",
+            "store_name": "Riverside",
+            "payment_method": "Mobile Pay",
+            "line_amount": "69.98"
+          },
+          {
+            "order_id": 1010,
+            "order_date": "2025-01-16",
+            "customer_id": "C002",
+            "customer_name": "Leo Chen",
+            "customer_city": "Portland",
+            "product_id": "P410",
+            "product_name": "Water Bottle",
+            "product_category": "Outdoors",
+            "unit_price": "18.00",
+            "quantity": 3,
+            "store_id": "S02",
+            "store_name": "Riverside",
+            "payment_method": "Card",
+            "line_amount": "54.00"
+          },
+          {
+            "order_id": 1011,
+            "order_date": "2025-01-18",
+            "customer_id": "C009",
+            "customer_name": "Amara Johnson",
+            "customer_city": "Seattle",
+            "product_id": "P101",
+            "product_name": "Everyday Mug",
+            "product_category": "Kitchen",
+            "unit_price": "12.50",
+            "quantity": 2,
+            "store_id": "S01",
+            "store_name": "Downtown",
+            "payment_method": "Card",
+            "line_amount": "25.00"
+          }
+        ]
+      },
+      {
+        "unique_id": "seed.store_poc.store_orders",
+        "resource_type": "",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "store_orders",
+        "relation_type": "BASE TABLE",
+        "columns": [
+          {
+            "name": "order_id",
+            "data_type": "INTEGER"
+          },
+          {
+            "name": "order_date",
+            "data_type": "DATE"
+          },
+          {
+            "name": "customer_id",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "customer_name",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "customer_city",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "product_id",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "product_name",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "product_category",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "unit_price",
+            "data_type": "DOUBLE"
+          },
+          {
+            "name": "quantity",
+            "data_type": "INTEGER"
+          },
+          {
+            "name": "store_id",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "store_name",
+            "data_type": "VARCHAR"
+          },
+          {
+            "name": "payment_method",
+            "data_type": "VARCHAR"
+          }
+        ],
+        "row_count": 20,
+        "sample_columns": [
+          "order_id",
+          "order_date",
+          "customer_id",
+          "customer_name",
+          "customer_city",
+          "product_id",
+          "product_name",
+          "product_category",
+          "unit_price",
+          "quantity",
+          "store_id",
+          "store_name",
+          "payment_method"
+        ],
+        "sample_rows": [
+          {
+            "order_id": 1001,
+            "order_date": "2025-01-03",
+            "customer_id": "C001",
+            "customer_name": "Asha Patel",
+            "customer_city": "Seattle",
+            "product_id": "P101",
+            "product_name": "Everyday Mug",
+            "product_category": "Kitchen",
+            "unit_price": 12.5,
+            "quantity": 2,
+            "store_id": "S01",
+            "store_name": "Downtown",
+            "payment_method": "Card"
+          },
+          {
+            "order_id": 1001,
+            "order_date": "2025-01-03",
+            "customer_id": "C001",
+            "customer_name": "Asha Patel",
+            "customer_city": "Seattle",
+            "product_id": "P204",
+            "product_name": "Notebook",
+            "product_category": "Stationery",
+            "unit_price": 6.0,
+            "quantity": 3,
+            "store_id": "S01",
+            "store_name": "Downtown",
+            "payment_method": "Card"
+          },
+          {
+            "order_id": 1002,
+            "order_date": "2025-01-04",
+            "customer_id": "C002",
+            "customer_name": "Leo Chen",
+            "customer_city": "Portland",
+            "product_id": "P305",
+            "product_name": "Desk Lamp",
+            "product_category": "Home",
+            "unit_price": 34.99,
+            "quantity": 1,
+            "store_id": "S02",
+            "store_name": "Riverside",
+            "payment_method": "Mobile Pay"
+          },
+          {
+            "order_id": 1003,
+            "order_date": "2025-01-05",
+            "customer_id": "C003",
+            "customer_name": "Maya Singh",
+            "customer_city": "Seattle",
+            "product_id": "P101",
+            "product_name": "Everyday Mug",
+            "product_category": "Kitchen",
+            "unit_price": 12.5,
+            "quantity": 1,
+            "store_id": "S01",
+            "store_name": "Downtown",
+            "payment_method": "Cash"
+          },
+          {
+            "order_id": 1003,
+            "order_date": "2025-01-05",
+            "customer_id": "C003",
+            "customer_name": "Maya Singh",
+            "customer_city": "Seattle",
+            "product_id": "P410",
+            "product_name": "Water Bottle",
+            "product_category": "Outdoors",
+            "unit_price": 18.0,
+            "quantity": 2,
+            "store_id": "S01",
+            "store_name": "Downtown",
+            "payment_method": "Cash"
+          },
+          {
+            "order_id": 1004,
+            "order_date": "2025-01-06",
+            "customer_id": "C004",
+            "customer_name": "Noah Kim",
+            "customer_city": "Tacoma",
+            "product_id": "P204",
+            "product_name": "Notebook",
+            "product_category": "Stationery",
+            "unit_price": 6.0,
+            "quantity": 5,
+            "store_id": "S03",
+            "store_name": "Hilltop",
+            "payment_method": "Card"
+          },
+          {
+            "order_id": 1005,
+            "order_date": "2025-01-08",
+            "customer_id": "C005",
+            "customer_name": "Emma Davis",
+            "customer_city": "Portland",
+            "product_id": "P520",
+            "product_name": "Tote Bag",
+            "product_category": "Accessories",
+            "unit_price": 15.0,
+            "quantity": 2,
+            "store_id": "S02",
+            "store_name": "Riverside",
+            "payment_method": "Card"
+          },
+          {
+            "order_id": 1005,
+            "order_date": "2025-01-08",
+            "customer_id": "C005",
+            "customer_name": "Emma Davis",
+            "customer_city": "Portland",
+            "product_id": "P305",
+            "product_name": "Desk Lamp",
+            "product_category": "Home",
+            "unit_price": 34.99,
+            "quantity": 1,
+            "store_id": "S02",
+            "store_name": "Riverside",
+            "payment_method": "Card"
+          },
+          {
+            "order_id": 1006,
+            "order_date": "2025-01-09",
+            "customer_id": "C001",
+            "customer_name": "Asha Patel",
+            "customer_city": "Seattle",
+            "product_id": "P410",
+            "product_name": "Water Bottle",
+            "product_category": "Outdoors",
+            "unit_price": 18.0,
+            "quantity": 1,
+            "store_id": "S01",
+            "store_name": "Downtown",
+            "payment_method": "Mobile Pay"
+          },
+          {
+            "order_id": 1007,
+            "order_date": "2025-01-10",
+            "customer_id": "C006",
+            "customer_name": "Oliver Brown",
+            "customer_city": "Tacoma",
+            "product_id": "P101",
+            "product_name": "Everyday Mug",
+            "product_category": "Kitchen",
+            "unit_price": 12.5,
+            "quantity": 4,
+            "store_id": "S03",
+            "store_name": "Hilltop",
+            "payment_method": "Cash"
+          },
+          {
+            "order_id": 1008,
+            "order_date": "2025-01-12",
+            "customer_id": "C007",
+            "customer_name": "Sophia Wilson",
+            "customer_city": "Seattle",
+            "product_id": "P520",
+            "product_name": "Tote Bag",
+            "product_category": "Accessories",
+            "unit_price": 15.0,
+            "quantity": 1,
+            "store_id": "S01",
+            "store_name": "Downtown",
+            "payment_method": "Card"
+          },
+          {
+            "order_id": 1008,
+            "order_date": "2025-01-12",
+            "customer_id": "C007",
+            "customer_name": "Sophia Wilson",
+            "customer_city": "Seattle",
+            "product_id": "P204",
+            "product_name": "Notebook",
+            "product_category": "Stationery",
+            "unit_price": 6.0,
+            "quantity": 2,
+            "store_id": "S01",
+            "store_name": "Downtown",
+            "payment_method": "Card"
+          },
+          {
+            "order_id": 1009,
+            "order_date": "2025-01-14",
+            "customer_id": "C008",
+            "customer_name": "Ethan Moore",
+            "customer_city": "Portland",
+            "product_id": "P305",
+            "product_name": "Desk Lamp",
+            "product_category": "Home",
+            "unit_price": 34.99,
+            "quantity": 2,
+            "store_id": "S02",
+            "store_name": "Riverside",
+            "payment_method": "Mobile Pay"
+          },
+          {
+            "order_id": 1010,
+            "order_date": "2025-01-16",
+            "customer_id": "C002",
+            "customer_name": "Leo Chen",
+            "customer_city": "Portland",
+            "product_id": "P410",
+            "product_name": "Water Bottle",
+            "product_category": "Outdoors",
+            "unit_price": 18.0,
+            "quantity": 3,
+            "store_id": "S02",
+            "store_name": "Riverside",
+            "payment_method": "Card"
+          },
+          {
+            "order_id": 1011,
+            "order_date": "2025-01-18",
+            "customer_id": "C009",
+            "customer_name": "Amara Johnson",
+            "customer_city": "Seattle",
+            "product_id": "P101",
+            "product_name": "Everyday Mug",
+            "product_category": "Kitchen",
+            "unit_price": 12.5,
+            "quantity": 2,
+            "store_id": "S01",
+            "store_name": "Downtown",
+            "payment_method": "Card"
+          }
+        ]
+      }
+    ],
+    "failures": [],
+    "additional_or_preexisting_objects": []
+  },
+  "dag_validation": {
+    "status": "passed",
+    "models_count": 8,
+    "models_by_materialization": {
+      "table": 8
+    },
+    "seeds_count": 1,
+    "snapshots_count": 0,
+    "tests_count": 54,
+    "sources_count": 0,
+    "dependencies_checked": 81,
+    "failures": []
+  },
+  "rerun_verification": {
+    "status": "passed",
+    "duration_seconds": 2.693410167004913,
+    "message": "Repeated execution safe: models cleanly materialized without conflict."
+  },
+  "database_type": "ducklake",
+  "execution_mode": "full",
+  "failure_details": [],
+  "warning_details": []
+}

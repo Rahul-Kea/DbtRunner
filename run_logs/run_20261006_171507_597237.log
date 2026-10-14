@@ -1,0 +1,96 @@
+dbt runner execution 20261006_171507_597237
+Project input: /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261006_171507_597237/project/transformation
+Database input: /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261006_171507_597237/lake.ducklake (ducklake)
+Data input: /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261006_171507_597237/lake_data
+Execution mode: isolated temporary sandbox with safe repeated execution verification.
+
+--- Clone DuckLake metadata catalog ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6tj4avxu/clone_ducklake_catalog.py /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261006_171507_597237/lake.ducklake /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6tj4avxu/simulation.ducklake
+Cloned DuckLake metadata catalog to /private/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6tj4avxu/simulation.ducklake
+
+[exit code: 0; duration: 0.12s]
+
+--- Install project packages (dbt deps) ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/dbt deps --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6tj4avxu/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6tj4avxu/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6tj4avxu/dbt_logs
+[0m11:45:11  Running with dbt=1.12.5
+[0m11:45:11  Installing dbt-labs/dbt_utils
+[0m11:45:12  Installed from version 1.3.3
+[0m11:45:12  Updated version available: 1.4.1
+[0m11:45:12  Installing metaplane/dbt_expectations
+[0m11:45:13  Installed from version 0.10.10
+[0m11:45:13  Up to date!
+[0m11:45:13  Installing tnightengale/dbt_meta_testing
+[0m11:45:13  Installed from version 0.3.6
+[0m11:45:13  Updated version available: 0.4.0
+[0m11:45:13  Installing dbt-labs/codegen
+[0m11:45:14  Installed from version 0.11.0
+[0m11:45:14  Updated version available: 0.14.1
+[0m11:45:14  Installing dbt-labs/audit_helper
+[0m11:45:15  Installed from version 0.11.0
+[0m11:45:15  Updated version available: 0.14.0
+[0m11:45:15  Installing https://github.com/EqualExperts/dbt-unit-testing
+[0m11:45:22  Installed from revision 5be2a9e75a9bf58c1113abb2187283fece805f0d
+[0m11:45:22  Installing godatadriven/dbt_date
+[0m11:45:23  Installed from version 0.17.1
+[0m11:45:23  Updated version available: 0.21.0
+[0m11:45:23  
+[0m11:45:23  Updates available for packages: ['dbt-labs/dbt_utils', 'tnightengale/dbt_meta_testing', 'dbt-labs/codegen', 'dbt-labs/audit_helper', 'godatadriven/dbt_date']                 
+Update your versions in packages.yml, then run dbt deps
+
+[exit code: 0; duration: 13.55s]
+
+--- Parse dbt DAG ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/dbt parse --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6tj4avxu/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6tj4avxu/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6tj4avxu/dbt_logs
+[0m11:45:24  Running with dbt=1.12.5
+[0m11:45:24  Registered adapter: duckdb=1.11.0
+[0m11:45:24  Unable to do partial parsing because saved manifest not found. Starting full parse.
+[0m11:45:26  Performance info: /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6tj4avxu/target/perf_info.json
+
+[exit code: 0; duration: 3.13s]
+
+--- Materialize dbt seeds ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/dbt seed --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6tj4avxu/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6tj4avxu/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6tj4avxu/dbt_logs
+[0m11:45:28  Running with dbt=1.12.5
+[0m11:45:28  Registered adapter: duckdb=1.11.0
+[0m11:45:28  Found 4 models, 28 data tests, 1 seed, 1 source, 1039 macros
+[0m11:45:28  
+[0m11:45:28  Concurrency: 1 threads (target='runner')
+[0m11:45:28  
+[0m11:45:29  1 of 1 START seed file main.ref_topic_categories ............................... [RUN]
+[0m11:45:29  1 of 1 OK loaded seed file main.ref_topic_categories ........................... [[32mINSERT 11[0m in 0.04s]
+[0m11:45:29  
+[0m11:45:29  Finished running 1 seed in 0 hours 0 minutes and 0.12 seconds (0.12s).
+[0m11:45:29  
+[0m11:45:29  [32mCompleted successfully[0m
+[0m11:45:29  
+[0m11:45:29  Done. PASS=1 WARN=0 ERROR=0 SKIP=0 NO-OP=0 REUSED=0 TOTAL=1
+
+[exit code: 0; duration: 2.99s]
+
+--- Materialize dbt models (dbt run) ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/dbt run --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6tj4avxu/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6tj4avxu/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6tj4avxu/dbt_logs
+[0m11:45:30  Running with dbt=1.12.5
+[0m11:45:30  Registered adapter: duckdb=1.11.0
+[0m11:45:30  Found 4 models, 28 data tests, 1 seed, 1 source, 1039 macros
+[0m11:45:30  
+[0m11:45:30  Concurrency: 1 threads (target='runner')
+[0m11:45:30  
+[0m11:45:31  1 of 4 START sql table model main.src_newsapi__articles_us_en .................. [RUN]
+[0m11:45:31  1 of 4 ERROR creating sql table model main.src_newsapi__articles_us_en ......... [[31mERROR[0m in 0.03s]
+[0m11:45:31  2 of 4 SKIP relation main.stg_newsapi__articles_us_en .......................... [[33mSKIP[0m]
+[0m11:45:31  3 of 4 SKIP relation main.int_newsapi__articles ................................ [[33mSKIP[0m]
+[0m11:45:31  4 of 4 SKIP relation main.mart_newsapi__articles ............................... [[33mSKIP[0m]
+[0m11:45:31  
+[0m11:45:31  Finished running 3 table models, 1 view model in 0 hours 0 minutes and 0.11 seconds (0.11s).
+[0m11:45:31  
+[0m11:45:31  [31mCompleted with 1 error, 0 partial successes, and 0 warnings:[0m
+[0m11:45:31  
+[0m11:45:31  [[31mERROR[0m]: in model src_newsapi__articles_us_en (models/staging/newsapi/raw/src_newsapi__articles_us_en.sql)
+[0m11:45:31    Runtime Error in model src_newsapi__articles_us_en (models/staging/newsapi/raw/src_newsapi__articles_us_en.sql)
+  Binder Error: Catalog "newsapi_ducklake" does not exist!
+[0m11:45:31  
+[0m11:45:31    compiled code at /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6tj4avxu/target/compiled/dwh_on_a_lake/models/staging/newsapi/raw/src_newsapi__articles_us_en.sql
+[0m11:45:31  
+[0m11:45:31  Done. PASS=0 WARN=0 ERROR=1 SKIP=3 NO-OP=0 REUSED=0 TOTAL=4
+
+[exit code: 1; duration: 1.99s]

@@ -1,0 +1,60 @@
+
+# Name your project! Project names should contain only lowercase characters
+# and underscores. A good package name should reflect your organization's
+# name or the intended use of these models
+name: 'tpch'
+version: '1.0.0'
+config-version: 2
+
+# This setting configures which "profile" dbt uses for this project.
+profile: 'tpch'
+
+# These configurations specify where dbt should look for different types of files.
+# The `source-paths` config, for example, states that models in this project can be
+# found in the "models/" directory. You probably won't need to change these!
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+asset-paths: ["assets"]
+
+
+target-path: "target"  # directory which will store compiled SQL files
+clean-targets:         # directories to be removed by `dbt clean`
+    - "target"
+    - "dbt_modules"
+    - "dbt_packages"
+
+vars:
+  start_date: '1999-01-01'
+  disable_dbt_artifacts_autoupload: "{% if target.name == 'prod' %}false{% else %}true{% endif %}"
+  disable_run_results: "{% if target.name == 'prod' %}false{% else %}true{% endif %}"
+  disable_tests_results: "{% if target.name == 'prod' %}false{% else %}true{% endif %}"
+  disable_dbt_invocation_autoupload: "{% if target.name == 'prod' %}false{% else %}true{% endif %}"
+
+# Configuring models
+# Full documentation: https://docs.getdbt.com/docs/configuring-models
+
+models:
+  use_anonymous_sproc: True
+
+  +materialized: table
+
+  tpch:
+    staging:
+      +materialized: view
+
+    marts:
+      core:
+        +materialized: table
+    ml:
+      +enabled: false
+
+seeds:
+  tpch:
+    snowflake_contract_rates:
+      +column_types:
+        effective_date: DATE
+        rate: NUMBER   

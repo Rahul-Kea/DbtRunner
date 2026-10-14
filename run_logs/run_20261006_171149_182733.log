@@ -1,0 +1,82 @@
+dbt runner execution 20261006_171149_182733
+Project input: /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261006_171149_182733/project
+Database input: /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261006_171149_182733/lake.ducklake (ducklake)
+Data input: /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261006_171149_182733/lake_data
+Execution mode: isolated temporary sandbox with safe repeated execution verification.
+
+--- Clone DuckLake metadata catalog ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-d7m1552z/clone_ducklake_catalog.py /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261006_171149_182733/lake.ducklake /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-d7m1552z/simulation.ducklake
+Cloned DuckLake metadata catalog to /private/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-d7m1552z/simulation.ducklake
+
+[exit code: 0; duration: 0.15s]
+
+--- Parse dbt DAG ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/dbt parse --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-d7m1552z/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-d7m1552z/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-d7m1552z/dbt_logs
+[0m11:41:51  Running with dbt=1.12.5
+[0m11:41:52  Registered adapter: duckdb=1.11.0
+[0m11:41:52  Unable to do partial parsing because saved manifest not found. Starting full parse.
+[0m11:41:52  [[33mWARNING[0m][MissingArgumentsPropertyInGenericTestDeprecation]: Deprecated
+functionality
+Found top-level arguments to test `accepted_values` defined on
+'stg_jaffle_shop__orders' in package 'my_new_project'
+(models/staging/jaffle_shop/stg_jaffle_shop.yml). Arguments to generic tests
+should be nested under the `arguments` property.
+[0m11:41:52  [[33mWARNING[0m]: Configuration paths exist in your dbt_project.yml file which do not apply to any resources.
+There are 1 unused configuration paths:
+- models.my_new_project.example
+[0m11:41:52  Performance info: /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-d7m1552z/target/perf_info.json
+[0m11:41:52  [[33mWARNING[0m][DeprecationsSummary]: Deprecated functionality
+Summary of encountered deprecations:
+- MissingArgumentsPropertyInGenericTestDeprecation: 2 occurrences
+To see all deprecation instances instead of just the first occurrence of each,
+run command again with the `--show-all-deprecations` flag. You may also need to
+run with `--no-partial-parse` as some deprecations are only encountered during
+parsing.
+
+[exit code: 0; duration: 2.57s]
+
+--- Materialize dbt models (dbt run) ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/dbt run --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-d7m1552z/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-d7m1552z/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-d7m1552z/dbt_logs
+[0m11:41:54  Running with dbt=1.12.5
+[0m11:41:54  Registered adapter: duckdb=1.11.0
+[0m11:41:54  [[33mWARNING[0m]: Configuration paths exist in your dbt_project.yml file which do not apply to any resources.
+There are 1 unused configuration paths:
+- models.my_new_project.example
+[0m11:41:54  Found 5 models, 12 data tests, 3 sources, 500 macros
+[0m11:41:54  
+[0m11:41:54  Concurrency: 1 threads (target='runner')
+[0m11:41:54  
+[0m11:41:54  1 of 5 START sql view model main.stg_jaffle_shop__customers .................... [RUN]
+[0m11:41:54  1 of 5 ERROR creating sql view model main.stg_jaffle_shop__customers ........... [[31mERROR[0m in 0.03s]
+[0m11:41:54  2 of 5 START sql view model main.stg_jaffle_shop__orders ....................... [RUN]
+[0m11:41:54  2 of 5 ERROR creating sql view model main.stg_jaffle_shop__orders .............. [[31mERROR[0m in 0.01s]
+[0m11:41:54  3 of 5 START sql view model main.stg_stripe__payments .......................... [RUN]
+[0m11:41:54  3 of 5 ERROR creating sql view model main.stg_stripe__payments ................. [[31mERROR[0m in 0.01s]
+[0m11:41:54  4 of 5 SKIP relation main.fct_orders ........................................... [[33mSKIP[0m]
+[0m11:41:54  5 of 5 SKIP relation main.dim_customers ........................................ [[33mSKIP[0m]
+[0m11:41:54  
+[0m11:41:54  Finished running 5 view models in 0 hours 0 minutes and 0.12 seconds (0.12s).
+[0m11:41:54  
+[0m11:41:54  [31mCompleted with 3 errors, 0 partial successes, and 0 warnings:[0m
+[0m11:41:54  
+[0m11:41:54  [[31mERROR[0m]: in model stg_jaffle_shop__customers (models/staging/jaffle_shop/stg_jaffle_shop__customers.sql)
+[0m11:41:54    Runtime Error in model stg_jaffle_shop__customers (models/staging/jaffle_shop/stg_jaffle_shop__customers.sql)
+  Binder Error: Catalog "raw" does not exist!
+[0m11:41:54  
+[0m11:41:54    compiled code at /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-d7m1552z/target/compiled/my_new_project/models/staging/jaffle_shop/stg_jaffle_shop__customers.sql
+[0m11:41:54  
+[0m11:41:54  [[31mERROR[0m]: in model stg_jaffle_shop__orders (models/staging/jaffle_shop/stg_jaffle_shop__orders.sql)
+[0m11:41:54    Runtime Error in model stg_jaffle_shop__orders (models/staging/jaffle_shop/stg_jaffle_shop__orders.sql)
+  Binder Error: Catalog "raw" does not exist!
+[0m11:41:54  
+[0m11:41:54    compiled code at /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-d7m1552z/target/compiled/my_new_project/models/staging/jaffle_shop/stg_jaffle_shop__orders.sql
+[0m11:41:54  
+[0m11:41:54  [[31mERROR[0m]: in model stg_stripe__payments (models/staging/stripe/stg_stripe__payments.sql)
+[0m11:41:54    Runtime Error in model stg_stripe__payments (models/staging/stripe/stg_stripe__payments.sql)
+  Binder Error: Catalog "raw" does not exist!
+[0m11:41:54  
+[0m11:41:54    compiled code at /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-d7m1552z/target/compiled/my_new_project/models/staging/stripe/stg_stripe__payments.sql
+[0m11:41:54  
+[0m11:41:54  Done. PASS=0 WARN=0 ERROR=3 SKIP=2 NO-OP=0 REUSED=0 TOTAL=5
+
+[exit code: 1; duration: 1.76s]

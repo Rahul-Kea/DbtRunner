@@ -1,0 +1,31 @@
+dbt runner execution 20261006_173922_548271
+Project input: /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261006_173922_548271/project/dbt_project
+Database input: /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261006_173922_548271/lake.ducklake (ducklake)
+Data input: /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261006_173922_548271/lake_data
+Execution mode: isolated temporary sandbox with safe repeated execution verification.
+
+--- Clone DuckLake metadata catalog ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-d5wj978r/clone_ducklake_catalog.py /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261006_173922_548271/lake.ducklake /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-d5wj978r/simulation.ducklake
+Cloned DuckLake metadata catalog to /private/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-d5wj978r/simulation.ducklake
+
+[exit code: 0; duration: 0.10s]
+
+--- Parse dbt DAG ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/dbt parse --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-d5wj978r/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-d5wj978r/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-d5wj978r/dbt_logs
+[0m12:09:26  Running with dbt=1.12.5
+[0m12:09:26  Registered adapter: duckdb=1.11.0
+[0m12:09:26  Unable to do partial parsing because saved manifest not found. Starting full parse.
+[0m12:09:27  Performance info: /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-d5wj978r/target/perf_info.json
+
+[exit code: 0; duration: 2.17s]
+
+--- Compile dbt models & validate references (dbt compile) ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/dbt compile --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-d5wj978r/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-d5wj978r/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-d5wj978r/dbt_logs
+[0m12:09:28  Running with dbt=1.12.5
+[0m12:09:28  Registered adapter: duckdb=1.11.0
+[0m12:09:28  Found 18 models, 5 sources, 500 macros
+[0m12:09:28  
+[0m12:09:28  Concurrency: 1 threads (target='runner')
+[0m12:09:28  
+
+[exit code: 0; duration: 1.87s]

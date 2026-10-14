@@ -1,0 +1,43 @@
+dbt runner execution 20261013_175154_117675
+Project input: /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261013_175154_117675/project
+Database input: /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261013_175154_117675/lake.ducklake (ducklake)
+Data input: /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261013_175154_117675/lake_data
+Execution mode: isolated temporary sandbox with safe repeated execution verification.
+
+--- Clone DuckLake metadata catalog ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-0o4xbkc7/clone_ducklake_catalog.py /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261013_175154_117675/lake.ducklake /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-0o4xbkc7/simulation.ducklake
+Cloned DuckLake metadata catalog to /private/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-0o4xbkc7/simulation.ducklake
+
+[exit code: 0; duration: 0.09s]
+
+--- Parse dbt DAG ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/dbt --no-version-check parse --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-0o4xbkc7/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-0o4xbkc7/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-0o4xbkc7/dbt_logs
+[0m12:21:57  Running with dbt=1.12.5
+[0m12:21:57  Registered adapter: duckdb=1.11.0
+[0m12:21:57  Unable to do partial parsing because saved manifest not found. Starting full parse.
+[0m12:21:58  [[33mWARNING[0m][MissingArgumentsPropertyInGenericTestDeprecation]: Deprecated
+functionality
+Found top-level arguments to test `relationships` defined on 'orders' in package
+'jaffle_shop' (models/schema.yml). Arguments to generic tests should be nested
+under the `arguments` property.
+[0m12:21:58  Performance info: /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-0o4xbkc7/target/perf_info.json
+[0m12:21:58  [[33mWARNING[0m][DeprecationsSummary]: Deprecated functionality
+Summary of encountered deprecations:
+- MissingArgumentsPropertyInGenericTestDeprecation: 4 occurrences
+To see all deprecation instances instead of just the first occurrence of each,
+run command again with the `--show-all-deprecations` flag. You may also need to
+run with `--no-partial-parse` as some deprecations are only encountered during
+parsing.
+
+[exit code: 0; duration: 2.33s]
+
+--- Compile dbt models & validate references (dbt compile) ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/dbt --no-version-check compile --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-0o4xbkc7/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-0o4xbkc7/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-0o4xbkc7/dbt_logs
+[0m12:21:59  Running with dbt=1.12.5
+[0m12:21:59  Registered adapter: duckdb=1.11.0
+[0m12:22:00  Found 5 models, 3 seeds, 20 data tests, 500 macros
+[0m12:22:00  
+[0m12:22:00  Concurrency: 1 threads (target='runner')
+[0m12:22:00  
+
+[exit code: 0; duration: 1.76s]

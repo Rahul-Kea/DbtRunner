@@ -1,0 +1,105 @@
+dbt runner execution 20261006_174304_105617
+Project input: /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261006_174304_105617/project/dbt_project
+Database input: /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261006_174304_105617/lake.ducklake (ducklake)
+Data input: /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261006_174304_105617/lake_data
+Execution mode: isolated temporary sandbox with safe repeated execution verification.
+
+--- Clone DuckLake metadata catalog ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-elb_4vmp/clone_ducklake_catalog.py /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261006_174304_105617/lake.ducklake /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-elb_4vmp/simulation.ducklake
+Cloned DuckLake metadata catalog to /private/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-elb_4vmp/simulation.ducklake
+
+[exit code: 0; duration: 0.13s]
+
+--- Parse dbt DAG ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/dbt parse --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-elb_4vmp/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-elb_4vmp/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-elb_4vmp/dbt_logs
+[0m12:13:07  Running with dbt=1.12.5
+[0m12:13:07  Registered adapter: duckdb=1.11.0
+[0m12:13:07  Unable to do partial parsing because saved manifest not found. Starting full parse.
+[0m12:13:08  Performance info: /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-elb_4vmp/target/perf_info.json
+
+[exit code: 0; duration: 2.63s]
+
+--- Materialize dbt models (dbt run) ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/dbt run --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-elb_4vmp/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-elb_4vmp/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-elb_4vmp/dbt_logs
+[0m12:13:09  Running with dbt=1.12.5
+[0m12:13:09  Registered adapter: duckdb=1.11.0
+[0m12:13:09  Found 18 models, 5 sources, 500 macros
+[0m12:13:09  
+[0m12:13:09  Concurrency: 1 threads (target='runner')
+[0m12:13:09  
+[0m12:13:10  1 of 18 START sql incremental model main.stg_ad_events ......................... [RUN]
+[0m12:13:10  1 of 18 ERROR creating sql incremental model main.stg_ad_events ................ [[31mERROR[0m in 0.05s]
+[0m12:13:10  2 of 18 START sql incremental model main.stg_campaigns ......................... [RUN]
+[0m12:13:10  2 of 18 ERROR creating sql incremental model main.stg_campaigns ................ [[31mERROR[0m in 0.01s]
+[0m12:13:10  3 of 18 START sql incremental model main.stg_conversions ....................... [RUN]
+[0m12:13:10  3 of 18 ERROR creating sql incremental model main.stg_conversions .............. [[31mERROR[0m in 0.01s]
+[0m12:13:10  4 of 18 START sql incremental model main.stg_products .......................... [RUN]
+[0m12:13:10  4 of 18 ERROR creating sql incremental model main.stg_products ................. [[31mERROR[0m in 0.01s]
+[0m12:13:10  5 of 18 START sql incremental model main.stg_users ............................. [RUN]
+[0m12:13:10  5 of 18 ERROR creating sql incremental model main.stg_users .................... [[31mERROR[0m in 0.01s]
+[0m12:13:10  6 of 18 SKIP relation main.int_campaign_performance ............................ [[33mSKIP[0m]
+[0m12:13:10  7 of 18 SKIP relation main.int_product_performance ............................. [[33mSKIP[0m]
+[0m12:13:10  8 of 18 SKIP relation main_marts_marketing.fct_campaign ........................ [[33mSKIP[0m]
+[0m12:13:10  9 of 18 SKIP relation main_marts_marketing.fct_conversion_funnel ............... [[33mSKIP[0m]
+[0m12:13:10  10 of 18 SKIP relation main_marts_marketing.fct_time_series .................... [[33mSKIP[0m]
+[0m12:13:10  11 of 18 SKIP relation main.int_channel_performance ............................ [[33mSKIP[0m]
+[0m12:13:10  12 of 18 SKIP relation main.int_daily_metrics .................................. [[33mSKIP[0m]
+[0m12:13:10  13 of 18 SKIP relation main.int_platform_performance ........................... [[33mSKIP[0m]
+[0m12:13:10  14 of 18 SKIP relation main.mart_campaign_insights ............................. [[33mSKIP[0m]
+[0m12:13:10  15 of 18 SKIP relation main_marts_product.fct_category_performance ............. [[33mSKIP[0m]
+[0m12:13:10  16 of 18 SKIP relation main_marts_product.fct_product_sales .................... [[33mSKIP[0m]
+[0m12:13:10  17 of 18 SKIP relation main_marts_marketing.fct_channel_metrics ................ [[33mSKIP[0m]
+[0m12:13:10  18 of 18 SKIP relation main_marts_marketing.fct_platform ....................... [[33mSKIP[0m]
+[0m12:13:10  
+[0m12:13:10  Finished running 6 incremental models, 8 table models, 4 view models in 0 hours 0 minutes and 0.19 seconds (0.19s).
+[0m12:13:10  
+[0m12:13:10  [31mCompleted with 5 errors, 0 partial successes, and 0 warnings:[0m
+[0m12:13:10  
+[0m12:13:10  [[31mERROR[0m]: in model stg_ad_events (models/staging/stg_ad_events.sql)
+[0m12:13:10    Runtime Error in model stg_ad_events (models/staging/stg_ad_events.sql)
+  Catalog Error: Table with name "raw.ad_events" does not exist because schema "raw" does not exist.
+  
+  LINE 13:     select * from "ducklake"."raw"."ad_events"
+                             ^
+[0m12:13:10  
+[0m12:13:10    compiled code at /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-elb_4vmp/target/compiled/nike_market_pipeline/models/staging/stg_ad_events.sql
+[0m12:13:10  
+[0m12:13:10  [[31mERROR[0m]: in model stg_campaigns (models/staging/stg_campaigns.sql)
+[0m12:13:10    Runtime Error in model stg_campaigns (models/staging/stg_campaigns.sql)
+  Catalog Error: Table with name "raw.campaigns" does not exist because schema "raw" does not exist.
+  
+  LINE 13:     select * from "ducklake"."raw"."campaigns"
+                             ^
+[0m12:13:10  
+[0m12:13:10    compiled code at /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-elb_4vmp/target/compiled/nike_market_pipeline/models/staging/stg_campaigns.sql
+[0m12:13:10  
+[0m12:13:10  [[31mERROR[0m]: in model stg_conversions (models/staging/stg_conversions.sql)
+[0m12:13:10    Runtime Error in model stg_conversions (models/staging/stg_conversions.sql)
+  Catalog Error: Table with name "raw.conversions" does not exist because schema "raw" does not exist.
+  
+  LINE 13:     select * from "ducklake"."raw"."conversions"
+                             ^
+[0m12:13:10  
+[0m12:13:10    compiled code at /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-elb_4vmp/target/compiled/nike_market_pipeline/models/staging/stg_conversions.sql
+[0m12:13:10  
+[0m12:13:10  [[31mERROR[0m]: in model stg_products (models/staging/stg_products.sql)
+[0m12:13:10    Runtime Error in model stg_products (models/staging/stg_products.sql)
+  Catalog Error: Table with name "raw.products" does not exist because schema "raw" does not exist.
+  
+  LINE 13:     select * from "ducklake"."raw"."products"
+                             ^
+[0m12:13:10  
+[0m12:13:10    compiled code at /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-elb_4vmp/target/compiled/nike_market_pipeline/models/staging/stg_products.sql
+[0m12:13:10  
+[0m12:13:10  [[31mERROR[0m]: in model stg_users (models/staging/stg_users.sql)
+[0m12:13:10    Runtime Error in model stg_users (models/staging/stg_users.sql)
+  Catalog Error: Table with name "raw.users" does not exist because schema "raw" does not exist.
+  
+  LINE 13:     select * from "raw"."users"
+                             ^
+[0m12:13:10  
+[0m12:13:10    compiled code at /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-elb_4vmp/target/compiled/nike_market_pipeline/models/staging/stg_users.sql
+[0m12:13:10  
+[0m12:13:10  Done. PASS=0 WARN=0 ERROR=5 SKIP=13 NO-OP=0 REUSED=0 TOTAL=18
+
+[exit code: 1; duration: 1.85s]

@@ -1,0 +1,345 @@
+{
+  "run_id": "20261006_171149_182733",
+  "started_at": "2026-10-06T11:41:50.482735+00:00",
+  "finished_at": "2026-10-06T11:41:56.874152+00:00",
+  "project_dir": "/Users/rahulrg/Kea-Data/dbt_runner/uploads/20261006_171149_182733/project",
+  "data_location": "/Users/rahulrg/Kea-Data/dbt_runner/uploads/20261006_171149_182733/lake_data",
+  "ducklake_metadata_location": "/Users/rahulrg/Kea-Data/dbt_runner/uploads/20261006_171149_182733/lake.ducklake",
+  "overall_status": "failed",
+  "steps": [
+    {
+      "name": "Clone DuckLake metadata catalog",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.13/bin/python3",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-d7m1552z/clone_ducklake_catalog.py",
+        "/Users/rahulrg/Kea-Data/dbt_runner/uploads/20261006_171149_182733/lake.ducklake",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-d7m1552z/simulation.ducklake"
+      ],
+      "return_code": 0,
+      "status": "passed",
+      "duration_seconds": 0.1480139159830287,
+      "error": null
+    },
+    {
+      "name": "Parse dbt DAG",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.13/bin/dbt",
+        "parse",
+        "--project-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-d7m1552z/project",
+        "--profiles-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-d7m1552z/profiles",
+        "--log-path",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-d7m1552z/dbt_logs"
+      ],
+      "return_code": 0,
+      "status": "passed",
+      "duration_seconds": 2.5742729159537703,
+      "error": null
+    },
+    {
+      "name": "Validate rerun-safe materializations",
+      "command": [],
+      "return_code": 0,
+      "status": "passed",
+      "duration_seconds": 0.0,
+      "error": null
+    },
+    {
+      "name": "Materialize dbt models (dbt run)",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.13/bin/dbt",
+        "run",
+        "--project-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-d7m1552z/project",
+        "--profiles-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-d7m1552z/profiles",
+        "--log-path",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-d7m1552z/dbt_logs"
+      ],
+      "return_code": 1,
+      "status": "failed",
+      "duration_seconds": 1.7563784999074414,
+      "error": null
+    }
+  ],
+  "model_test_results": [
+    {
+      "node": "model.my_new_project.stg_jaffle_shop__customers",
+      "model": "stg_jaffle_shop__customers",
+      "resource_type": "model",
+      "object_type": "view",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"stg_jaffle_shop__customers\"",
+      "status": "error",
+      "execution_status": "error",
+      "duration_seconds": 0.025990962982177734,
+      "message": "Runtime Error in model stg_jaffle_shop__customers (models/staging/jaffle_shop/stg_jaffle_shop__customers.sql)\n  Binder Error: Catalog \"raw\" does not exist!",
+      "error_message": "Runtime Error in model stg_jaffle_shop__customers (models/staging/jaffle_shop/stg_jaffle_shop__customers.sql)\n  Binder Error: Catalog \"raw\" does not exist!",
+      "is_warning": false
+    },
+    {
+      "node": "model.my_new_project.stg_jaffle_shop__orders",
+      "model": "stg_jaffle_shop__orders",
+      "resource_type": "model",
+      "object_type": "view",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"stg_jaffle_shop__orders\"",
+      "status": "error",
+      "execution_status": "error",
+      "duration_seconds": 0.006249904632568359,
+      "message": "Runtime Error in model stg_jaffle_shop__orders (models/staging/jaffle_shop/stg_jaffle_shop__orders.sql)\n  Binder Error: Catalog \"raw\" does not exist!",
+      "error_message": "Runtime Error in model stg_jaffle_shop__orders (models/staging/jaffle_shop/stg_jaffle_shop__orders.sql)\n  Binder Error: Catalog \"raw\" does not exist!",
+      "is_warning": false
+    },
+    {
+      "node": "model.my_new_project.stg_stripe__payments",
+      "model": "stg_stripe__payments",
+      "resource_type": "model",
+      "object_type": "view",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"stg_stripe__payments\"",
+      "status": "error",
+      "execution_status": "error",
+      "duration_seconds": 0.005587100982666016,
+      "message": "Runtime Error in model stg_stripe__payments (models/staging/stripe/stg_stripe__payments.sql)\n  Binder Error: Catalog \"raw\" does not exist!",
+      "error_message": "Runtime Error in model stg_stripe__payments (models/staging/stripe/stg_stripe__payments.sql)\n  Binder Error: Catalog \"raw\" does not exist!",
+      "is_warning": false
+    },
+    {
+      "node": "model.my_new_project.fct_orders",
+      "model": "fct_orders",
+      "resource_type": "model",
+      "object_type": "view",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"fct_orders\"",
+      "status": "skipped",
+      "execution_status": "skipped",
+      "duration_seconds": 0.0,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.my_new_project.dim_customers",
+      "model": "dim_customers",
+      "resource_type": "model",
+      "object_type": "view",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"dim_customers\"",
+      "status": "skipped",
+      "execution_status": "skipped",
+      "duration_seconds": 0.0,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    }
+  ],
+  "model_executions": [
+    {
+      "node": "model.my_new_project.stg_jaffle_shop__customers",
+      "model": "stg_jaffle_shop__customers",
+      "resource_type": "model",
+      "object_type": "view",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"stg_jaffle_shop__customers\"",
+      "status": "error",
+      "execution_status": "error",
+      "duration_seconds": 0.025990962982177734,
+      "message": "Runtime Error in model stg_jaffle_shop__customers (models/staging/jaffle_shop/stg_jaffle_shop__customers.sql)\n  Binder Error: Catalog \"raw\" does not exist!",
+      "error_message": "Runtime Error in model stg_jaffle_shop__customers (models/staging/jaffle_shop/stg_jaffle_shop__customers.sql)\n  Binder Error: Catalog \"raw\" does not exist!",
+      "is_warning": false
+    },
+    {
+      "node": "model.my_new_project.stg_jaffle_shop__orders",
+      "model": "stg_jaffle_shop__orders",
+      "resource_type": "model",
+      "object_type": "view",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"stg_jaffle_shop__orders\"",
+      "status": "error",
+      "execution_status": "error",
+      "duration_seconds": 0.006249904632568359,
+      "message": "Runtime Error in model stg_jaffle_shop__orders (models/staging/jaffle_shop/stg_jaffle_shop__orders.sql)\n  Binder Error: Catalog \"raw\" does not exist!",
+      "error_message": "Runtime Error in model stg_jaffle_shop__orders (models/staging/jaffle_shop/stg_jaffle_shop__orders.sql)\n  Binder Error: Catalog \"raw\" does not exist!",
+      "is_warning": false
+    },
+    {
+      "node": "model.my_new_project.stg_stripe__payments",
+      "model": "stg_stripe__payments",
+      "resource_type": "model",
+      "object_type": "view",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"stg_stripe__payments\"",
+      "status": "error",
+      "execution_status": "error",
+      "duration_seconds": 0.005587100982666016,
+      "message": "Runtime Error in model stg_stripe__payments (models/staging/stripe/stg_stripe__payments.sql)\n  Binder Error: Catalog \"raw\" does not exist!",
+      "error_message": "Runtime Error in model stg_stripe__payments (models/staging/stripe/stg_stripe__payments.sql)\n  Binder Error: Catalog \"raw\" does not exist!",
+      "is_warning": false
+    },
+    {
+      "node": "model.my_new_project.fct_orders",
+      "model": "fct_orders",
+      "resource_type": "model",
+      "object_type": "view",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"fct_orders\"",
+      "status": "skipped",
+      "execution_status": "skipped",
+      "duration_seconds": 0.0,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.my_new_project.dim_customers",
+      "model": "dim_customers",
+      "resource_type": "model",
+      "object_type": "view",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"dim_customers\"",
+      "status": "skipped",
+      "execution_status": "skipped",
+      "duration_seconds": 0.0,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    }
+  ],
+  "log_file": "/Users/rahulrg/Kea-Data/dbt_runner/run_logs/run_20261006_171149_182733.log",
+  "structured_log_file": "/Users/rahulrg/Kea-Data/dbt_runner/run_logs/run_20261006_171149_182733.events.jsonl",
+  "report_file": "/Users/rahulrg/Kea-Data/dbt_runner/run_logs/run_20261006_171149_182733.json",
+  "config_file": "/Users/rahulrg/Kea-Data/dbt_runner/runner_config.json",
+  "rerun_policy": "isolated clone of the database/lake per run with idempotency validation",
+  "sandbox_workspace": "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-d7m1552z",
+  "sandbox_cleanup_status": "cleaned",
+  "object_validation": {
+    "status": "failed",
+    "expected_objects": [
+      {
+        "unique_id": "model.my_new_project.stg_jaffle_shop__customers",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "stg_jaffle_shop__customers",
+        "materialized": "view",
+        "expected_type": "view",
+        "columns": [
+          {
+            "name": "customer_id",
+            "data_type": ""
+          }
+        ]
+      },
+      {
+        "unique_id": "model.my_new_project.stg_jaffle_shop__orders",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "stg_jaffle_shop__orders",
+        "materialized": "view",
+        "expected_type": "view",
+        "columns": [
+          {
+            "name": "order_id",
+            "data_type": ""
+          },
+          {
+            "name": "status",
+            "data_type": ""
+          },
+          {
+            "name": "customer_id",
+            "data_type": ""
+          }
+        ]
+      },
+      {
+        "unique_id": "model.my_new_project.stg_stripe__payments",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "stg_stripe__payments",
+        "materialized": "view",
+        "expected_type": "view",
+        "columns": [
+          {
+            "name": "payment_id",
+            "data_type": ""
+          }
+        ]
+      },
+      {
+        "unique_id": "model.my_new_project.dim_customers",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "dim_customers",
+        "materialized": "view",
+        "expected_type": "view",
+        "columns": [
+          {
+            "name": "customer_id",
+            "data_type": ""
+          }
+        ]
+      },
+      {
+        "unique_id": "model.my_new_project.fct_orders",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "fct_orders",
+        "materialized": "view",
+        "expected_type": "view",
+        "columns": [
+          {
+            "name": "order_id",
+            "data_type": ""
+          }
+        ]
+      }
+    ],
+    "actual_objects": [],
+    "failures": [
+      "Direct DuckDB inspection error: Catalog Error: Table with name \"information_schema.tables\" does not exist because schema \"information_schema\" does not exist.\n\nLINE 1: ... table_catalog, table_schema, table_name, table_type FROM ducklake.information_schema.tables\n                                                                     ^"
+    ]
+  },
+  "dag_validation": {
+    "status": "passed",
+    "models_count": 5,
+    "models_by_materialization": {
+      "view": 5
+    },
+    "seeds_count": 0,
+    "snapshots_count": 0,
+    "tests_count": 12,
+    "sources_count": 3,
+    "dependencies_checked": 20,
+    "failures": []
+  },
+  "rerun_verification": {},
+  "database_type": "ducklake",
+  "execution_mode": "full",
+  "failure_details": [
+    "stg_jaffle_shop__customers (view) error after 0.026s: Runtime Error in model stg_jaffle_shop__customers (models/staging/jaffle_shop/stg_jaffle_shop__customers.sql)\n  Binder Error: Catalog \"raw\" does not exist!",
+    "stg_jaffle_shop__orders (view) error after 0.006s: Runtime Error in model stg_jaffle_shop__orders (models/staging/jaffle_shop/stg_jaffle_shop__orders.sql)\n  Binder Error: Catalog \"raw\" does not exist!",
+    "stg_stripe__payments (view) error after 0.006s: Runtime Error in model stg_stripe__payments (models/staging/stripe/stg_stripe__payments.sql)\n  Binder Error: Catalog \"raw\" does not exist!",
+    "fct_orders (view) skipped after 0.000s (model.my_new_project.fct_orders)",
+    "dim_customers (view) skipped after 0.000s (model.my_new_project.dim_customers)",
+    "Materialize dbt models (dbt run) failed (exit code 1)",
+    "Direct DuckDB inspection error: Catalog Error: Table with name \"information_schema.tables\" does not exist because schema \"information_schema\" does not exist.\n\nLINE 1: ... table_catalog, table_schema, table_name, table_type FROM ducklake.information_schema.tables\n                                                                     ^"
+  ],
+  "warning_details": []
+}

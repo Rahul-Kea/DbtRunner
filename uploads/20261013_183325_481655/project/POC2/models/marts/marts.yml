@@ -1,0 +1,165 @@
+version: 2
+
+models:
+  - name: dim_date
+    description: One row per order date.
+    columns:
+      - name: order_date
+        data_type: date
+        data_tests: [not_null, unique]
+
+  - name: dim_customer
+    description: One row per customer, identified by the source customer ID.
+    columns:
+      - name: customer_id
+        data_tests: [not_null, unique]
+      - name: customer_name
+        data_tests: [not_null]
+      - name: customer_city
+        data_tests: [not_null]
+
+  - name: dim_product
+    description: One row per product, identified by the source product ID.
+    columns:
+      - name: product_id
+        data_tests: [not_null, unique]
+      - name: product_name
+        data_tests: [not_null]
+      - name: product_category
+        data_tests: [not_null]
+
+  - name: dim_store
+    description: One row per store, identified by the source store ID.
+    columns:
+      - name: store_id
+        data_tests: [not_null, unique]
+      - name: store_name
+        data_tests: [not_null]
+
+  - name: dim_payment_method
+    description: One row per payment method, identified by its name.
+    columns:
+      - name: payment_method
+        data_tests: [not_null, unique]
+
+  - name: fact_sales_line
+    description: One row per product line in an order, linked to dimensions by their natural keys.
+    columns:
+      - name: order_id
+        data_tests: [not_null]
+      - name: order_date
+        data_type: date
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_date')
+                field: order_date
+      - name: customer_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_customer')
+                field: customer_id
+      - name: product_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_product')
+                field: product_id
+      - name: store_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_store')
+                field: store_id
+      - name: payment_method
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_payment_method')
+                field: payment_method
+      - name: quantity
+        data_tests: [not_null]
+      - name: unit_price
+        data_tests: [not_null]
+      - name: line_amount
+        data_tests: [not_null]
+
+  - name: fact_order
+    description: One row per order, linked to dimensions by their natural keys.
+    columns:
+      - name: order_id
+        data_tests: [not_null, unique]
+      - name: order_date
+        data_type: date
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_date')
+                field: order_date
+      - name: customer_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_customer')
+                field: customer_id
+      - name: store_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_store')
+                field: store_id
+      - name: payment_method
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_payment_method')
+                field: payment_method
+      - name: line_count
+        data_tests: [not_null]
+      - name: total_quantity
+        data_tests: [not_null]
+      - name: order_total
+        data_tests: [not_null]
+
+unit_tests:
+  - name: fact_order_sums_line_amounts
+    model: fact_order
+    given:
+      - input: ref('stg_store_orders')
+        rows:
+          - {order_id: 1001, order_date: "2025-01-03", customer_id: C001, store_id: S01, payment_method: Card, quantity: 2, line_amount: 25.00}
+          - {order_id: 1001, order_date: "2025-01-03", customer_id: C001, store_id: S01, payment_method: Card, quantity: 3, line_amount: 18.00}
+          - {order_id: 1002, order_date: "2025-01-04", customer_id: C002, store_id: S01, payment_method: Card, quantity: 1, line_amount: 7.50}
+
+      - input: ref('dim_date')
+        rows:
+          - {order_date: "2025-01-03"}
+          - {order_date: "2025-01-04"}
+
+      - input: ref('dim_customer')
+        rows:
+          - {customer_id: C001}
+          - {customer_id: C002}
+
+      - input: ref('dim_store')
+        rows:
+          - {store_id: S01}
+
+      - input: ref('dim_payment_method')
+        rows:
+          - {payment_method: Card}
+
+    expect:
+      rows:
+        - {order_id: 1001, order_date: "2025-01-03", customer_id: C001, store_id: S01, payment_method: Card, line_count: 2, total_quantity: 5, order_total: 43.00}
+        - {order_id: 1002, order_date: "2025-01-04", customer_id: C002, store_id: S01, payment_method: Card, line_count: 1, total_quantity: 1, order_total: 7.50}

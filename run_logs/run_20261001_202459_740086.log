@@ -1,0 +1,245 @@
+dbt runner execution 20261001_202459_740086
+Project input: /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261001_202459_740086/project
+Database input: /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261001_202459_740086/lake.ducklake (ducklake)
+Data input: /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261001_202459_740086/lake_data
+Execution mode: isolated temporary sandbox with safe repeated execution verification.
+
+--- Clone DuckLake metadata catalog ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-w_jz8e87/clone_ducklake_catalog.py /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261001_202459_740086/lake.ducklake /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-w_jz8e87/simulation.ducklake
+Cloned DuckLake metadata catalog to /private/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-w_jz8e87/simulation.ducklake
+
+[exit code: 0; duration: 0.07s]
+
+--- Parse dbt DAG ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/dbt parse --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-w_jz8e87/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-w_jz8e87/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-w_jz8e87/dbt_logs
+[0m14:55:01  Running with dbt=1.12.5
+[0m14:55:01  Registered adapter: duckdb=1.11.0
+[0m14:55:01  Unable to do partial parsing because saved manifest not found. Starting full parse.
+[0m14:55:02  Performance info: /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-w_jz8e87/target/perf_info.json
+
+[exit code: 0; duration: 3.34s]
+
+--- Materialize dbt seeds ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/dbt seed --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-w_jz8e87/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-w_jz8e87/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-w_jz8e87/dbt_logs
+[0m14:55:04  Running with dbt=1.12.5
+[0m14:55:04  Registered adapter: duckdb=1.11.0
+[0m14:55:04  Found 8 models, 54 data tests, 1 seed, 500 macros, 1 unit test
+[0m14:55:04  
+[0m14:55:04  Concurrency: 1 threads (target='runner')
+[0m14:55:04  
+[0m14:55:04  1 of 1 START seed file main.store_orders ....................................... [RUN]
+[0m14:55:04  1 of 1 OK loaded seed file main.store_orders ................................... [[32mINSERT 20[0m in 0.04s]
+[0m14:55:04  
+[0m14:55:04  Finished running 1 seed in 0 hours 0 minutes and 0.11 seconds (0.11s).
+[0m14:55:04  
+[0m14:55:04  [32mCompleted successfully[0m
+[0m14:55:04  
+[0m14:55:04  Done. PASS=1 WARN=0 ERROR=0 SKIP=0 NO-OP=0 REUSED=0 TOTAL=1
+
+[exit code: 0; duration: 1.85s]
+
+--- Materialize dbt models (dbt run) ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/dbt run --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-w_jz8e87/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-w_jz8e87/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-w_jz8e87/dbt_logs
+[0m14:55:06  Running with dbt=1.12.5
+[0m14:55:06  Registered adapter: duckdb=1.11.0
+[0m14:55:06  Found 8 models, 54 data tests, 1 seed, 500 macros, 1 unit test
+[0m14:55:06  
+[0m14:55:06  Concurrency: 1 threads (target='runner')
+[0m14:55:06  
+[0m14:55:06  1 of 8 START sql table model main.stg_store_orders ............................. [RUN]
+[0m14:55:06  1 of 8 OK created sql table model main.stg_store_orders ........................ [[32mOK[0m in 0.05s]
+[0m14:55:06  2 of 8 START sql table model main.dim_customer ................................. [RUN]
+[0m14:55:06  2 of 8 OK created sql table model main.dim_customer ............................ [[32mOK[0m in 0.02s]
+[0m14:55:06  3 of 8 START sql table model main.dim_date ..................................... [RUN]
+[0m14:55:06  3 of 8 OK created sql table model main.dim_date ................................ [[32mOK[0m in 0.02s]
+[0m14:55:06  4 of 8 START sql table model main.dim_payment_method ........................... [RUN]
+[0m14:55:06  4 of 8 OK created sql table model main.dim_payment_method ...................... [[32mOK[0m in 0.02s]
+[0m14:55:06  5 of 8 START sql table model main.dim_product .................................. [RUN]
+[0m14:55:06  5 of 8 OK created sql table model main.dim_product ............................. [[32mOK[0m in 0.02s]
+[0m14:55:06  6 of 8 START sql table model main.dim_store .................................... [RUN]
+[0m14:55:06  6 of 8 OK created sql table model main.dim_store ............................... [[32mOK[0m in 0.02s]
+[0m14:55:06  7 of 8 START sql table model main.fact_order ................................... [RUN]
+[0m14:55:06  7 of 8 OK created sql table model main.fact_order .............................. [[32mOK[0m in 0.03s]
+[0m14:55:06  8 of 8 START sql table model main.fact_sales_line .............................. [RUN]
+[0m14:55:06  8 of 8 OK created sql table model main.fact_sales_line ......................... [[32mOK[0m in 0.03s]
+[0m14:55:06  
+[0m14:55:06  Finished running 8 table models in 0 hours 0 minutes and 0.29 seconds (0.29s).
+[0m14:55:06  
+[0m14:55:06  [32mCompleted successfully[0m
+[0m14:55:06  
+[0m14:55:06  Done. PASS=8 WARN=0 ERROR=0 SKIP=0 NO-OP=0 REUSED=0 TOTAL=8
+
+[exit code: 0; duration: 1.97s]
+
+--- Run dbt tests ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/dbt test --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-w_jz8e87/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-w_jz8e87/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-w_jz8e87/dbt_logs
+[0m14:55:08  Running with dbt=1.12.5
+[0m14:55:08  Registered adapter: duckdb=1.11.0
+[0m14:55:08  Found 8 models, 54 data tests, 1 seed, 500 macros, 1 unit test
+[0m14:55:08  
+[0m14:55:08  Concurrency: 1 threads (target='runner')
+[0m14:55:08  
+[0m14:55:08  1 of 55 START test not_null_dim_customer_customer_city ......................... [RUN]
+[0m14:55:08  1 of 55 PASS not_null_dim_customer_customer_city ............................... [[32mPASS[0m in 0.02s]
+[0m14:55:08  2 of 55 START test not_null_dim_customer_customer_id ........................... [RUN]
+[0m14:55:08  2 of 55 PASS not_null_dim_customer_customer_id ................................. [[32mPASS[0m in 0.01s]
+[0m14:55:08  3 of 55 START test not_null_dim_customer_customer_name ......................... [RUN]
+[0m14:55:08  3 of 55 PASS not_null_dim_customer_customer_name ............................... [[32mPASS[0m in 0.01s]
+[0m14:55:08  4 of 55 START test not_null_dim_date_order_date ................................ [RUN]
+[0m14:55:08  4 of 55 PASS not_null_dim_date_order_date ...................................... [[32mPASS[0m in 0.01s]
+[0m14:55:08  5 of 55 START test not_null_dim_payment_method_payment_method .................. [RUN]
+[0m14:55:08  5 of 55 PASS not_null_dim_payment_method_payment_method ........................ [[32mPASS[0m in 0.01s]
+[0m14:55:08  6 of 55 START test not_null_dim_product_product_category ....................... [RUN]
+[0m14:55:08  6 of 55 PASS not_null_dim_product_product_category ............................. [[32mPASS[0m in 0.01s]
+[0m14:55:08  7 of 55 START test not_null_dim_product_product_id ............................. [RUN]
+[0m14:55:08  7 of 55 PASS not_null_dim_product_product_id ................................... [[32mPASS[0m in 0.01s]
+[0m14:55:08  8 of 55 START test not_null_dim_product_product_name ........................... [RUN]
+[0m14:55:08  8 of 55 PASS not_null_dim_product_product_name ................................. [[32mPASS[0m in 0.01s]
+[0m14:55:08  9 of 55 START test not_null_dim_store_store_id ................................. [RUN]
+[0m14:55:08  9 of 55 PASS not_null_dim_store_store_id ....................................... [[32mPASS[0m in 0.01s]
+[0m14:55:08  10 of 55 START test not_null_dim_store_store_name .............................. [RUN]
+[0m14:55:08  10 of 55 PASS not_null_dim_store_store_name .................................... [[32mPASS[0m in 0.01s]
+[0m14:55:08  11 of 55 START test not_null_fact_order_customer_id ............................ [RUN]
+[0m14:55:08  11 of 55 PASS not_null_fact_order_customer_id .................................. [[32mPASS[0m in 0.01s]
+[0m14:55:08  12 of 55 START test not_null_fact_order_line_count ............................. [RUN]
+[0m14:55:08  12 of 55 PASS not_null_fact_order_line_count ................................... [[32mPASS[0m in 0.01s]
+[0m14:55:08  13 of 55 START test not_null_fact_order_order_date ............................. [RUN]
+[0m14:55:08  13 of 55 PASS not_null_fact_order_order_date ................................... [[32mPASS[0m in 0.01s]
+[0m14:55:08  14 of 55 START test not_null_fact_order_order_id ............................... [RUN]
+[0m14:55:08  14 of 55 PASS not_null_fact_order_order_id ..................................... [[32mPASS[0m in 0.01s]
+[0m14:55:08  15 of 55 START test not_null_fact_order_order_total ............................ [RUN]
+[0m14:55:08  15 of 55 PASS not_null_fact_order_order_total .................................. [[32mPASS[0m in 0.01s]
+[0m14:55:08  16 of 55 START test not_null_fact_order_payment_method ......................... [RUN]
+[0m14:55:08  16 of 55 PASS not_null_fact_order_payment_method ............................... [[32mPASS[0m in 0.01s]
+[0m14:55:08  17 of 55 START test not_null_fact_order_store_id ............................... [RUN]
+[0m14:55:08  17 of 55 PASS not_null_fact_order_store_id ..................................... [[32mPASS[0m in 0.01s]
+[0m14:55:08  18 of 55 START test not_null_fact_order_total_quantity ......................... [RUN]
+[0m14:55:08  18 of 55 PASS not_null_fact_order_total_quantity ............................... [[32mPASS[0m in 0.01s]
+[0m14:55:08  19 of 55 START test not_null_fact_sales_line_customer_id ....................... [RUN]
+[0m14:55:08  19 of 55 PASS not_null_fact_sales_line_customer_id ............................. [[32mPASS[0m in 0.01s]
+[0m14:55:08  20 of 55 START test not_null_fact_sales_line_line_amount ....................... [RUN]
+[0m14:55:08  20 of 55 PASS not_null_fact_sales_line_line_amount ............................. [[32mPASS[0m in 0.01s]
+[0m14:55:08  21 of 55 START test not_null_fact_sales_line_order_date ........................ [RUN]
+[0m14:55:08  21 of 55 PASS not_null_fact_sales_line_order_date .............................. [[32mPASS[0m in 0.01s]
+[0m14:55:08  22 of 55 START test not_null_fact_sales_line_order_id .......................... [RUN]
+[0m14:55:08  22 of 55 PASS not_null_fact_sales_line_order_id ................................ [[32mPASS[0m in 0.01s]
+[0m14:55:08  23 of 55 START test not_null_fact_sales_line_payment_method .................... [RUN]
+[0m14:55:08  23 of 55 PASS not_null_fact_sales_line_payment_method .......................... [[32mPASS[0m in 0.01s]
+[0m14:55:08  24 of 55 START test not_null_fact_sales_line_product_id ........................ [RUN]
+[0m14:55:08  24 of 55 PASS not_null_fact_sales_line_product_id .............................. [[32mPASS[0m in 0.01s]
+[0m14:55:08  25 of 55 START test not_null_fact_sales_line_quantity .......................... [RUN]
+[0m14:55:08  25 of 55 PASS not_null_fact_sales_line_quantity ................................ [[32mPASS[0m in 0.01s]
+[0m14:55:08  26 of 55 START test not_null_fact_sales_line_store_id .......................... [RUN]
+[0m14:55:08  26 of 55 PASS not_null_fact_sales_line_store_id ................................ [[32mPASS[0m in 0.01s]
+[0m14:55:08  27 of 55 START test not_null_fact_sales_line_unit_price ........................ [RUN]
+[0m14:55:08  27 of 55 PASS not_null_fact_sales_line_unit_price .............................. [[32mPASS[0m in 0.01s]
+[0m14:55:08  28 of 55 START test not_null_stg_store_orders_customer_id ...................... [RUN]
+[0m14:55:08  28 of 55 PASS not_null_stg_store_orders_customer_id ............................ [[32mPASS[0m in 0.01s]
+[0m14:55:08  29 of 55 START test not_null_stg_store_orders_customer_name .................... [RUN]
+[0m14:55:08  29 of 55 PASS not_null_stg_store_orders_customer_name .......................... [[32mPASS[0m in 0.01s]
+[0m14:55:08  30 of 55 START test not_null_stg_store_orders_line_amount ...................... [RUN]
+[0m14:55:08  30 of 55 PASS not_null_stg_store_orders_line_amount ............................ [[32mPASS[0m in 0.01s]
+[0m14:55:08  31 of 55 START test not_null_stg_store_orders_order_date ....................... [RUN]
+[0m14:55:08  31 of 55 PASS not_null_stg_store_orders_order_date ............................. [[32mPASS[0m in 0.01s]
+[0m14:55:08  32 of 55 START test not_null_stg_store_orders_order_id ......................... [RUN]
+[0m14:55:08  32 of 55 PASS not_null_stg_store_orders_order_id ............................... [[32mPASS[0m in 0.01s]
+[0m14:55:08  33 of 55 START test not_null_stg_store_orders_payment_method ................... [RUN]
+[0m14:55:08  33 of 55 PASS not_null_stg_store_orders_payment_method ......................... [[32mPASS[0m in 0.01s]
+[0m14:55:08  34 of 55 START test not_null_stg_store_orders_product_id ....................... [RUN]
+[0m14:55:08  34 of 55 PASS not_null_stg_store_orders_product_id ............................. [[32mPASS[0m in 0.01s]
+[0m14:55:08  35 of 55 START test not_null_stg_store_orders_product_name ..................... [RUN]
+[0m14:55:08  35 of 55 PASS not_null_stg_store_orders_product_name ........................... [[32mPASS[0m in 0.01s]
+[0m14:55:08  36 of 55 START test not_null_stg_store_orders_quantity ......................... [RUN]
+[0m14:55:08  36 of 55 PASS not_null_stg_store_orders_quantity ............................... [[32mPASS[0m in 0.01s]
+[0m14:55:08  37 of 55 START test not_null_stg_store_orders_store_id ......................... [RUN]
+[0m14:55:08  37 of 55 PASS not_null_stg_store_orders_store_id ............................... [[32mPASS[0m in 0.01s]
+[0m14:55:08  38 of 55 START test not_null_stg_store_orders_unit_price ....................... [RUN]
+[0m14:55:08  38 of 55 PASS not_null_stg_store_orders_unit_price ............................. [[32mPASS[0m in 0.01s]
+[0m14:55:08  39 of 55 START test order_total_matches_lines .................................. [RUN]
+[0m14:55:08  39 of 55 PASS order_total_matches_lines ........................................ [[32mPASS[0m in 0.01s]
+[0m14:55:08  40 of 55 START test relationships_fact_order_customer_id__customer_id__ref_dim_customer_  [RUN]
+[0m14:55:08  40 of 55 PASS relationships_fact_order_customer_id__customer_id__ref_dim_customer_  [[32mPASS[0m in 0.02s]
+[0m14:55:08  41 of 55 START test relationships_fact_order_order_date__order_date__ref_dim_date_  [RUN]
+[0m14:55:08  41 of 55 PASS relationships_fact_order_order_date__order_date__ref_dim_date_ ... [[32mPASS[0m in 0.02s]
+[0m14:55:08  42 of 55 START test relationships_fact_order_payment_method__payment_method__ref_dim_payment_method_  [RUN]
+[0m14:55:08  42 of 55 PASS relationships_fact_order_payment_method__payment_method__ref_dim_payment_method_  [[32mPASS[0m in 0.02s]
+[0m14:55:08  43 of 55 START test relationships_fact_order_store_id__store_id__ref_dim_store_  [RUN]
+[0m14:55:08  43 of 55 PASS relationships_fact_order_store_id__store_id__ref_dim_store_ ...... [[32mPASS[0m in 0.01s]
+[0m14:55:08  44 of 55 START test relationships_fact_sales_line_customer_id__customer_id__ref_dim_customer_  [RUN]
+[0m14:55:08  44 of 55 PASS relationships_fact_sales_line_customer_id__customer_id__ref_dim_customer_  [[32mPASS[0m in 0.01s]
+[0m14:55:08  45 of 55 START test relationships_fact_sales_line_order_date__order_date__ref_dim_date_  [RUN]
+[0m14:55:08  45 of 55 PASS relationships_fact_sales_line_order_date__order_date__ref_dim_date_  [[32mPASS[0m in 0.01s]
+[0m14:55:08  46 of 55 START test relationships_fact_sales_line_payment_method__payment_method__ref_dim_payment_method_  [RUN]
+[0m14:55:08  46 of 55 PASS relationships_fact_sales_line_payment_method__payment_method__ref_dim_payment_method_  [[32mPASS[0m in 0.01s]
+[0m14:55:08  47 of 55 START test relationships_fact_sales_line_product_id__product_id__ref_dim_product_  [RUN]
+[0m14:55:08  47 of 55 PASS relationships_fact_sales_line_product_id__product_id__ref_dim_product_  [[32mPASS[0m in 0.02s]
+[0m14:55:08  48 of 55 START test relationships_fact_sales_line_store_id__store_id__ref_dim_store_  [RUN]
+[0m14:55:08  48 of 55 PASS relationships_fact_sales_line_store_id__store_id__ref_dim_store_ . [[32mPASS[0m in 0.01s]
+[0m14:55:08  49 of 55 START test unique_dim_customer_customer_id ............................ [RUN]
+[0m14:55:08  49 of 55 PASS unique_dim_customer_customer_id .................................. [[32mPASS[0m in 0.01s]
+[0m14:55:08  50 of 55 START test unique_dim_date_order_date ................................. [RUN]
+[0m14:55:08  50 of 55 PASS unique_dim_date_order_date ....................................... [[32mPASS[0m in 0.01s]
+[0m14:55:08  51 of 55 START test unique_dim_payment_method_payment_method ................... [RUN]
+[0m14:55:08  51 of 55 PASS unique_dim_payment_method_payment_method ......................... [[32mPASS[0m in 0.01s]
+[0m14:55:08  52 of 55 START test unique_dim_product_product_id .............................. [RUN]
+[0m14:55:08  52 of 55 PASS unique_dim_product_product_id .................................... [[32mPASS[0m in 0.01s]
+[0m14:55:08  53 of 55 START test unique_dim_store_store_id .................................. [RUN]
+[0m14:55:08  53 of 55 PASS unique_dim_store_store_id ........................................ [[32mPASS[0m in 0.01s]
+[0m14:55:08  54 of 55 START test unique_fact_order_order_id ................................. [RUN]
+[0m14:55:08  54 of 55 PASS unique_fact_order_order_id ....................................... [[32mPASS[0m in 0.01s]
+[0m14:55:08  55 of 55 START unit_test fact_order::fact_order_sums_line_amounts .............. [RUN]
+[0m14:55:09  55 of 55 PASS fact_order::fact_order_sums_line_amounts ......................... [[32mPASS[0m in 0.07s]
+[0m14:55:09  
+[0m14:55:09  Finished running 54 data tests, 1 unit test in 0 hours 0 minutes and 0.57 seconds (0.57s).
+[0m14:55:09  
+[0m14:55:09  [32mCompleted successfully[0m
+[0m14:55:09  
+[0m14:55:09  Done. PASS=55 WARN=0 ERROR=0 SKIP=0 NO-OP=0 REUSED=0 TOTAL=55
+
+[exit code: 0; duration: 2.20s]
+
+--- Generate dbt docs & catalog ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/dbt docs generate --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-w_jz8e87/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-w_jz8e87/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-w_jz8e87/dbt_logs
+[0m14:55:10  Running with dbt=1.12.5
+[0m14:55:10  Registered adapter: duckdb=1.11.0
+[0m14:55:10  Found 8 models, 54 data tests, 1 seed, 500 macros, 1 unit test
+[0m14:55:10  
+[0m14:55:10  Concurrency: 1 threads (target='runner')
+[0m14:55:10  
+[0m14:55:10  Building catalog
+[0m14:55:10  Catalog written to /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-w_jz8e87/target/catalog.json
+
+[exit code: 0; duration: 1.90s]
+
+--- Safe repeated execution (dbt run rerun) ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/dbt run --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-w_jz8e87/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-w_jz8e87/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-w_jz8e87/dbt_logs
+[0m14:55:12  Running with dbt=1.12.5
+[0m14:55:12  Registered adapter: duckdb=1.11.0
+[0m14:55:12  Found 8 models, 54 data tests, 1 seed, 500 macros, 1 unit test
+[0m14:55:12  
+[0m14:55:12  Concurrency: 1 threads (target='runner')
+[0m14:55:12  
+[0m14:55:12  1 of 8 START sql table model main.stg_store_orders ............................. [RUN]
+[0m14:55:12  1 of 8 OK created sql table model main.stg_store_orders ........................ [[32mOK[0m in 0.06s]
+[0m14:55:12  2 of 8 START sql table model main.dim_customer ................................. [RUN]
+[0m14:55:12  2 of 8 OK created sql table model main.dim_customer ............................ [[32mOK[0m in 0.03s]
+[0m14:55:12  3 of 8 START sql table model main.dim_date ..................................... [RUN]
+[0m14:55:12  3 of 8 OK created sql table model main.dim_date ................................ [[32mOK[0m in 0.03s]
+[0m14:55:12  4 of 8 START sql table model main.dim_payment_method ........................... [RUN]
+[0m14:55:12  4 of 8 OK created sql table model main.dim_payment_method ...................... [[32mOK[0m in 0.03s]
+[0m14:55:12  5 of 8 START sql table model main.dim_product .................................. [RUN]
+[0m14:55:12  5 of 8 OK created sql table model main.dim_product ............................. [[32mOK[0m in 0.03s]
+[0m14:55:12  6 of 8 START sql table model main.dim_store .................................... [RUN]
+[0m14:55:12  6 of 8 OK created sql table model main.dim_store ............................... [[32mOK[0m in 0.03s]
+[0m14:55:12  7 of 8 START sql table model main.fact_order ................................... [RUN]
+[0m14:55:12  7 of 8 OK created sql table model main.fact_order .............................. [[32mOK[0m in 0.04s]
+[0m14:55:12  8 of 8 START sql table model main.fact_sales_line .............................. [RUN]
+[0m14:55:12  8 of 8 OK created sql table model main.fact_sales_line ......................... [[32mOK[0m in 0.04s]
+[0m14:55:12  
+[0m14:55:12  Finished running 8 table models in 0 hours 0 minutes and 0.36 seconds (0.36s).
+[0m14:55:12  
+[0m14:55:12  [32mCompleted successfully[0m
+[0m14:55:12  
+[0m14:55:12  Done. PASS=8 WARN=0 ERROR=0 SKIP=0 NO-OP=0 REUSED=0 TOTAL=8
+
+[exit code: 0; duration: 2.01s]

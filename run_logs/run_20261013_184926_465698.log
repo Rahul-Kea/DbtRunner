@@ -1,0 +1,152 @@
+dbt runner execution 20261013_184926_465698
+Project input: /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261013_184926_465698/project
+Database input: /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261013_184926_465698/lake.ducklake (ducklake)
+Data input: /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261013_184926_465698/lake_data
+Execution mode: isolated temporary sandbox with safe repeated execution verification.
+
+--- Clone DuckLake metadata catalog ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-e_z3nj9y/clone_ducklake_catalog.py /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261013_184926_465698/lake.ducklake /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-e_z3nj9y/simulation.ducklake
+Cloned DuckLake metadata catalog to /private/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-e_z3nj9y/simulation.ducklake
+
+[exit code: 0; duration: 0.13s]
+
+--- Parse dbt DAG ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/dbt --no-version-check parse --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-e_z3nj9y/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-e_z3nj9y/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-e_z3nj9y/dbt_logs
+[0m13:19:30  Running with dbt=1.12.5
+[0m13:19:30  Registered adapter: duckdb=1.11.0
+[0m13:19:30  Unable to do partial parsing because saved manifest not found. Starting full parse.
+[0m13:19:31  [[33mWARNING[0m][MissingArgumentsPropertyInGenericTestDeprecation]: Deprecated
+functionality
+Found top-level arguments to test `relationships` defined on 'orders' in package
+'jaffle_shop' (models/schema.yml). Arguments to generic tests should be nested
+under the `arguments` property.
+[0m13:19:31  Performance info: /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-e_z3nj9y/target/perf_info.json
+[0m13:19:31  [[33mWARNING[0m][DeprecationsSummary]: Deprecated functionality
+Summary of encountered deprecations:
+- MissingArgumentsPropertyInGenericTestDeprecation: 4 occurrences
+To see all deprecation instances instead of just the first occurrence of each,
+run command again with the `--show-all-deprecations` flag. You may also need to
+run with `--no-partial-parse` as some deprecations are only encountered during
+parsing.
+
+[exit code: 0; duration: 3.20s]
+
+--- Materialize dbt seeds ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/dbt --no-version-check seed --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-e_z3nj9y/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-e_z3nj9y/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-e_z3nj9y/dbt_logs
+[0m13:19:33  Running with dbt=1.12.5
+[0m13:19:33  Registered adapter: duckdb=1.11.0
+[0m13:19:33  Found 5 models, 3 seeds, 20 data tests, 500 macros
+[0m13:19:33  
+[0m13:19:33  Concurrency: 1 threads (target='runner')
+[0m13:19:33  
+[0m13:19:34  1 of 3 START seed file main.raw_customers ...................................... [RUN]
+[0m13:19:34  1 of 3 OK loaded seed file main.raw_customers .................................. [[32mINSERT 100[0m in 0.06s]
+[0m13:19:34  2 of 3 START seed file main.raw_orders ......................................... [RUN]
+[0m13:19:34  2 of 3 OK loaded seed file main.raw_orders ..................................... [[32mINSERT 99[0m in 0.03s]
+[0m13:19:34  3 of 3 START seed file main.raw_payments ....................................... [RUN]
+[0m13:19:34  3 of 3 OK loaded seed file main.raw_payments ................................... [[32mINSERT 113[0m in 0.02s]
+[0m13:19:34  
+[0m13:19:34  Finished running 3 seeds in 0 hours 0 minutes and 0.23 seconds (0.23s).
+[0m13:19:34  
+[0m13:19:34  [32mCompleted successfully[0m
+[0m13:19:34  
+[0m13:19:34  Done. PASS=3 WARN=0 ERROR=0 SKIP=0 NO-OP=0 REUSED=0 TOTAL=3
+
+[exit code: 0; duration: 2.52s]
+
+--- Materialize dbt models (dbt run) ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/dbt --no-version-check run --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-e_z3nj9y/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-e_z3nj9y/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-e_z3nj9y/dbt_logs
+[0m13:19:35  Running with dbt=1.12.5
+[0m13:19:36  Registered adapter: duckdb=1.11.0
+[0m13:19:36  Found 5 models, 3 seeds, 20 data tests, 500 macros
+[0m13:19:36  
+[0m13:19:36  Concurrency: 1 threads (target='runner')
+[0m13:19:36  
+[0m13:19:36  1 of 5 START sql view model main.stg_customers ................................. [RUN]
+[0m13:19:36  1 of 5 OK created sql view model main.stg_customers ............................ [[32mOK[0m in 0.05s]
+[0m13:19:36  2 of 5 START sql view model main.stg_orders .................................... [RUN]
+[0m13:19:36  2 of 5 OK created sql view model main.stg_orders ............................... [[32mOK[0m in 0.02s]
+[0m13:19:36  3 of 5 START sql view model main.stg_payments .................................. [RUN]
+[0m13:19:36  3 of 5 OK created sql view model main.stg_payments ............................. [[32mOK[0m in 0.03s]
+[0m13:19:36  4 of 5 START sql table model main.customers .................................... [RUN]
+[0m13:19:36  4 of 5 OK created sql table model main.customers ............................... [[32mOK[0m in 0.07s]
+[0m13:19:36  5 of 5 START sql table model main.orders ....................................... [RUN]
+[0m13:19:36  5 of 5 OK created sql table model main.orders .................................. [[32mOK[0m in 0.03s]
+[0m13:19:36  
+[0m13:19:36  Finished running 2 table models, 3 view models in 0 hours 0 minutes and 0.29 seconds (0.29s).
+[0m13:19:36  
+[0m13:19:36  [32mCompleted successfully[0m
+[0m13:19:36  
+[0m13:19:36  Done. PASS=5 WARN=0 ERROR=0 SKIP=0 NO-OP=0 REUSED=0 TOTAL=5
+
+[exit code: 0; duration: 2.43s]
+
+--- Run dbt tests ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/dbt --no-version-check test --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-e_z3nj9y/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-e_z3nj9y/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-e_z3nj9y/dbt_logs
+[0m13:19:38  Running with dbt=1.12.5
+[0m13:19:38  Registered adapter: duckdb=1.11.0
+[0m13:19:38  Found 5 models, 3 seeds, 20 data tests, 500 macros
+[0m13:19:38  
+[0m13:19:38  Concurrency: 1 threads (target='runner')
+[0m13:19:38  
+[0m13:19:38  1 of 20 START test accepted_values_orders_status__placed__shipped__completed__return_pending__returned  [RUN]
+[0m13:19:38  1 of 20 PASS accepted_values_orders_status__placed__shipped__completed__return_pending__returned  [[32mPASS[0m in 0.03s]
+[0m13:19:38  2 of 20 START test accepted_values_stg_orders_status__placed__shipped__completed__return_pending__returned  [RUN]
+[0m13:19:38  2 of 20 PASS accepted_values_stg_orders_status__placed__shipped__completed__return_pending__returned  [[32mPASS[0m in 0.02s]
+[0m13:19:38  3 of 20 START test accepted_values_stg_payments_payment_method__credit_card__coupon__bank_transfer__gift_card  [RUN]
+[0m13:19:38  3 of 20 PASS accepted_values_stg_payments_payment_method__credit_card__coupon__bank_transfer__gift_card  [[32mPASS[0m in 0.02s]
+[0m13:19:38  4 of 20 START test not_null_customers_customer_id .............................. [RUN]
+[0m13:19:38  4 of 20 PASS not_null_customers_customer_id .................................... [[32mPASS[0m in 0.01s]
+[0m13:19:38  5 of 20 START test not_null_orders_amount ...................................... [RUN]
+[0m13:19:38  5 of 20 PASS not_null_orders_amount ............................................ [[32mPASS[0m in 0.01s]
+[0m13:19:38  6 of 20 START test not_null_orders_bank_transfer_amount ........................ [RUN]
+[0m13:19:38  6 of 20 PASS not_null_orders_bank_transfer_amount .............................. [[32mPASS[0m in 0.01s]
+[0m13:19:38  7 of 20 START test not_null_orders_coupon_amount ............................... [RUN]
+[0m13:19:38  7 of 20 PASS not_null_orders_coupon_amount ..................................... [[32mPASS[0m in 0.01s]
+[0m13:19:38  8 of 20 START test not_null_orders_credit_card_amount .......................... [RUN]
+[0m13:19:38  8 of 20 PASS not_null_orders_credit_card_amount ................................ [[32mPASS[0m in 0.01s]
+[0m13:19:38  9 of 20 START test not_null_orders_customer_id ................................. [RUN]
+[0m13:19:38  9 of 20 PASS not_null_orders_customer_id ....................................... [[32mPASS[0m in 0.01s]
+[0m13:19:38  10 of 20 START test not_null_orders_gift_card_amount ........................... [RUN]
+[0m13:19:38  10 of 20 PASS not_null_orders_gift_card_amount ................................. [[32mPASS[0m in 0.01s]
+[0m13:19:38  11 of 20 START test not_null_orders_order_id ................................... [RUN]
+[0m13:19:38  11 of 20 PASS not_null_orders_order_id ......................................... [[32mPASS[0m in 0.01s]
+[0m13:19:38  12 of 20 START test not_null_stg_customers_customer_id ......................... [RUN]
+[0m13:19:38  12 of 20 PASS not_null_stg_customers_customer_id ............................... [[32mPASS[0m in 0.01s]
+[0m13:19:38  13 of 20 START test not_null_stg_orders_order_id ............................... [RUN]
+[0m13:19:38  13 of 20 PASS not_null_stg_orders_order_id ..................................... [[32mPASS[0m in 0.01s]
+[0m13:19:38  14 of 20 START test not_null_stg_payments_payment_id ........................... [RUN]
+[0m13:19:38  14 of 20 PASS not_null_stg_payments_payment_id ................................. [[32mPASS[0m in 0.01s]
+[0m13:19:38  15 of 20 START test relationships_orders_customer_id__customer_id__ref_customers_  [RUN]
+[0m13:19:38  15 of 20 PASS relationships_orders_customer_id__customer_id__ref_customers_ .... [[32mPASS[0m in 0.02s]
+[0m13:19:38  16 of 20 START test unique_customers_customer_id ............................... [RUN]
+[0m13:19:38  16 of 20 PASS unique_customers_customer_id ..................................... [[32mPASS[0m in 0.01s]
+[0m13:19:38  17 of 20 START test unique_orders_order_id ..................................... [RUN]
+[0m13:19:38  17 of 20 PASS unique_orders_order_id ........................................... [[32mPASS[0m in 0.01s]
+[0m13:19:38  18 of 20 START test unique_stg_customers_customer_id ........................... [RUN]
+[0m13:19:38  18 of 20 PASS unique_stg_customers_customer_id ................................. [[32mPASS[0m in 0.01s]
+[0m13:19:38  19 of 20 START test unique_stg_orders_order_id ................................. [RUN]
+[0m13:19:38  19 of 20 PASS unique_stg_orders_order_id ....................................... [[32mPASS[0m in 0.01s]
+[0m13:19:38  20 of 20 START test unique_stg_payments_payment_id ............................. [RUN]
+[0m13:19:38  20 of 20 PASS unique_stg_payments_payment_id ................................... [[32mPASS[0m in 0.01s]
+[0m13:19:38  
+[0m13:19:38  Finished running 20 data tests in 0 hours 0 minutes and 0.32 seconds (0.32s).
+[0m13:19:38  
+[0m13:19:38  [32mCompleted successfully[0m
+[0m13:19:38  
+[0m13:19:38  Done. PASS=20 WARN=0 ERROR=0 SKIP=0 NO-OP=0 REUSED=0 TOTAL=20
+
+[exit code: 0; duration: 2.23s]
+
+--- Generate dbt docs & catalog ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/dbt --no-version-check docs generate --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-e_z3nj9y/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-e_z3nj9y/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-e_z3nj9y/dbt_logs
+[0m13:19:40  Running with dbt=1.12.5
+[0m13:19:40  Registered adapter: duckdb=1.11.0
+[0m13:19:40  Found 5 models, 3 seeds, 20 data tests, 500 macros
+[0m13:19:40  
+[0m13:19:40  Concurrency: 1 threads (target='runner')
+[0m13:19:40  
+[0m13:19:41  Building catalog
+[0m13:19:41  Catalog written to /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-e_z3nj9y/target/catalog.json
+
+[exit code: 0; duration: 2.10s]

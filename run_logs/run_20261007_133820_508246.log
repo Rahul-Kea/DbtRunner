@@ -1,0 +1,56 @@
+dbt runner execution 20261007_133820_508246
+Project input: /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261007_133820_508246/project
+Database input: /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261007_133820_508246/lake.ducklake (ducklake)
+Data input: /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261007_133820_508246/lake_data
+Execution mode: isolated temporary sandbox with safe repeated execution verification.
+
+--- Clone DuckLake metadata catalog ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-nd0y6q_u/clone_ducklake_catalog.py /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261007_133820_508246/lake.ducklake /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-nd0y6q_u/simulation.ducklake
+Cloned DuckLake metadata catalog to /private/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-nd0y6q_u/simulation.ducklake
+
+[exit code: 0; duration: 0.09s]
+
+--- Install project packages (dbt deps) ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/dbt --no-version-check deps --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-nd0y6q_u/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-nd0y6q_u/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-nd0y6q_u/dbt_logs
+[0m08:08:23  Running with dbt=1.12.5
+[0m08:08:23  Installing dbt-labs/dbt_utils
+[0m08:08:25  Installed from version 1.1.1
+[0m08:08:25  Updated version available: 1.4.1
+[0m08:08:25  
+[0m08:08:25  Updates available for packages: ['dbt-labs/dbt_utils']                 
+Update your versions in packages.yml, then run dbt deps
+
+[exit code: 0; duration: 3.32s]
+
+--- Parse dbt DAG ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/dbt --no-version-check parse --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-nd0y6q_u/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-nd0y6q_u/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-nd0y6q_u/dbt_logs
+[0m08:08:26  Running with dbt=1.12.5
+[0m08:08:26  Registered adapter: duckdb=1.11.0
+[0m08:08:26  Unable to do partial parsing because saved manifest not found. Starting full parse.
+[0m08:08:27  [[33mWARNING[0m][MissingArgumentsPropertyInGenericTestDeprecation]: Deprecated
+functionality
+Found top-level arguments to test `dbt_utils.unique_combination_of_columns`
+defined on 'fct_mrr' in package 'saas_revenue_ops'
+(models/marts/saas_revenue_ops/_marts__models.yml). Arguments to generic tests
+should be nested under the `arguments` property.
+[0m08:08:27  Performance info: /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-nd0y6q_u/target/perf_info.json
+[0m08:08:27  [[33mWARNING[0m][DeprecationsSummary]: Deprecated functionality
+Summary of encountered deprecations:
+- MissingArgumentsPropertyInGenericTestDeprecation: 1 occurrence
+To see all deprecation instances instead of just the first occurrence of each,
+run command again with the `--show-all-deprecations` flag. You may also need to
+run with `--no-partial-parse` as some deprecations are only encountered during
+parsing.
+
+[exit code: 0; duration: 2.21s]
+
+--- Compile dbt models & validate references (dbt compile) ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/dbt --no-version-check compile --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-nd0y6q_u/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-nd0y6q_u/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-nd0y6q_u/dbt_logs
+[0m08:08:28  Running with dbt=1.12.5
+[0m08:08:28  Registered adapter: duckdb=1.11.0
+[0m08:08:28  Found 6 models, 17 data tests, 3 sources, 614 macros
+[0m08:08:28  
+[0m08:08:28  Concurrency: 1 threads (target='runner')
+[0m08:08:28  
+
+[exit code: 0; duration: 1.74s]

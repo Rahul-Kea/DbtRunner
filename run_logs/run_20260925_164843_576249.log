@@ -1,0 +1,443 @@
+dbt runner execution 20260925_164843_576249
+Project input: /Users/rahulrg/Kea-Data/DuckLake/POC2
+DuckLake data input: /Users/rahulrg/Kea-Data/DuckLake/POC2/simulation/lake_data
+DuckLake metadata input: /Users/rahulrg/Kea-Data/DuckLake/POC2/simulation/simulation.ducklake
+Execution mode: isolated temporary sandbox with a fresh DuckLake catalog per run.
+
+Temporary sandbox: /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-a2448hy3
+Copying project and DuckLake inputs into sandbox.
+
+Generated profile: /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-a2448hy3/profiles/profiles.yml
+
+--- Install dbt-duckdb ---
+$ /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-a2448hy3/venv/bin/python -m pip install dbt-duckdb
+Collecting dbt-duckdb
+  Downloading dbt_duckdb-1.11.0-py3-none-any.whl.metadata (43 kB)
+Collecting dbt-common<2,>=1 (from dbt-duckdb)
+  Downloading dbt_common-1.39.0-py3-none-any.whl.metadata (5.1 kB)
+Collecting dbt-adapters<2,>=1 (from dbt-duckdb)
+  Downloading dbt_adapters-1.24.5-py3-none-any.whl.metadata (4.6 kB)
+Collecting duckdb>=1.0.0 (from dbt-duckdb)
+  Downloading duckdb-1.5.5-cp313-cp313-macosx_11_0_arm64.whl.metadata (4.2 kB)
+Collecting dbt-core>=1.8.0 (from dbt-duckdb)
+  Downloading dbt_core-1.12.5-py3-none-any.whl.metadata (5.3 kB)
+Collecting agate<2.0,>=1.0 (from dbt-adapters<2,>=1->dbt-duckdb)
+  Downloading agate-1.14.2-py3-none-any.whl.metadata (3.1 kB)
+Collecting dbt-protos<2.0,>=1.0.291 (from dbt-adapters<2,>=1->dbt-duckdb)
+  Downloading dbt_protos-1.0.565-py3-none-any.whl.metadata (859 bytes)
+Collecting mashumaro<3.18,>=3.9 (from mashumaro[msgpack]<3.18,>=3.9->dbt-adapters<2,>=1->dbt-duckdb)
+  Downloading mashumaro-3.17-py3-none-any.whl.metadata (118 kB)
+Collecting protobuf<7.0,>=6.0 (from dbt-adapters<2,>=1->dbt-duckdb)
+  Downloading protobuf-6.33.6-cp39-abi3-macosx_10_9_universal2.whl.metadata (593 bytes)
+Collecting pytz>=2015.7 (from dbt-adapters<2,>=1->dbt-duckdb)
+  Downloading pytz-2026.4-py2.py3-none-any.whl.metadata (22 kB)
+Collecting typing-extensions<5.0,>=4.0 (from dbt-adapters<2,>=1->dbt-duckdb)
+  Downloading typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+Collecting Babel>=2.0 (from agate<2.0,>=1.0->dbt-adapters<2,>=1->dbt-duckdb)
+  Downloading babel-2.18.0-py3-none-any.whl.metadata (2.2 kB)
+Collecting isodate>=0.5.4 (from agate<2.0,>=1.0->dbt-adapters<2,>=1->dbt-duckdb)
+  Downloading isodate-0.7.2-py3-none-any.whl.metadata (11 kB)
+Collecting leather>=0.3.2 (from agate<2.0,>=1.0->dbt-adapters<2,>=1->dbt-duckdb)
+  Downloading leather-0.4.1-py3-none-any.whl.metadata (3.0 kB)
+Collecting parsedatetime!=2.5,>=2.1 (from agate<2.0,>=1.0->dbt-adapters<2,>=1->dbt-duckdb)
+  Downloading parsedatetime-2.6-py3-none-any.whl.metadata (4.7 kB)
+Collecting python-slugify>=1.2.1 (from agate<2.0,>=1.0->dbt-adapters<2,>=1->dbt-duckdb)
+  Downloading python_slugify-9.1.1-py3-none-any.whl.metadata (12 kB)
+Collecting pytimeparse>=1.1.5 (from agate<2.0,>=1.0->dbt-adapters<2,>=1->dbt-duckdb)
+  Downloading pytimeparse-1.1.8-py2.py3-none-any.whl.metadata (3.4 kB)
+Collecting agate<2.0,>=1.0 (from dbt-adapters<2,>=1->dbt-duckdb)
+  Downloading agate-1.9.1-py2.py3-none-any.whl.metadata (3.2 kB)
+Collecting colorama<0.5,>=0.3.9 (from dbt-common<2,>=1->dbt-duckdb)
+  Downloading colorama-0.4.6-py2.py3-none-any.whl.metadata (17 kB)
+Collecting deepdiff<9.0,>=7.0 (from dbt-common<2,>=1->dbt-duckdb)
+  Downloading deepdiff-8.6.2-py3-none-any.whl.metadata (8.8 kB)
+Collecting jinja2<4,>=3.1.3 (from dbt-common<2,>=1->dbt-duckdb)
+  Downloading jinja2-3.1.6-py3-none-any.whl.metadata (2.9 kB)
+Collecting jsonschema<5.0,>=4.0 (from dbt-common<2,>=1->dbt-duckdb)
+  Downloading jsonschema-4.26.0-py3-none-any.whl.metadata (7.6 kB)
+Collecting opentelemetry-api<3.0,>=1.26 (from dbt-common<2,>=1->dbt-duckdb)
+  Downloading opentelemetry_api-1.44.0-py3-none-any.whl.metadata (1.4 kB)
+Collecting pathspec<1.1,>=0.9 (from dbt-common<2,>=1->dbt-duckdb)
+  Downloading pathspec-1.0.4-py3-none-any.whl.metadata (13 kB)
+Collecting python-dateutil<3.0,>=2.0 (from dbt-common<2,>=1->dbt-duckdb)
+  Downloading python_dateutil-2.9.0.post0-py2.py3-none-any.whl.metadata (8.4 kB)
+Collecting requests<3.0.0 (from dbt-common<2,>=1->dbt-duckdb)
+  Downloading requests-2.34.2-py3-none-any.whl.metadata (4.8 kB)
+Collecting orderly-set<6,>=5.4.1 (from deepdiff<9.0,>=7.0->dbt-common<2,>=1->dbt-duckdb)
+  Downloading orderly_set-5.5.0-py3-none-any.whl.metadata (6.6 kB)
+Collecting MarkupSafe>=2.0 (from jinja2<4,>=3.1.3->dbt-common<2,>=1->dbt-duckdb)
+  Downloading markupsafe-3.0.3-cp313-cp313-macosx_11_0_arm64.whl.metadata (2.7 kB)
+Collecting attrs>=22.2.0 (from jsonschema<5.0,>=4.0->dbt-common<2,>=1->dbt-duckdb)
+  Downloading attrs-26.1.0-py3-none-any.whl.metadata (8.8 kB)
+Collecting jsonschema-specifications>=2023.03.6 (from jsonschema<5.0,>=4.0->dbt-common<2,>=1->dbt-duckdb)
+  Downloading jsonschema_specifications-2025.9.1-py3-none-any.whl.metadata (2.9 kB)
+Collecting referencing>=0.28.4 (from jsonschema<5.0,>=4.0->dbt-common<2,>=1->dbt-duckdb)
+  Downloading referencing-0.37.0-py3-none-any.whl.metadata (2.8 kB)
+Collecting rpds-py>=0.25.0 (from jsonschema<5.0,>=4.0->dbt-common<2,>=1->dbt-duckdb)
+  Downloading rpds_py-2026.6.3-cp313-cp313-macosx_11_0_arm64.whl.metadata (4.1 kB)
+Collecting msgpack>=0.5.6 (from mashumaro[msgpack]<3.18,>=3.9->dbt-adapters<2,>=1->dbt-duckdb)
+  Downloading msgpack-1.2.2-cp313-cp313-macosx_11_0_arm64.whl.metadata (8.3 kB)
+Collecting six>=1.5 (from python-dateutil<3.0,>=2.0->dbt-common<2,>=1->dbt-duckdb)
+  Downloading six-1.17.0-py2.py3-none-any.whl.metadata (1.7 kB)
+Collecting charset_normalizer<4,>=2 (from requests<3.0.0->dbt-common<2,>=1->dbt-duckdb)
+  Downloading charset_normalizer-3.5.1-cp313-cp313-macosx_10_13_universal2.whl.metadata (45 kB)
+Collecting idna<4,>=2.5 (from requests<3.0.0->dbt-common<2,>=1->dbt-duckdb)
+  Downloading idna-3.20-py3-none-any.whl.metadata (7.2 kB)
+Collecting urllib3<3,>=1.26 (from requests<3.0.0->dbt-common<2,>=1->dbt-duckdb)
+  Downloading urllib3-2.8.0-py3-none-any.whl.metadata (7.4 kB)
+Collecting certifi>=2023.5.7 (from requests<3.0.0->dbt-common<2,>=1->dbt-duckdb)
+  Downloading certifi-2026.7.22-py3-none-any.whl.metadata (2.5 kB)
+Collecting click<9.0,>=8.3.0 (from dbt-core>=1.8.0->dbt-duckdb)
+  Downloading click-8.5.0-py3-none-any.whl.metadata (2.6 kB)
+Collecting daff>=1.3.46 (from dbt-core>=1.8.0->dbt-duckdb)
+  Downloading daff-1.4.2-py3-none-any.whl.metadata (10 kB)
+Collecting dbt-core-experimental-parser<3,>=2.0.0b1 (from dbt-core>=1.8.0->dbt-duckdb)
+  Downloading dbt_core_experimental_parser-2.0.5.tar.gz (4.8 kB)
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Collecting dbt-extractor<=0.6,>=0.5.0 (from dbt-core>=1.8.0->dbt-duckdb)
+  Downloading dbt_extractor-0.6.0-cp39-abi3-macosx_10_12_x86_64.macosx_11_0_arm64.macosx_10_12_universal2.whl.metadata (4.6 kB)
+Collecting metricflow<1.0,>=0.213.0 (from dbt-core>=1.8.0->dbt-duckdb)
+  Downloading metricflow-0.213.0-py3-none-any.whl.metadata (23 kB)
+Collecting networkx<4.0,>=2.3 (from dbt-core>=1.8.0->dbt-duckdb)
+  Downloading networkx-3.7-py3-none-any.whl.metadata (6.7 kB)
+Collecting packaging>20.9 (from dbt-core>=1.8.0->dbt-duckdb)
+  Downloading packaging-26.3-py3-none-any.whl.metadata (3.5 kB)
+Collecting pydantic<3 (from dbt-core>=1.8.0->dbt-duckdb)
+  Downloading pydantic-2.13.5-py3-none-any.whl.metadata (110 kB)
+Collecting python-dotenv>=1.2 (from dbt-core>=1.8.0->dbt-duckdb)
+  Downloading python_dotenv-1.2.3-py3-none-any.whl.metadata (29 kB)
+Collecting pyyaml>=6.0 (from dbt-core>=1.8.0->dbt-duckdb)
+  Downloading pyyaml-6.0.3-cp313-cp313-macosx_11_0_arm64.whl.metadata (2.4 kB)
+Collecting snowplow-tracker<2.0,>=1.0.2 (from dbt-core>=1.8.0->dbt-duckdb)
+  Downloading snowplow_tracker-1.1.0-py3-none-any.whl.metadata (5.7 kB)
+Collecting sqlparse<0.7.0,>=0.5.5 (from dbt-core>=1.8.0->dbt-duckdb)
+  Downloading sqlparse-0.6.0-py3-none-any.whl.metadata (6.0 kB)
+Collecting importlib-metadata>=4.0 (from metricflow<1.0,>=0.213.0->dbt-core>=1.8.0->dbt-duckdb)
+  Downloading importlib_metadata-9.0.1-py3-none-any.whl.metadata (4.5 kB)
+Collecting more-itertools<11.0,>=10.0.0 (from metricflow<1.0,>=0.213.0->dbt-core>=1.8.0->dbt-duckdb)
+  Downloading more_itertools-10.8.0-py3-none-any.whl.metadata (39 kB)
+Collecting rapidfuzz<4.0,>=3.0 (from metricflow<1.0,>=0.213.0->dbt-core>=1.8.0->dbt-duckdb)
+  Downloading rapidfuzz-3.14.6-cp313-cp313-macosx_11_0_arm64.whl.metadata (12 kB)
+Collecting sqlglot>=20.0.0 (from metricflow<1.0,>=0.213.0->dbt-core>=1.8.0->dbt-duckdb)
+  Downloading sqlglot-30.19.0-py3-none-any.whl.metadata (25 kB)
+Collecting tabulate>=0.8.9 (from metricflow<1.0,>=0.213.0->dbt-core>=1.8.0->dbt-duckdb)
+  Downloading tabulate-0.10.0-py3-none-any.whl.metadata (40 kB)
+Collecting annotated-types>=0.6.0 (from pydantic<3->dbt-core>=1.8.0->dbt-duckdb)
+  Downloading annotated_types-0.8.0-py3-none-any.whl.metadata (15 kB)
+Collecting pydantic-core==2.46.5 (from pydantic<3->dbt-core>=1.8.0->dbt-duckdb)
+  Downloading pydantic_core-2.46.5-cp313-cp313-macosx_11_0_arm64.whl.metadata (6.6 kB)
+Collecting typing-inspection>=0.4.2 (from pydantic<3->dbt-core>=1.8.0->dbt-duckdb)
+  Downloading typing_inspection-0.4.4-py3-none-any.whl.metadata (2.6 kB)
+Collecting zipp>=3.20 (from importlib-metadata>=4.0->metricflow<1.0,>=0.213.0->dbt-core>=1.8.0->dbt-duckdb)
+  Downloading zipp-4.1.0-py3-none-any.whl.metadata (3.6 kB)
+Collecting text-unidecode>=1.3 (from python-slugify>=1.2.1->agate<2.0,>=1.0->dbt-adapters<2,>=1->dbt-duckdb)
+  Downloading text_unidecode-1.3-py2.py3-none-any.whl.metadata (2.4 kB)
+Downloading dbt_duckdb-1.11.0-py3-none-any.whl (91 kB)
+Downloading dbt_adapters-1.24.5-py3-none-any.whl (177 kB)
+Downloading dbt_common-1.39.0-py3-none-any.whl (89 kB)
+Downloading agate-1.9.1-py2.py3-none-any.whl (95 kB)
+Downloading colorama-0.4.6-py2.py3-none-any.whl (25 kB)
+Downloading dbt_protos-1.0.565-py3-none-any.whl (260 kB)
+Downloading deepdiff-8.6.2-py3-none-any.whl (91 kB)
+Downloading isodate-0.7.2-py3-none-any.whl (22 kB)
+Downloading jinja2-3.1.6-py3-none-any.whl (134 kB)
+Downloading jsonschema-4.26.0-py3-none-any.whl (90 kB)
+Downloading mashumaro-3.17-py3-none-any.whl (94 kB)
+Downloading opentelemetry_api-1.44.0-py3-none-any.whl (60 kB)
+Downloading orderly_set-5.5.0-py3-none-any.whl (13 kB)
+Downloading pathspec-1.0.4-py3-none-any.whl (55 kB)
+Downloading protobuf-6.33.6-cp39-abi3-macosx_10_9_universal2.whl (427 kB)
+Downloading python_dateutil-2.9.0.post0-py2.py3-none-any.whl (229 kB)
+Downloading requests-2.34.2-py3-none-any.whl (73 kB)
+Downloading charset_normalizer-3.5.1-cp313-cp313-macosx_10_13_universal2.whl (340 kB)
+Downloading idna-3.20-py3-none-any.whl (69 kB)
+Downloading typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+Downloading urllib3-2.8.0-py3-none-any.whl (135 kB)
+Downloading attrs-26.1.0-py3-none-any.whl (67 kB)
+Downloading babel-2.18.0-py3-none-any.whl (10.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 10.2/10.2 MB 18.4 MB/s  0:00:00
+Downloading certifi-2026.7.22-py3-none-any.whl (136 kB)
+Downloading dbt_core-1.12.5-py3-none-any.whl (1.1 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.1/1.1 MB 29.7 MB/s  0:00:00
+Downloading click-8.5.0-py3-none-any.whl (125 kB)
+Downloading dbt_extractor-0.6.0-cp39-abi3-macosx_10_12_x86_64.macosx_11_0_arm64.macosx_10_12_universal2.whl (790 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 790.2/790.2 kB 29.8 MB/s  0:00:00
+Downloading metricflow-0.213.0-py3-none-any.whl (999 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 999.5/999.5 kB 27.9 MB/s  0:00:00
+Downloading more_itertools-10.8.0-py3-none-any.whl (69 kB)
+Downloading networkx-3.7-py3-none-any.whl (2.1 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.1/2.1 MB 26.0 MB/s  0:00:00
+Downloading pydantic-2.13.5-py3-none-any.whl (472 kB)
+Downloading pydantic_core-2.46.5-cp313-cp313-macosx_11_0_arm64.whl (1.9 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.9/1.9 MB 22.3 MB/s  0:00:00
+Downloading pyyaml-6.0.3-cp313-cp313-macosx_11_0_arm64.whl (173 kB)
+Downloading rapidfuzz-3.14.6-cp313-cp313-macosx_11_0_arm64.whl (1.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.2/1.2 MB 28.3 MB/s  0:00:00
+Downloading snowplow_tracker-1.1.0-py3-none-any.whl (44 kB)
+Downloading sqlparse-0.6.0-py3-none-any.whl (50 kB)
+Downloading annotated_types-0.8.0-py3-none-any.whl (13 kB)
+Downloading daff-1.4.2-py3-none-any.whl (144 kB)
+Downloading duckdb-1.5.5-cp313-cp313-macosx_11_0_arm64.whl (15.5 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 15.5/15.5 MB 25.7 MB/s  0:00:00
+Downloading importlib_metadata-9.0.1-py3-none-any.whl (27 kB)
+Downloading jsonschema_specifications-2025.9.1-py3-none-any.whl (18 kB)
+Downloading leather-0.4.1-py3-none-any.whl (30 kB)
+Downloading markupsafe-3.0.3-cp313-cp313-macosx_11_0_arm64.whl (12 kB)
+Downloading msgpack-1.2.2-cp313-cp313-macosx_11_0_arm64.whl (83 kB)
+Downloading packaging-26.3-py3-none-any.whl (129 kB)
+Downloading parsedatetime-2.6-py3-none-any.whl (42 kB)
+Downloading python_dotenv-1.2.3-py3-none-any.whl (22 kB)
+Downloading python_slugify-9.1.1-py3-none-any.whl (15 kB)
+Downloading pytimeparse-1.1.8-py2.py3-none-any.whl (10.0 kB)
+Downloading pytz-2026.4-py2.py3-none-any.whl (506 kB)
+Downloading referencing-0.37.0-py3-none-any.whl (26 kB)
+Downloading rpds_py-2026.6.3-cp313-cp313-macosx_11_0_arm64.whl (338 kB)
+Downloading six-1.17.0-py2.py3-none-any.whl (11 kB)
+Downloading sqlglot-30.19.0-py3-none-any.whl (756 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 756.2/756.2 kB 21.8 MB/s  0:00:00
+Downloading tabulate-0.10.0-py3-none-any.whl (39 kB)
+Downloading text_unidecode-1.3-py2.py3-none-any.whl (78 kB)
+Downloading typing_inspection-0.4.4-py3-none-any.whl (14 kB)
+Downloading zipp-4.1.0-py3-none-any.whl (10 kB)
+Building wheels for collected packages: dbt-core-experimental-parser
+  Building wheel for dbt-core-experimental-parser (pyproject.toml): started
+  Building wheel for dbt-core-experimental-parser (pyproject.toml): finished with status 'done'
+  Created wheel for dbt-core-experimental-parser: filename=dbt_core_experimental_parser-2.0.5-py3-none-macosx_11_0_arm64.whl size=49011041 sha256=9f1a2f5c5d6e5dbfa8ba1bc0e7c87669b8b0166e5c08a6564cfa073e2ae8f019
+  Stored in directory: /private/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-a2448hy3/tmp/pip-ephem-wheel-cache-aqn5qc4k/wheels/22/ac/18/68b176ccde78028e1d1b4eebce0ff00b14e48a94e89d9754e2
+Successfully built dbt-core-experimental-parser
+Installing collected packages: text-unidecode, pytz, pytimeparse, parsedatetime, leather, daff, zipp, urllib3, typing-extensions, tabulate, sqlparse, sqlglot, six, rpds-py, rapidfuzz, pyyaml, python-slugify, python-dotenv, protobuf, pathspec, packaging, orderly-set, networkx, msgpack, more-itertools, MarkupSafe, isodate, idna, duckdb, dbt-extractor, dbt-core-experimental-parser, colorama, click, charset_normalizer, certifi, Babel, attrs, annotated-types, typing-inspection, requests, referencing, python-dateutil, pydantic-core, opentelemetry-api, mashumaro, jinja2, importlib-metadata, deepdiff, dbt-protos, agate, snowplow-tracker, pydantic, jsonschema-specifications, jsonschema, metricflow, dbt-common, dbt-adapters, dbt-core, dbt-duckdb
+
+Successfully installed Babel-2.18.0 MarkupSafe-3.0.3 agate-1.9.1 annotated-types-0.8.0 attrs-26.1.0 certifi-2026.7.22 charset_normalizer-3.5.1 click-8.5.0 colorama-0.4.6 daff-1.4.2 dbt-adapters-1.24.5 dbt-common-1.39.0 dbt-core-1.12.5 dbt-core-experimental-parser-2.0.5 dbt-duckdb-1.11.0 dbt-extractor-0.6.0 dbt-protos-1.0.565 deepdiff-8.6.2 duckdb-1.5.5 idna-3.20 importlib-metadata-9.0.1 isodate-0.7.2 jinja2-3.1.6 jsonschema-4.26.0 jsonschema-specifications-2025.9.1 leather-0.4.1 mashumaro-3.17 metricflow-0.213.0 more-itertools-10.8.0 msgpack-1.2.2 networkx-3.7 opentelemetry-api-1.44.0 orderly-set-5.5.0 packaging-26.3 parsedatetime-2.6 pathspec-1.0.4 protobuf-6.33.6 pydantic-2.13.5 pydantic-core-2.46.5 python-dateutil-2.9.0.post0 python-dotenv-1.2.3 python-slugify-9.1.1 pytimeparse-1.1.8 pytz-2026.4 pyyaml-6.0.3 rapidfuzz-3.14.6 referencing-0.37.0 requests-2.34.2 rpds-py-2026.6.3 six-1.17.0 snowplow-tracker-1.1.0 sqlglot-30.19.0 sqlparse-0.6.0 tabulate-0.10.0 text-unidecode-1.3 typing-extensions-4.16.0 typing-inspection-0.4.4 urllib3-2.8.0 zipp-4.1.0
+
+[notice] A new release of pip is available: 25.2 -> 26.2.1
+[notice] To update, run: python -m pip install --upgrade pip
+
+[exit code: 0; duration: 14.29s]
+
+--- Install project packages (dbt deps) ---
+$ /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-a2448hy3/venv/bin/dbt deps --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-a2448hy3/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-a2448hy3/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-a2448hy3/dbt_logs
+[0m11:19:01  Running with dbt=1.12.5
+[0m11:19:01  Warning: No packages were found in packages.yml
+[0m11:19:01  Warning: No packages were found in packages.yml
+
+[exit code: 0; duration: 3.01s]
+
+--- Parse dbt DAG ---
+$ /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-a2448hy3/venv/bin/dbt parse --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-a2448hy3/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-a2448hy3/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-a2448hy3/dbt_logs
+[0m11:19:02  Running with dbt=1.12.5
+[0m11:19:03  Registered adapter: duckdb=1.11.0
+[0m11:19:03  Unable to do partial parsing because saved manifest not found. Starting full parse.
+[0m11:19:03  Performance info: /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-a2448hy3/target/perf_info.json
+
+[exit code: 0; duration: 2.02s]
+
+--- Materialize dbt seeds ---
+$ /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-a2448hy3/venv/bin/dbt seed --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-a2448hy3/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-a2448hy3/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-a2448hy3/dbt_logs
+[0m11:19:04  Running with dbt=1.12.5
+[0m11:19:04  Registered adapter: duckdb=1.11.0
+[0m11:19:05  Found 8 models, 54 data tests, 1 seed, 500 macros, 1 unit test
+[0m11:19:05  
+[0m11:19:05  Concurrency: 1 threads (target='runner')
+[0m11:19:05  
+[0m11:19:05  1 of 1 START seed file main.store_orders ....................................... [RUN]
+[0m11:19:05  1 of 1 OK loaded seed file main.store_orders ................................... [[32mINSERT 20[0m in 0.04s]
+[0m11:19:05  
+[0m11:19:05  Finished running 1 seed in 0 hours 0 minutes and 0.14 seconds (0.14s).
+[0m11:19:05  
+[0m11:19:05  [32mCompleted successfully[0m
+[0m11:19:05  
+[0m11:19:05  Done. PASS=1 WARN=0 ERROR=0 SKIP=0 NO-OP=0 REUSED=0 TOTAL=1
+
+[exit code: 0; duration: 1.27s]
+
+--- Materialize dbt models (single dbt run) ---
+$ /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-a2448hy3/venv/bin/dbt run --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-a2448hy3/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-a2448hy3/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-a2448hy3/dbt_logs
+[0m11:19:05  Running with dbt=1.12.5
+[0m11:19:06  Registered adapter: duckdb=1.11.0
+[0m11:19:06  Found 8 models, 54 data tests, 1 seed, 500 macros, 1 unit test
+[0m11:19:06  
+[0m11:19:06  Concurrency: 1 threads (target='runner')
+[0m11:19:06  
+[0m11:19:06  1 of 8 START sql table model main.stg_store_orders ............................. [RUN]
+[0m11:19:06  1 of 8 OK created sql table model main.stg_store_orders ........................ [[32mOK[0m in 0.05s]
+[0m11:19:06  2 of 8 START sql table model main.dim_customer ................................. [RUN]
+[0m11:19:06  2 of 8 OK created sql table model main.dim_customer ............................ [[32mOK[0m in 0.02s]
+[0m11:19:06  3 of 8 START sql table model main.dim_date ..................................... [RUN]
+[0m11:19:06  3 of 8 OK created sql table model main.dim_date ................................ [[32mOK[0m in 0.02s]
+[0m11:19:06  4 of 8 START sql table model main.dim_payment_method ........................... [RUN]
+[0m11:19:06  4 of 8 OK created sql table model main.dim_payment_method ...................... [[32mOK[0m in 0.02s]
+[0m11:19:06  5 of 8 START sql table model main.dim_product .................................. [RUN]
+[0m11:19:06  5 of 8 OK created sql table model main.dim_product ............................. [[32mOK[0m in 0.02s]
+[0m11:19:06  6 of 8 START sql table model main.dim_store .................................... [RUN]
+[0m11:19:06  6 of 8 OK created sql table model main.dim_store ............................... [[32mOK[0m in 0.02s]
+[0m11:19:06  7 of 8 START sql table model main.fact_order ................................... [RUN]
+[0m11:19:06  7 of 8 OK created sql table model main.fact_order .............................. [[32mOK[0m in 0.03s]
+[0m11:19:06  8 of 8 START sql table model main.fact_sales_line .............................. [RUN]
+[0m11:19:06  8 of 8 OK created sql table model main.fact_sales_line ......................... [[32mOK[0m in 0.03s]
+[0m11:19:06  
+[0m11:19:06  Finished running 8 table models in 0 hours 0 minutes and 0.30 seconds (0.30s).
+[0m11:19:06  
+[0m11:19:06  [32mCompleted successfully[0m
+[0m11:19:06  
+[0m11:19:06  Done. PASS=8 WARN=0 ERROR=0 SKIP=0 NO-OP=0 REUSED=0 TOTAL=8
+
+[exit code: 0; duration: 1.41s]
+
+--- Materialize dbt snapshots ---
+$ /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-a2448hy3/venv/bin/dbt snapshot --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-a2448hy3/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-a2448hy3/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-a2448hy3/dbt_logs
+[0m11:19:07  Running with dbt=1.12.5
+[0m11:19:07  Registered adapter: duckdb=1.11.0
+[0m11:19:07  Found 8 models, 54 data tests, 1 seed, 500 macros, 1 unit test
+[0m11:19:07  [[33mWARNING[0m]: Nothing to do. Try checking your model configs and model specification args
+
+[exit code: 0; duration: 1.11s]
+
+--- Run dbt tests ---
+$ /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-a2448hy3/venv/bin/dbt test --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-a2448hy3/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-a2448hy3/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-a2448hy3/dbt_logs
+[0m11:19:08  Running with dbt=1.12.5
+[0m11:19:08  Registered adapter: duckdb=1.11.0
+[0m11:19:08  Found 8 models, 54 data tests, 1 seed, 500 macros, 1 unit test
+[0m11:19:08  
+[0m11:19:08  Concurrency: 1 threads (target='runner')
+[0m11:19:08  
+[0m11:19:08  1 of 55 START test not_null_dim_customer_customer_city ......................... [RUN]
+[0m11:19:08  1 of 55 PASS not_null_dim_customer_customer_city ............................... [[32mPASS[0m in 0.02s]
+[0m11:19:08  2 of 55 START test not_null_dim_customer_customer_id ........................... [RUN]
+[0m11:19:08  2 of 55 PASS not_null_dim_customer_customer_id ................................. [[32mPASS[0m in 0.01s]
+[0m11:19:08  3 of 55 START test not_null_dim_customer_customer_name ......................... [RUN]
+[0m11:19:08  3 of 55 PASS not_null_dim_customer_customer_name ............................... [[32mPASS[0m in 0.01s]
+[0m11:19:08  4 of 55 START test not_null_dim_date_order_date ................................ [RUN]
+[0m11:19:08  4 of 55 PASS not_null_dim_date_order_date ...................................... [[32mPASS[0m in 0.01s]
+[0m11:19:08  5 of 55 START test not_null_dim_payment_method_payment_method .................. [RUN]
+[0m11:19:08  5 of 55 PASS not_null_dim_payment_method_payment_method ........................ [[32mPASS[0m in 0.01s]
+[0m11:19:08  6 of 55 START test not_null_dim_product_product_category ....................... [RUN]
+[0m11:19:08  6 of 55 PASS not_null_dim_product_product_category ............................. [[32mPASS[0m in 0.01s]
+[0m11:19:08  7 of 55 START test not_null_dim_product_product_id ............................. [RUN]
+[0m11:19:08  7 of 55 PASS not_null_dim_product_product_id ................................... [[32mPASS[0m in 0.01s]
+[0m11:19:08  8 of 55 START test not_null_dim_product_product_name ........................... [RUN]
+[0m11:19:08  8 of 55 PASS not_null_dim_product_product_name ................................. [[32mPASS[0m in 0.01s]
+[0m11:19:08  9 of 55 START test not_null_dim_store_store_id ................................. [RUN]
+[0m11:19:08  9 of 55 PASS not_null_dim_store_store_id ....................................... [[32mPASS[0m in 0.01s]
+[0m11:19:08  10 of 55 START test not_null_dim_store_store_name .............................. [RUN]
+[0m11:19:08  10 of 55 PASS not_null_dim_store_store_name .................................... [[32mPASS[0m in 0.01s]
+[0m11:19:08  11 of 55 START test not_null_fact_order_customer_id ............................ [RUN]
+[0m11:19:08  11 of 55 PASS not_null_fact_order_customer_id .................................. [[32mPASS[0m in 0.01s]
+[0m11:19:09  12 of 55 START test not_null_fact_order_line_count ............................. [RUN]
+[0m11:19:09  12 of 55 PASS not_null_fact_order_line_count ................................... [[32mPASS[0m in 0.01s]
+[0m11:19:09  13 of 55 START test not_null_fact_order_order_date ............................. [RUN]
+[0m11:19:09  13 of 55 PASS not_null_fact_order_order_date ................................... [[32mPASS[0m in 0.01s]
+[0m11:19:09  14 of 55 START test not_null_fact_order_order_id ............................... [RUN]
+[0m11:19:09  14 of 55 PASS not_null_fact_order_order_id ..................................... [[32mPASS[0m in 0.01s]
+[0m11:19:09  15 of 55 START test not_null_fact_order_order_total ............................ [RUN]
+[0m11:19:09  15 of 55 PASS not_null_fact_order_order_total .................................. [[32mPASS[0m in 0.01s]
+[0m11:19:09  16 of 55 START test not_null_fact_order_payment_method ......................... [RUN]
+[0m11:19:09  16 of 55 PASS not_null_fact_order_payment_method ............................... [[32mPASS[0m in 0.01s]
+[0m11:19:09  17 of 55 START test not_null_fact_order_store_id ............................... [RUN]
+[0m11:19:09  17 of 55 PASS not_null_fact_order_store_id ..................................... [[32mPASS[0m in 0.01s]
+[0m11:19:09  18 of 55 START test not_null_fact_order_total_quantity ......................... [RUN]
+[0m11:19:09  18 of 55 PASS not_null_fact_order_total_quantity ............................... [[32mPASS[0m in 0.01s]
+[0m11:19:09  19 of 55 START test not_null_fact_sales_line_customer_id ....................... [RUN]
+[0m11:19:09  19 of 55 PASS not_null_fact_sales_line_customer_id ............................. [[32mPASS[0m in 0.01s]
+[0m11:19:09  20 of 55 START test not_null_fact_sales_line_line_amount ....................... [RUN]
+[0m11:19:09  20 of 55 PASS not_null_fact_sales_line_line_amount ............................. [[32mPASS[0m in 0.01s]
+[0m11:19:09  21 of 55 START test not_null_fact_sales_line_order_date ........................ [RUN]
+[0m11:19:09  21 of 55 PASS not_null_fact_sales_line_order_date .............................. [[32mPASS[0m in 0.01s]
+[0m11:19:09  22 of 55 START test not_null_fact_sales_line_order_id .......................... [RUN]
+[0m11:19:09  22 of 55 PASS not_null_fact_sales_line_order_id ................................ [[32mPASS[0m in 0.01s]
+[0m11:19:09  23 of 55 START test not_null_fact_sales_line_payment_method .................... [RUN]
+[0m11:19:09  23 of 55 PASS not_null_fact_sales_line_payment_method .......................... [[32mPASS[0m in 0.01s]
+[0m11:19:09  24 of 55 START test not_null_fact_sales_line_product_id ........................ [RUN]
+[0m11:19:09  24 of 55 PASS not_null_fact_sales_line_product_id .............................. [[32mPASS[0m in 0.01s]
+[0m11:19:09  25 of 55 START test not_null_fact_sales_line_quantity .......................... [RUN]
+[0m11:19:09  25 of 55 PASS not_null_fact_sales_line_quantity ................................ [[32mPASS[0m in 0.01s]
+[0m11:19:09  26 of 55 START test not_null_fact_sales_line_store_id .......................... [RUN]
+[0m11:19:09  26 of 55 PASS not_null_fact_sales_line_store_id ................................ [[32mPASS[0m in 0.01s]
+[0m11:19:09  27 of 55 START test not_null_fact_sales_line_unit_price ........................ [RUN]
+[0m11:19:09  27 of 55 PASS not_null_fact_sales_line_unit_price .............................. [[32mPASS[0m in 0.01s]
+[0m11:19:09  28 of 55 START test not_null_stg_store_orders_customer_id ...................... [RUN]
+[0m11:19:09  28 of 55 PASS not_null_stg_store_orders_customer_id ............................ [[32mPASS[0m in 0.01s]
+[0m11:19:09  29 of 55 START test not_null_stg_store_orders_customer_name .................... [RUN]
+[0m11:19:09  29 of 55 PASS not_null_stg_store_orders_customer_name .......................... [[32mPASS[0m in 0.01s]
+[0m11:19:09  30 of 55 START test not_null_stg_store_orders_line_amount ...................... [RUN]
+[0m11:19:09  30 of 55 PASS not_null_stg_store_orders_line_amount ............................ [[32mPASS[0m in 0.01s]
+[0m11:19:09  31 of 55 START test not_null_stg_store_orders_order_date ....................... [RUN]
+[0m11:19:09  31 of 55 PASS not_null_stg_store_orders_order_date ............................. [[32mPASS[0m in 0.01s]
+[0m11:19:09  32 of 55 START test not_null_stg_store_orders_order_id ......................... [RUN]
+[0m11:19:09  32 of 55 PASS not_null_stg_store_orders_order_id ............................... [[32mPASS[0m in 0.01s]
+[0m11:19:09  33 of 55 START test not_null_stg_store_orders_payment_method ................... [RUN]
+[0m11:19:09  33 of 55 PASS not_null_stg_store_orders_payment_method ......................... [[32mPASS[0m in 0.01s]
+[0m11:19:09  34 of 55 START test not_null_stg_store_orders_product_id ....................... [RUN]
+[0m11:19:09  34 of 55 PASS not_null_stg_store_orders_product_id ............................. [[32mPASS[0m in 0.01s]
+[0m11:19:09  35 of 55 START test not_null_stg_store_orders_product_name ..................... [RUN]
+[0m11:19:09  35 of 55 PASS not_null_stg_store_orders_product_name ........................... [[32mPASS[0m in 0.01s]
+[0m11:19:09  36 of 55 START test not_null_stg_store_orders_quantity ......................... [RUN]
+[0m11:19:09  36 of 55 PASS not_null_stg_store_orders_quantity ............................... [[32mPASS[0m in 0.01s]
+[0m11:19:09  37 of 55 START test not_null_stg_store_orders_store_id ......................... [RUN]
+[0m11:19:09  37 of 55 PASS not_null_stg_store_orders_store_id ............................... [[32mPASS[0m in 0.01s]
+[0m11:19:09  38 of 55 START test not_null_stg_store_orders_unit_price ....................... [RUN]
+[0m11:19:09  38 of 55 PASS not_null_stg_store_orders_unit_price ............................. [[32mPASS[0m in 0.01s]
+[0m11:19:09  39 of 55 START test order_total_matches_lines .................................. [RUN]
+[0m11:19:09  39 of 55 PASS order_total_matches_lines ........................................ [[32mPASS[0m in 0.01s]
+[0m11:19:09  40 of 55 START test relationships_fact_order_customer_id__customer_id__ref_dim_customer_  [RUN]
+[0m11:19:09  40 of 55 PASS relationships_fact_order_customer_id__customer_id__ref_dim_customer_  [[32mPASS[0m in 0.02s]
+[0m11:19:09  41 of 55 START test relationships_fact_order_order_date__order_date__ref_dim_date_  [RUN]
+[0m11:19:09  41 of 55 PASS relationships_fact_order_order_date__order_date__ref_dim_date_ ... [[32mPASS[0m in 0.02s]
+[0m11:19:09  42 of 55 START test relationships_fact_order_payment_method__payment_method__ref_dim_payment_method_  [RUN]
+[0m11:19:09  42 of 55 PASS relationships_fact_order_payment_method__payment_method__ref_dim_payment_method_  [[32mPASS[0m in 0.02s]
+[0m11:19:09  43 of 55 START test relationships_fact_order_store_id__store_id__ref_dim_store_  [RUN]
+[0m11:19:09  43 of 55 PASS relationships_fact_order_store_id__store_id__ref_dim_store_ ...... [[32mPASS[0m in 0.02s]
+[0m11:19:09  44 of 55 START test relationships_fact_sales_line_customer_id__customer_id__ref_dim_customer_  [RUN]
+[0m11:19:09  44 of 55 PASS relationships_fact_sales_line_customer_id__customer_id__ref_dim_customer_  [[32mPASS[0m in 0.01s]
+[0m11:19:09  45 of 55 START test relationships_fact_sales_line_order_date__order_date__ref_dim_date_  [RUN]
+[0m11:19:09  45 of 55 PASS relationships_fact_sales_line_order_date__order_date__ref_dim_date_  [[32mPASS[0m in 0.01s]
+[0m11:19:09  46 of 55 START test relationships_fact_sales_line_payment_method__payment_method__ref_dim_payment_method_  [RUN]
+[0m11:19:09  46 of 55 PASS relationships_fact_sales_line_payment_method__payment_method__ref_dim_payment_method_  [[32mPASS[0m in 0.01s]
+[0m11:19:09  47 of 55 START test relationships_fact_sales_line_product_id__product_id__ref_dim_product_  [RUN]
+[0m11:19:09  47 of 55 PASS relationships_fact_sales_line_product_id__product_id__ref_dim_product_  [[32mPASS[0m in 0.02s]
+[0m11:19:09  48 of 55 START test relationships_fact_sales_line_store_id__store_id__ref_dim_store_  [RUN]
+[0m11:19:09  48 of 55 PASS relationships_fact_sales_line_store_id__store_id__ref_dim_store_ . [[32mPASS[0m in 0.01s]
+[0m11:19:09  49 of 55 START test unique_dim_customer_customer_id ............................ [RUN]
+[0m11:19:09  49 of 55 PASS unique_dim_customer_customer_id .................................. [[32mPASS[0m in 0.01s]
+[0m11:19:09  50 of 55 START test unique_dim_date_order_date ................................. [RUN]
+[0m11:19:09  50 of 55 PASS unique_dim_date_order_date ....................................... [[32mPASS[0m in 0.01s]
+[0m11:19:09  51 of 55 START test unique_dim_payment_method_payment_method ................... [RUN]
+[0m11:19:09  51 of 55 PASS unique_dim_payment_method_payment_method ......................... [[32mPASS[0m in 0.01s]
+[0m11:19:09  52 of 55 START test unique_dim_product_product_id .............................. [RUN]
+[0m11:19:09  52 of 55 PASS unique_dim_product_product_id .................................... [[32mPASS[0m in 0.01s]
+[0m11:19:09  53 of 55 START test unique_dim_store_store_id .................................. [RUN]
+[0m11:19:09  53 of 55 PASS unique_dim_store_store_id ........................................ [[32mPASS[0m in 0.01s]
+[0m11:19:09  54 of 55 START test unique_fact_order_order_id ................................. [RUN]
+[0m11:19:09  54 of 55 PASS unique_fact_order_order_id ....................................... [[32mPASS[0m in 0.01s]
+[0m11:19:09  55 of 55 START unit_test fact_order::fact_order_sums_line_amounts .............. [RUN]
+[0m11:19:09  55 of 55 PASS fact_order::fact_order_sums_line_amounts ......................... [[32mPASS[0m in 0.07s]
+[0m11:19:09  
+[0m11:19:09  Finished running 54 data tests, 1 unit test in 0 hours 0 minutes and 0.61 seconds (0.61s).
+[0m11:19:09  
+[0m11:19:09  [32mCompleted successfully[0m
+[0m11:19:09  
+[0m11:19:09  Done. PASS=55 WARN=0 ERROR=0 SKIP=0 NO-OP=0 REUSED=0 TOTAL=55
+
+[exit code: 0; duration: 1.82s]
+
+--- Inspect materialized catalog (dbt docs generate) ---
+$ /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-a2448hy3/venv/bin/dbt docs generate --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-a2448hy3/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-a2448hy3/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-a2448hy3/dbt_logs
+[0m11:19:10  Running with dbt=1.12.5
+[0m11:19:10  Registered adapter: duckdb=1.11.0
+[0m11:19:10  Found 8 models, 54 data tests, 1 seed, 500 macros, 1 unit test
+[0m11:19:10  
+[0m11:19:10  Concurrency: 1 threads (target='runner')
+[0m11:19:10  
+[0m11:19:10  Building catalog
+[0m11:19:10  Catalog written to /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-a2448hy3/target/catalog.json
+
+[exit code: 0; duration: 1.41s]
+
+Temporary sandbox cleanup: cleaned
+
+Run status: passed
+Report: /Users/rahulrg/Kea-Data/dbt_runner/run_logs/run_20260925_164843_576249.json

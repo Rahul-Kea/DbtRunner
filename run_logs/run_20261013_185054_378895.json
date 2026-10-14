@@ -1,0 +1,83 @@
+{
+  "run_id": "20261013_185054_378895",
+  "started_at": "2026-10-13T13:20:55.588991+00:00",
+  "finished_at": "2026-10-13T13:21:01.211473+00:00",
+  "project_dir": "/Users/rahulrg/Kea-Data/dbt_runner/uploads/20261013_185054_378895/project/dbt",
+  "data_location": "/Users/rahulrg/Kea-Data/dbt_runner/uploads/20261013_185054_378895/lake_data",
+  "ducklake_metadata_location": "/Users/rahulrg/Kea-Data/dbt_runner/uploads/20261013_185054_378895/lake.ducklake",
+  "overall_status": "failed",
+  "steps": [
+    {
+      "name": "Clone DuckLake metadata catalog",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.13/bin/python3",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-fjs412of/clone_ducklake_catalog.py",
+        "/Users/rahulrg/Kea-Data/dbt_runner/uploads/20261013_185054_378895/lake.ducklake",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-fjs412of/simulation.ducklake"
+      ],
+      "return_code": 0,
+      "status": "passed",
+      "duration_seconds": 0.12909612490329891,
+      "error": null
+    },
+    {
+      "name": "Install project packages (dbt deps)",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.13/bin/dbt",
+        "--no-version-check",
+        "deps",
+        "--project-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-fjs412of/project",
+        "--profiles-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-fjs412of/profiles",
+        "--log-path",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-fjs412of/dbt_logs"
+      ],
+      "return_code": 0,
+      "status": "passed",
+      "duration_seconds": 2.815866208053194,
+      "error": null
+    },
+    {
+      "name": "Parse dbt DAG",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.13/bin/dbt",
+        "--no-version-check",
+        "parse",
+        "--project-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-fjs412of/project",
+        "--profiles-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-fjs412of/profiles",
+        "--log-path",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-fjs412of/dbt_logs"
+      ],
+      "return_code": 2,
+      "status": "failed",
+      "duration_seconds": 2.638743916992098,
+      "error": null
+    }
+  ],
+  "model_test_results": [],
+  "model_executions": [],
+  "log_file": "/Users/rahulrg/Kea-Data/dbt_runner/run_logs/run_20261013_185054_378895.log",
+  "structured_log_file": "/Users/rahulrg/Kea-Data/dbt_runner/run_logs/run_20261013_185054_378895.events.jsonl",
+  "report_file": "/Users/rahulrg/Kea-Data/dbt_runner/run_logs/run_20261013_185054_378895.json",
+  "config_file": "/Users/rahulrg/Kea-Data/dbt_runner/runner_config.json",
+  "rerun_policy": "isolated clone of the database/lake per run with idempotency validation",
+  "sandbox_workspace": "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-fjs412of",
+  "sandbox_cleanup_status": "cleaned",
+  "object_validation": {
+    "status": "not_run",
+    "failures": [
+      "dbt manifest was not generated"
+    ]
+  },
+  "dag_validation": {},
+  "rerun_verification": {},
+  "database_type": "ducklake",
+  "execution_mode": "full",
+  "failure_details": [
+    "Parse dbt DAG failed (exit code 2)"
+  ],
+  "warning_details": []
+}

@@ -1,0 +1,99 @@
+dbt runner execution 20261007_133727_450955
+Project input: /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261007_133727_450955/project
+Database input: /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261007_133727_450955/lake.ducklake (ducklake)
+Data input: /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261007_133727_450955/lake_data
+Execution mode: isolated temporary sandbox with safe repeated execution verification.
+
+--- Clone DuckLake metadata catalog ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-0u7lvhjc/clone_ducklake_catalog.py /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261007_133727_450955/lake.ducklake /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-0u7lvhjc/simulation.ducklake
+Cloned DuckLake metadata catalog to /private/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-0u7lvhjc/simulation.ducklake
+
+[exit code: 0; duration: 0.10s]
+
+--- Install project packages (dbt deps) ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/dbt --no-version-check deps --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-0u7lvhjc/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-0u7lvhjc/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-0u7lvhjc/dbt_logs
+[0m08:07:30  Running with dbt=1.12.5
+[0m08:07:30  Installing dbt-labs/dbt_utils
+[0m08:07:31  Installed from version 1.1.1
+[0m08:07:31  Updated version available: 1.4.1
+[0m08:07:31  
+[0m08:07:31  Updates available for packages: ['dbt-labs/dbt_utils']                 
+Update your versions in packages.yml, then run dbt deps
+
+[exit code: 0; duration: 2.29s]
+
+--- Parse dbt DAG ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/dbt --no-version-check parse --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-0u7lvhjc/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-0u7lvhjc/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-0u7lvhjc/dbt_logs
+[0m08:07:32  Running with dbt=1.12.5
+[0m08:07:32  Registered adapter: duckdb=1.11.0
+[0m08:07:32  Unable to do partial parsing because saved manifest not found. Starting full parse.
+[0m08:07:33  [[33mWARNING[0m][MissingArgumentsPropertyInGenericTestDeprecation]: Deprecated
+functionality
+Found top-level arguments to test `dbt_utils.unique_combination_of_columns`
+defined on 'fct_mrr' in package 'saas_revenue_ops'
+(models/marts/saas_revenue_ops/_marts__models.yml). Arguments to generic tests
+should be nested under the `arguments` property.
+[0m08:07:33  Performance info: /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-0u7lvhjc/target/perf_info.json
+[0m08:07:33  [[33mWARNING[0m][DeprecationsSummary]: Deprecated functionality
+Summary of encountered deprecations:
+- MissingArgumentsPropertyInGenericTestDeprecation: 1 occurrence
+To see all deprecation instances instead of just the first occurrence of each,
+run command again with the `--show-all-deprecations` flag. You may also need to
+run with `--no-partial-parse` as some deprecations are only encountered during
+parsing.
+
+[exit code: 0; duration: 2.29s]
+
+--- Materialize dbt models (dbt run) ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/dbt --no-version-check run --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-0u7lvhjc/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-0u7lvhjc/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-0u7lvhjc/dbt_logs
+[0m08:07:34  Running with dbt=1.12.5
+[0m08:07:35  Registered adapter: duckdb=1.11.0
+[0m08:07:35  Found 6 models, 17 data tests, 3 sources, 614 macros
+[0m08:07:35  
+[0m08:07:35  Concurrency: 1 threads (target='runner')
+[0m08:07:35  
+[0m08:07:35  1 of 6 START sql table model main.dim_month .................................... [RUN]
+[0m08:07:35  1 of 6 ERROR creating sql table model main.dim_month ........................... [[31mERROR[0m in 0.03s]
+[0m08:07:35  2 of 6 START sql view model main.stg_events .................................... [RUN]
+[0m08:07:35  2 of 6 ERROR creating sql view model main.stg_events ........................... [[31mERROR[0m in 0.01s]
+[0m08:07:35  3 of 6 START sql view model main.stg_subscriptions ............................. [RUN]
+[0m08:07:35  3 of 6 ERROR creating sql view model main.stg_subscriptions .................... [[31mERROR[0m in 0.01s]
+[0m08:07:35  4 of 6 START sql view model main.stg_users ..................................... [RUN]
+[0m08:07:35  4 of 6 ERROR creating sql view model main.stg_users ............................ [[31mERROR[0m in 0.01s]
+[0m08:07:35  5 of 6 SKIP relation main.int_subscription_users ............................... [[33mSKIP[0m]
+[0m08:07:35  6 of 6 SKIP relation main.fct_mrr .............................................. [[33mSKIP[0m]
+[0m08:07:35  
+[0m08:07:35  Finished running 2 table models, 4 view models in 0 hours 0 minutes and 0.13 seconds (0.13s).
+[0m08:07:35  
+[0m08:07:35  [31mCompleted with 4 errors, 0 partial successes, and 0 warnings:[0m
+[0m08:07:35  
+[0m08:07:35  [[31mERROR[0m]: in model dim_month (models/marts/saas_revenue_ops/dim_month.sql)
+[0m08:07:35    Runtime Error in model dim_month (models/marts/saas_revenue_ops/dim_month.sql)
+  Binder Error: Referenced column "month" was not found because the FROM clause is missing
+  
+  LINE 15:             date_trunc(current_date(), month),
+                                                  ^
+[0m08:07:35  
+[0m08:07:35    compiled code at /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-0u7lvhjc/target/compiled/saas_revenue_ops/models/marts/saas_revenue_ops/dim_month.sql
+[0m08:07:35  
+[0m08:07:35  [[31mERROR[0m]: in model stg_events (models/staging/saas_revenue_ops/stg_events.sql)
+[0m08:07:35    Runtime Error in model stg_events (models/staging/saas_revenue_ops/stg_events.sql)
+  Binder Error: Catalog "saas-revenue-ops" does not exist!
+[0m08:07:35  
+[0m08:07:35    compiled code at /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-0u7lvhjc/target/compiled/saas_revenue_ops/models/staging/saas_revenue_ops/stg_events.sql
+[0m08:07:35  
+[0m08:07:35  [[31mERROR[0m]: in model stg_subscriptions (models/staging/saas_revenue_ops/stg_subscriptions.sql)
+[0m08:07:35    Runtime Error in model stg_subscriptions (models/staging/saas_revenue_ops/stg_subscriptions.sql)
+  Binder Error: Catalog "saas-revenue-ops" does not exist!
+[0m08:07:35  
+[0m08:07:35    compiled code at /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-0u7lvhjc/target/compiled/saas_revenue_ops/models/staging/saas_revenue_ops/stg_subscriptions.sql
+[0m08:07:35  
+[0m08:07:35  [[31mERROR[0m]: in model stg_users (models/staging/saas_revenue_ops/stg_users.sql)
+[0m08:07:35    Runtime Error in model stg_users (models/staging/saas_revenue_ops/stg_users.sql)
+  Binder Error: Catalog "saas-revenue-ops" does not exist!
+[0m08:07:35  
+[0m08:07:35    compiled code at /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-0u7lvhjc/target/compiled/saas_revenue_ops/models/staging/saas_revenue_ops/stg_users.sql
+[0m08:07:35  
+[0m08:07:35  Done. PASS=0 WARN=0 ERROR=4 SKIP=2 NO-OP=0 REUSED=0 TOTAL=6
+
+[exit code: 1; duration: 1.78s]

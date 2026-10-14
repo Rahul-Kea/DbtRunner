@@ -1,0 +1,21 @@
+order_id,order_date,customer_id,customer_name,customer_city,product_id,product_name,product_category,unit_price,quantity,store_id,store_name,payment_method
+1001,2025-01-03,C001,Asha Patel,Seattle,P101,Everyday Mug,Kitchen,12.50,2,S01,Downtown,Card
+1001,2025-01-03,C001,Asha Patel,Seattle,P204,Notebook,Stationery,6.00,3,S01,Downtown,Card
+1002,2025-01-04,C002,Leo Chen,Portland,P305,Desk Lamp,Home,34.99,1,S02,Riverside,Mobile Pay
+1003,2025-01-05,C003,Maya Singh,Seattle,P101,Everyday Mug,Kitchen,12.50,1,S01,Downtown,Cash
+1003,2025-01-05,C003,Maya Singh,Seattle,P410,Water Bottle,Outdoors,18.00,2,S01,Downtown,Cash
+1004,2025-01-06,C004,Noah Kim,Tacoma,P204,Notebook,Stationery,6.00,5,S03,Hilltop,Card
+1005,2025-01-08,C005,Emma Davis,Portland,P520,Tote Bag,Accessories,15.00,2,S02,Riverside,Card
+1005,2025-01-08,C005,Emma Davis,Portland,P305,Desk Lamp,Home,34.99,1,S02,Riverside,Card
+1006,2025-01-09,C001,Asha Patel,Seattle,P410,Water Bottle,Outdoors,18.00,1,S01,Downtown,Mobile Pay
+1007,2025-01-10,C006,Oliver Brown,Tacoma,P101,Everyday Mug,Kitchen,12.50,4,S03,Hilltop,Cash
+1008,2025-01-12,C007,Sophia Wilson,Seattle,P520,Tote Bag,Accessories,15.00,1,S01,Downtown,Card
+1008,2025-01-12,C007,Sophia Wilson,Seattle,P204,Notebook,Stationery,6.00,2,S01,Downtown,Card
+1009,2025-01-14,C008,Ethan Moore,Portland,P305,Desk Lamp,Home,34.99,2,S02,Riverside,Mobile Pay
+1010,2025-01-16,C002,Leo Chen,Portland,P410,Water Bottle,Outdoors,18.00,3,S02,Riverside,Card
+1011,2025-01-18,C009,Amara Johnson,Seattle,P101,Everyday Mug,Kitchen,12.50,2,S01,Downtown,Card
+1011,2025-01-18,C009,Amara Johnson,Seattle,P520,Tote Bag,Accessories,15.00,1,S01,Downtown,Card
+1012,2025-01-20,C010,Liam Garcia,Tacoma,P204,Notebook,Stationery,6.00,4,S03,Hilltop,Cash
+1013,2025-01-22,C004,Noah Kim,Tacoma,P305,Desk Lamp,Home,34.99,1,S03,Hilltop,Card
+1014,2025-01-25,C005,Emma Davis,Portland,P410,Water Bottle,Outdoors,18.00,2,S02,Riverside,Mobile Pay
+1015,2025-01-28,C007,Sophia Wilson,Seattle,P520,Tote Bag,Accessories,15.00,3,S01,Downtown,Card

@@ -1,0 +1,7 @@
+store_poc:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: "ducklake:simulation/simulation.ducklake"
+      threads: 1

@@ -1,0 +1,428 @@
+{
+  "run_id": "20261007_133727_450955",
+  "started_at": "2026-10-07T08:07:29.132118+00:00",
+  "finished_at": "2026-10-07T08:07:37.659593+00:00",
+  "project_dir": "/Users/rahulrg/Kea-Data/dbt_runner/uploads/20261007_133727_450955/project",
+  "data_location": "/Users/rahulrg/Kea-Data/dbt_runner/uploads/20261007_133727_450955/lake_data",
+  "ducklake_metadata_location": "/Users/rahulrg/Kea-Data/dbt_runner/uploads/20261007_133727_450955/lake.ducklake",
+  "overall_status": "failed",
+  "steps": [
+    {
+      "name": "Clone DuckLake metadata catalog",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.13/bin/python3",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-0u7lvhjc/clone_ducklake_catalog.py",
+        "/Users/rahulrg/Kea-Data/dbt_runner/uploads/20261007_133727_450955/lake.ducklake",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-0u7lvhjc/simulation.ducklake"
+      ],
+      "return_code": 0,
+      "status": "passed",
+      "duration_seconds": 0.09674170799553394,
+      "error": null
+    },
+    {
+      "name": "Install project packages (dbt deps)",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.13/bin/dbt",
+        "--no-version-check",
+        "deps",
+        "--project-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-0u7lvhjc/project",
+        "--profiles-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-0u7lvhjc/profiles",
+        "--log-path",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-0u7lvhjc/dbt_logs"
+      ],
+      "return_code": 0,
+      "status": "passed",
+      "duration_seconds": 2.2949850410223007,
+      "error": null
+    },
+    {
+      "name": "Parse dbt DAG",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.13/bin/dbt",
+        "--no-version-check",
+        "parse",
+        "--project-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-0u7lvhjc/project",
+        "--profiles-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-0u7lvhjc/profiles",
+        "--log-path",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-0u7lvhjc/dbt_logs"
+      ],
+      "return_code": 0,
+      "status": "passed",
+      "duration_seconds": 2.2908113750163466,
+      "error": null
+    },
+    {
+      "name": "Validate rerun-safe materializations",
+      "command": [],
+      "return_code": 0,
+      "status": "passed",
+      "duration_seconds": 0.0,
+      "error": null
+    },
+    {
+      "name": "Materialize dbt models (dbt run)",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.13/bin/dbt",
+        "--no-version-check",
+        "run",
+        "--project-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-0u7lvhjc/project",
+        "--profiles-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-0u7lvhjc/profiles",
+        "--log-path",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-0u7lvhjc/dbt_logs"
+      ],
+      "return_code": 1,
+      "status": "failed",
+      "duration_seconds": 1.7791572499554604,
+      "error": null
+    }
+  ],
+  "model_test_results": [
+    {
+      "node": "model.saas_revenue_ops.dim_month",
+      "model": "dim_month",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"dim_month\"",
+      "status": "error",
+      "execution_status": "error",
+      "duration_seconds": 0.033589839935302734,
+      "message": "Runtime Error in model dim_month (models/marts/saas_revenue_ops/dim_month.sql)\n  Binder Error: Referenced column \"month\" was not found because the FROM clause is missing\n  \n  LINE 15:             date_trunc(current_date(), month),\n                                                  ^",
+      "error_message": "Runtime Error in model dim_month (models/marts/saas_revenue_ops/dim_month.sql)\n  Binder Error: Referenced column \"month\" was not found because the FROM clause is missing\n  \n  LINE 15:             date_trunc(current_date(), month),\n                                                  ^",
+      "is_warning": false
+    },
+    {
+      "node": "model.saas_revenue_ops.stg_events",
+      "model": "stg_events",
+      "resource_type": "model",
+      "object_type": "view",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"stg_events\"",
+      "status": "error",
+      "execution_status": "error",
+      "duration_seconds": 0.013115167617797852,
+      "message": "Runtime Error in model stg_events (models/staging/saas_revenue_ops/stg_events.sql)\n  Binder Error: Catalog \"saas-revenue-ops\" does not exist!",
+      "error_message": "Runtime Error in model stg_events (models/staging/saas_revenue_ops/stg_events.sql)\n  Binder Error: Catalog \"saas-revenue-ops\" does not exist!",
+      "is_warning": false
+    },
+    {
+      "node": "model.saas_revenue_ops.stg_subscriptions",
+      "model": "stg_subscriptions",
+      "resource_type": "model",
+      "object_type": "view",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"stg_subscriptions\"",
+      "status": "error",
+      "execution_status": "error",
+      "duration_seconds": 0.0059719085693359375,
+      "message": "Runtime Error in model stg_subscriptions (models/staging/saas_revenue_ops/stg_subscriptions.sql)\n  Binder Error: Catalog \"saas-revenue-ops\" does not exist!",
+      "error_message": "Runtime Error in model stg_subscriptions (models/staging/saas_revenue_ops/stg_subscriptions.sql)\n  Binder Error: Catalog \"saas-revenue-ops\" does not exist!",
+      "is_warning": false
+    },
+    {
+      "node": "model.saas_revenue_ops.stg_users",
+      "model": "stg_users",
+      "resource_type": "model",
+      "object_type": "view",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"stg_users\"",
+      "status": "error",
+      "execution_status": "error",
+      "duration_seconds": 0.006621837615966797,
+      "message": "Runtime Error in model stg_users (models/staging/saas_revenue_ops/stg_users.sql)\n  Binder Error: Catalog \"saas-revenue-ops\" does not exist!",
+      "error_message": "Runtime Error in model stg_users (models/staging/saas_revenue_ops/stg_users.sql)\n  Binder Error: Catalog \"saas-revenue-ops\" does not exist!",
+      "is_warning": false
+    },
+    {
+      "node": "model.saas_revenue_ops.int_subscription_users",
+      "model": "int_subscription_users",
+      "resource_type": "model",
+      "object_type": "view",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"int_subscription_users\"",
+      "status": "skipped",
+      "execution_status": "skipped",
+      "duration_seconds": 0.0,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.saas_revenue_ops.fct_mrr",
+      "model": "fct_mrr",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"fct_mrr\"",
+      "status": "skipped",
+      "execution_status": "skipped",
+      "duration_seconds": 0.0,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    }
+  ],
+  "model_executions": [
+    {
+      "node": "model.saas_revenue_ops.dim_month",
+      "model": "dim_month",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"dim_month\"",
+      "status": "error",
+      "execution_status": "error",
+      "duration_seconds": 0.033589839935302734,
+      "message": "Runtime Error in model dim_month (models/marts/saas_revenue_ops/dim_month.sql)\n  Binder Error: Referenced column \"month\" was not found because the FROM clause is missing\n  \n  LINE 15:             date_trunc(current_date(), month),\n                                                  ^",
+      "error_message": "Runtime Error in model dim_month (models/marts/saas_revenue_ops/dim_month.sql)\n  Binder Error: Referenced column \"month\" was not found because the FROM clause is missing\n  \n  LINE 15:             date_trunc(current_date(), month),\n                                                  ^",
+      "is_warning": false
+    },
+    {
+      "node": "model.saas_revenue_ops.stg_events",
+      "model": "stg_events",
+      "resource_type": "model",
+      "object_type": "view",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"stg_events\"",
+      "status": "error",
+      "execution_status": "error",
+      "duration_seconds": 0.013115167617797852,
+      "message": "Runtime Error in model stg_events (models/staging/saas_revenue_ops/stg_events.sql)\n  Binder Error: Catalog \"saas-revenue-ops\" does not exist!",
+      "error_message": "Runtime Error in model stg_events (models/staging/saas_revenue_ops/stg_events.sql)\n  Binder Error: Catalog \"saas-revenue-ops\" does not exist!",
+      "is_warning": false
+    },
+    {
+      "node": "model.saas_revenue_ops.stg_subscriptions",
+      "model": "stg_subscriptions",
+      "resource_type": "model",
+      "object_type": "view",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"stg_subscriptions\"",
+      "status": "error",
+      "execution_status": "error",
+      "duration_seconds": 0.0059719085693359375,
+      "message": "Runtime Error in model stg_subscriptions (models/staging/saas_revenue_ops/stg_subscriptions.sql)\n  Binder Error: Catalog \"saas-revenue-ops\" does not exist!",
+      "error_message": "Runtime Error in model stg_subscriptions (models/staging/saas_revenue_ops/stg_subscriptions.sql)\n  Binder Error: Catalog \"saas-revenue-ops\" does not exist!",
+      "is_warning": false
+    },
+    {
+      "node": "model.saas_revenue_ops.stg_users",
+      "model": "stg_users",
+      "resource_type": "model",
+      "object_type": "view",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"stg_users\"",
+      "status": "error",
+      "execution_status": "error",
+      "duration_seconds": 0.006621837615966797,
+      "message": "Runtime Error in model stg_users (models/staging/saas_revenue_ops/stg_users.sql)\n  Binder Error: Catalog \"saas-revenue-ops\" does not exist!",
+      "error_message": "Runtime Error in model stg_users (models/staging/saas_revenue_ops/stg_users.sql)\n  Binder Error: Catalog \"saas-revenue-ops\" does not exist!",
+      "is_warning": false
+    },
+    {
+      "node": "model.saas_revenue_ops.int_subscription_users",
+      "model": "int_subscription_users",
+      "resource_type": "model",
+      "object_type": "view",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"int_subscription_users\"",
+      "status": "skipped",
+      "execution_status": "skipped",
+      "duration_seconds": 0.0,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.saas_revenue_ops.fct_mrr",
+      "model": "fct_mrr",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"fct_mrr\"",
+      "status": "skipped",
+      "execution_status": "skipped",
+      "duration_seconds": 0.0,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    }
+  ],
+  "log_file": "/Users/rahulrg/Kea-Data/dbt_runner/run_logs/run_20261007_133727_450955.log",
+  "structured_log_file": "/Users/rahulrg/Kea-Data/dbt_runner/run_logs/run_20261007_133727_450955.events.jsonl",
+  "report_file": "/Users/rahulrg/Kea-Data/dbt_runner/run_logs/run_20261007_133727_450955.json",
+  "config_file": "/Users/rahulrg/Kea-Data/dbt_runner/runner_config.json",
+  "rerun_policy": "isolated clone of the database/lake per run with idempotency validation",
+  "sandbox_workspace": "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-0u7lvhjc",
+  "sandbox_cleanup_status": "cleaned",
+  "object_validation": {
+    "status": "failed",
+    "expected_objects": [
+      {
+        "unique_id": "model.saas_revenue_ops.stg_users",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "stg_users",
+        "materialized": "view",
+        "expected_type": "view",
+        "columns": [
+          {
+            "name": "user_id",
+            "data_type": ""
+          }
+        ]
+      },
+      {
+        "unique_id": "model.saas_revenue_ops.stg_subscriptions",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "stg_subscriptions",
+        "materialized": "view",
+        "expected_type": "view",
+        "columns": [
+          {
+            "name": "user_id",
+            "data_type": ""
+          }
+        ]
+      },
+      {
+        "unique_id": "model.saas_revenue_ops.stg_events",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "stg_events",
+        "materialized": "view",
+        "expected_type": "view",
+        "columns": [
+          {
+            "name": "user_id",
+            "data_type": ""
+          },
+          {
+            "name": "event_date",
+            "data_type": ""
+          }
+        ]
+      },
+      {
+        "unique_id": "model.saas_revenue_ops.fct_mrr",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "fct_mrr",
+        "materialized": "table",
+        "expected_type": "table",
+        "columns": [
+          {
+            "name": "financial_month",
+            "data_type": ""
+          },
+          {
+            "name": "user_id",
+            "data_type": ""
+          },
+          {
+            "name": "subscription_plan",
+            "data_type": ""
+          },
+          {
+            "name": "mrr",
+            "data_type": ""
+          }
+        ]
+      },
+      {
+        "unique_id": "model.saas_revenue_ops.dim_month",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "dim_month",
+        "materialized": "table",
+        "expected_type": "table",
+        "columns": [
+          {
+            "name": "month_start_date",
+            "data_type": ""
+          }
+        ]
+      },
+      {
+        "unique_id": "model.saas_revenue_ops.int_subscription_users",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "int_subscription_users",
+        "materialized": "view",
+        "expected_type": "view",
+        "columns": [
+          {
+            "name": "user_id",
+            "data_type": ""
+          },
+          {
+            "name": "signup_date",
+            "data_type": ""
+          },
+          {
+            "name": "subscription_plan",
+            "data_type": ""
+          }
+        ]
+      }
+    ],
+    "actual_objects": [],
+    "failures": [
+      "Direct DuckDB inspection error: Catalog Error: Table with name \"information_schema.tables\" does not exist because schema \"information_schema\" does not exist.\n\nLINE 1: ... table_catalog, table_schema, table_name, table_type FROM ducklake.information_schema.tables\n                                                                     ^"
+    ]
+  },
+  "dag_validation": {
+    "status": "passed",
+    "models_count": 6,
+    "models_by_materialization": {
+      "view": 4,
+      "table": 2
+    },
+    "seeds_count": 0,
+    "snapshots_count": 0,
+    "tests_count": 17,
+    "sources_count": 3,
+    "dependencies_checked": 24,
+    "failures": []
+  },
+  "rerun_verification": {},
+  "database_type": "ducklake",
+  "execution_mode": "full",
+  "failure_details": [
+    "dim_month (table) error after 0.034s: Runtime Error in model dim_month (models/marts/saas_revenue_ops/dim_month.sql)\n  Binder Error: Referenced column \"month\" was not found because the FROM clause is missing\n  \n  LINE 15:             date_trunc(current_date(), month),\n                                                  ^",
+    "stg_events (view) error after 0.013s: Runtime Error in model stg_events (models/staging/saas_revenue_ops/stg_events.sql)\n  Binder Error: Catalog \"saas-revenue-ops\" does not exist!",
+    "stg_subscriptions (view) error after 0.006s: Runtime Error in model stg_subscriptions (models/staging/saas_revenue_ops/stg_subscriptions.sql)\n  Binder Error: Catalog \"saas-revenue-ops\" does not exist!",
+    "stg_users (view) error after 0.007s: Runtime Error in model stg_users (models/staging/saas_revenue_ops/stg_users.sql)\n  Binder Error: Catalog \"saas-revenue-ops\" does not exist!",
+    "int_subscription_users (view) skipped after 0.000s (model.saas_revenue_ops.int_subscription_users)",
+    "fct_mrr (table) skipped after 0.000s (model.saas_revenue_ops.fct_mrr)",
+    "Materialize dbt models (dbt run) failed (exit code 1)",
+    "Direct DuckDB inspection error: Catalog Error: Table with name \"information_schema.tables\" does not exist because schema \"information_schema\" does not exist.\n\nLINE 1: ... table_catalog, table_schema, table_name, table_type FROM ducklake.information_schema.tables\n                                                                     ^"
+  ],
+  "warning_details": []
+}

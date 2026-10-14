@@ -1,0 +1,47 @@
+dbt runner execution 20261006_175642_062499
+Project input: /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261006_175642_062499/project
+Database input: /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261006_175642_062499/lake.ducklake (ducklake)
+Data input: /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261006_175642_062499/lake_data
+Execution mode: isolated temporary sandbox with safe repeated execution verification.
+
+--- Clone DuckLake metadata catalog ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-s7bp_b4w/clone_ducklake_catalog.py /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261006_175642_062499/lake.ducklake /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-s7bp_b4w/simulation.ducklake
+Cloned DuckLake metadata catalog to /private/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-s7bp_b4w/simulation.ducklake
+
+[exit code: 0; duration: 0.10s]
+
+--- Install project packages (dbt deps) ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/dbt deps --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-s7bp_b4w/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-s7bp_b4w/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-s7bp_b4w/dbt_logs
+[0m12:26:45  Running with dbt=1.12.5
+[0m12:26:45  Updating lock file in file path: /private/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-s7bp_b4w/project/package-lock.yml
+[0m12:26:45  Installing dbt-labs/dbt_utils
+[0m12:26:45  Installed from version 1.3.0
+[0m12:26:45  Updated version available: 1.4.1
+[0m12:26:45  
+[0m12:26:45  Updates available for packages: ['dbt-labs/dbt_utils']                 
+Update your versions in packages.yml, then run dbt deps
+
+[exit code: 0; duration: 2.41s]
+
+--- Parse dbt DAG ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/dbt parse --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-s7bp_b4w/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-s7bp_b4w/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-s7bp_b4w/dbt_logs
+[0m12:26:47  Running with dbt=1.12.5
+[0m12:26:47  Registered adapter: duckdb=1.11.0
+[0m12:26:47  Unable to do partial parsing because saved manifest not found. Starting full parse.
+[0m12:26:48  [[33mWARNING[0m][MissingArgumentsPropertyInGenericTestDeprecation]: Deprecated
+functionality
+Found top-level arguments to test `accepted_values` defined on 'stg_orders' in
+package 'retail_analytics' (models/staging/schema.yml). Arguments to generic
+tests should be nested under the `arguments` property.
+[0m12:26:48  [[31mERROR[0m]: Encountered an error:
+Compilation Error
+  Model 'model.retail_analytics.monthly_revenue_summary' (models/marts/analytics/monthly_revenue_summary.sql) depends on a node named 'fact_orders' which was not found
+[0m12:26:48  [[33mWARNING[0m][DeprecationsSummary]: Deprecated functionality
+Summary of encountered deprecations:
+- MissingArgumentsPropertyInGenericTestDeprecation: 4 occurrences
+To see all deprecation instances instead of just the first occurrence of each,
+run command again with the `--show-all-deprecations` flag. You may also need to
+run with `--no-partial-parse` as some deprecations are only encountered during
+parsing.
+
+[exit code: 2; duration: 2.37s]

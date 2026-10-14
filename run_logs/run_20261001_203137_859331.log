@@ -1,0 +1,23 @@
+dbt runner execution 20261001_203137_859331
+Project input: /Users/rahulrg/Kea-Data/DuckLake/POC2
+Database input: /Users/rahulrg/Kea-Data/dbt_runner/test_seed_only/lake.ducklake (ducklake)
+Data input: /Users/rahulrg/Kea-Data/dbt_runner/test_seed_only/lake_data
+Execution mode: isolated temporary sandbox with safe repeated execution verification.
+
+--- Clone DuckLake metadata catalog ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-4_dalcpu/clone_ducklake_catalog.py /Users/rahulrg/Kea-Data/dbt_runner/test_seed_only/lake.ducklake /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-4_dalcpu/simulation.ducklake
+Cloned DuckLake metadata catalog to /private/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-4_dalcpu/simulation.ducklake
+
+[exit code: 0; duration: 0.08s]
+
+--- Parse dbt DAG ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/dbt parse --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-4_dalcpu/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-4_dalcpu/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-4_dalcpu/dbt_logs
+[0m15:01:39  Running with dbt=1.12.5
+[0m15:01:40  Registered adapter: duckdb=1.11.0
+[0m15:01:40  Unable to do partial parsing because saved manifest not found. Starting full parse.
+[0m15:01:41  Performance info: /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-4_dalcpu/target/perf_info.json
+
+[exit code: 0; duration: 2.63s]
+
+--- Materialize dbt seeds ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/dbt seed --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-4_dalcpu/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-4_dalcpu/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-4_dalcpu/dbt_logs

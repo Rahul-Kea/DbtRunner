@@ -1,0 +1,15 @@
+{
+  "dbt_package": "dbt-duckdb",
+  "threads": 1,
+  "run_logs_dir": "run_logs",
+  "safe_materializations": [
+    "table",
+    "view",
+    "incremental",
+    "ephemeral",
+    "materialized_view"
+  ],
+  "verify_rerun": true,
+  "reuse_environment": true,
+  "timeout_seconds": 600
+}

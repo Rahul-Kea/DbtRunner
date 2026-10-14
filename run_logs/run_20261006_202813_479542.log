@@ -1,0 +1,83 @@
+dbt runner execution 20261006_202813_479542
+Project input: /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261006_202813_479542/project/snowflake-dbt-demo-project-main
+Database input: /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261006_202813_479542/lake.ducklake (ducklake)
+Data input: /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261006_202813_479542/lake_data
+Execution mode: isolated temporary sandbox with safe repeated execution verification.
+
+--- Clone DuckLake metadata catalog ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-_qyg5smz/clone_ducklake_catalog.py /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261006_202813_479542/lake.ducklake /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-_qyg5smz/simulation.ducklake
+Cloned DuckLake metadata catalog to /private/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-_qyg5smz/simulation.ducklake
+
+[exit code: 0; duration: 0.10s]
+
+--- Install project packages (dbt deps) ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/dbt --no-version-check deps --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-_qyg5smz/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-_qyg5smz/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-_qyg5smz/dbt_logs
+[0m14:58:15  Running with dbt=1.12.5
+[0m14:58:25  [[33mWARNING[0m]: The git package "https://github.com/dpguthrie/instagram_module" 
+	is pinned to the "main" branch.
+	This can introduce breaking changes into your project without warning!
+
+See https://docs.getdbt.com/docs/package-management#section-specifying-package-versions
+[0m14:58:29  [[33mWARNING[0m]: The git package "https://github.com/dpguthrie/facebook_module" 
+	is pinned to the "main" branch.
+	This can introduce breaking changes into your project without warning!
+
+See https://docs.getdbt.com/docs/package-management#section-specifying-package-versions
+[0m14:58:30  [[33mWARNING[0m]: The git package "https://github.com/dpguthrie/instagram_module" 
+	is pinned to the "main" branch.
+	This can introduce breaking changes into your project without warning!
+
+See https://docs.getdbt.com/docs/package-management#section-specifying-package-versions
+[0m14:58:31  [[33mWARNING[0m]: The git package "https://github.com/dpguthrie/facebook_module" 
+	is pinned to the "main" branch.
+	This can introduce breaking changes into your project without warning!
+
+See https://docs.getdbt.com/docs/package-management#section-specifying-package-versions
+[0m14:58:31  Updating lock file in file path: /private/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-_qyg5smz/project/package-lock.yml
+[0m14:58:31  Installing dbt-labs/codegen
+[0m14:58:32  Installed from version 0.14.1
+[0m14:58:32  Up to date!
+[0m14:58:32  Installing dbt-labs/dbt_utils
+[0m14:58:34  Installed from version 1.4.1
+[0m14:58:34  Up to date!
+[0m14:58:34  Installing dbt-labs/dbt_external_tables
+[0m14:58:36  Installed from version 0.12.4
+[0m14:58:36  Up to date!
+[0m14:58:36  Installing dbt-labs/metrics
+[0m14:58:37  Installed from version 1.3.2
+[0m14:58:37  Updated version available: 1.5.1
+[0m14:58:37  Installing brooklyn-data/dbt_artifacts
+[0m14:58:37  Installed from version 2.11.1
+[0m14:58:37  Up to date!
+[0m14:58:37  Installing https://github.com/dpguthrie/instagram_module
+[0m14:58:43  Installed from revision ece821a668d3424e5540e496ba54c1e2feccc55a
+[0m14:58:43  Installing https://github.com/dpguthrie/facebook_module
+[0m14:58:52  Installed from revision 74f9e92ee9ad334d8df704d223fe624707d87eed
+[0m14:58:52  
+[0m14:58:52  Updates available for packages: ['dbt-labs/metrics']                 
+Update your versions in packages.yml, then run dbt deps
+
+[exit code: 0; duration: 38.03s]
+
+--- Parse dbt DAG ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/dbt --no-version-check parse --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-_qyg5smz/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-_qyg5smz/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-_qyg5smz/dbt_logs
+[0m14:58:53  Running with dbt=1.12.5
+[0m14:58:53  Registered adapter: duckdb=1.11.0
+[0m14:58:54  Unable to do partial parsing because saved manifest not found. Starting full parse.
+[0m14:58:55  [[33mWARNING[0m]: Did not find matching node for patch with name 'select_from_orders_example' in the 'models' section of file 'analyses/analysis.yml'
+[0m14:58:55  [[33mWARNING[0m]: Argument column_name in the yaml for macro cents_to_dollars has an invalid type.
+[0m14:58:55  [[33mWARNING[0m]: Argument precision in the yaml for macro cents_to_dollars has an invalid type.
+[0m14:58:55  [[33mWARNING[0m]: Argument filter_column_name in the yaml for macro limit_data_in_dev has an invalid type.
+[0m14:58:55  [[33mWARNING[0m]: Argument lookback_days in the yaml for macro limit_data_in_dev has an invalid type.
+[0m14:58:55  [[33mWARNING[0m]: Argument col in the yaml for macro money has an invalid type.
+[0m14:58:55  [[33mWARNING[0m]: Argument schemas in the yaml for macro grant_all_on_schemas has an invalid type.
+[0m14:58:55  [[33mWARNING[0m]: Argument role in the yaml for macro grant_all_on_schemas has an invalid type.
+[0m14:58:55  [[33mWARNING[0m]: Argument table in the yaml for macro test_all_values_gte_zero has an invalid type.
+[0m14:58:55  [[33mWARNING[0m]: Argument column in the yaml for macro test_all_values_gte_zero has an invalid type.
+[0m14:58:55  [[33mWARNING[0m]: The number of arguments in the yaml for macro standard_account_fields does not match the jinja definition.
+[0m14:58:55  [[33mWARNING[0m]: Argument return_fields in the yaml for macro standard_account_fields has an invalid type.
+[0m14:58:55  [[31mERROR[0m]: Encountered an error:
+Parsing Error
+  Invalid metrics config given in FilePath(searched_path='models', relative_path='metrics/tpch_metrics.yml', modification_time=1791298693.5007312, project_root='/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-_qyg5smz/project') @ metrics: {'name': 'total_revenue', 'label': 'Total Revenue', 'model': "ref('fct_order_items')", 'description': 'Total income from all orders', 'calculation_method': 'sum', 'expression': 'gross_item_sales_amount', 'timestamp': 'order_date', 'time_grains': ['day', 'week', 'month', 'quarter', 'year'], 'dimensions': ['return_flag', 'order_item_status_code', 'supplier_key', 'ship_mode']} - at path []: Additional properties are not allowed ('calculation_method', 'dimensions', 'expression', 'model', 'time_grains', 'timestamp' were unexpected)
+
+[exit code: 2; duration: 3.09s]

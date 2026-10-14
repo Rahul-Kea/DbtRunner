@@ -1,0 +1,14 @@
+dbt runner execution 20260930_164352_582225
+Project input: /Users/rahulrg/Kea-Data/DuckLake/POC2
+Database input: /Users/rahulrg/Kea-Data/DuckLake/POC2/simulation/simulation.ducklake (ducklake)
+Data input: /Users/rahulrg/Kea-Data/DuckLake/POC2/simulation/lake_data
+Execution mode: isolated temporary sandbox with safe repeated execution verification.
+
+--- Clone DuckLake metadata catalog ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-xtba5ukq/clone_ducklake_catalog.py /Users/rahulrg/Kea-Data/DuckLake/POC2/simulation/simulation.ducklake /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-xtba5ukq/simulation.ducklake
+Cloned DuckLake metadata catalog to /private/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-xtba5ukq/simulation.ducklake
+
+[exit code: 0; duration: 0.10s]
+
+--- Parse dbt DAG ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/dbt parse --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-xtba5ukq/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-xtba5ukq/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-xtba5ukq/dbt_logs

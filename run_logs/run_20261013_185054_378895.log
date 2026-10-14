@@ -1,0 +1,32 @@
+dbt runner execution 20261013_185054_378895
+Project input: /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261013_185054_378895/project/dbt
+Database input: /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261013_185054_378895/lake.ducklake (ducklake)
+Data input: /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261013_185054_378895/lake_data
+Execution mode: isolated temporary sandbox with safe repeated execution verification.
+
+--- Clone DuckLake metadata catalog ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-fjs412of/clone_ducklake_catalog.py /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261013_185054_378895/lake.ducklake /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-fjs412of/simulation.ducklake
+Cloned DuckLake metadata catalog to /private/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-fjs412of/simulation.ducklake
+
+[exit code: 0; duration: 0.13s]
+
+--- Install project packages (dbt deps) ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/dbt --no-version-check deps --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-fjs412of/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-fjs412of/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-fjs412of/dbt_logs
+[0m13:20:57  Running with dbt=1.12.5
+[0m13:20:57  Installing dbt-labs/dbt_utils
+[0m13:20:58  Installed from version 1.4.1
+[0m13:20:58  Up to date!
+
+[exit code: 0; duration: 2.82s]
+
+--- Parse dbt DAG ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/dbt --no-version-check parse --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-fjs412of/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-fjs412of/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-fjs412of/dbt_logs
+[0m13:20:59  Running with dbt=1.12.5
+[0m13:20:59  Registered adapter: duckdb=1.11.0
+[0m13:20:59  Unable to do partial parsing because saved manifest not found. Starting full parse.
+[0m13:21:00  [[31mERROR[0m]: Encountered an error:
+Parsing Error
+  Failed to render models/staging/sources.yml from project weather_dbt: Parsing Error
+    Env var required but not provided: 'DATA_DB_NAME'
+
+[exit code: 2; duration: 2.64s]

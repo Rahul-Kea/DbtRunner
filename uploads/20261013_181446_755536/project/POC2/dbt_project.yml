@@ -1,0 +1,10 @@
+name: 'store_poc'
+version: '1.0.0'
+profile: 'store_poc'
+
+model-paths: ["models"]
+seed-paths: ["seeds"]
+
+models:
+  store_poc:
+    +materialized: table

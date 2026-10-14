@@ -1,0 +1,43 @@
+dbt runner execution 20260930_165955_714403
+Project input: /Users/rahulrg/Kea-Data/dbt_runner/uploads/20260930_165955_714403/project
+Database input: /Users/rahulrg/Kea-Data/dbt_runner/uploads/20260930_165955_714403/simulation.ducklake (ducklake)
+Data input: /Users/rahulrg/Kea-Data/dbt_runner/uploads/20260930_165955_714403/lake_data/main
+Execution mode: isolated temporary sandbox with safe repeated execution verification.
+
+--- Clone DuckLake metadata catalog ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-g74h4zwh/clone_ducklake_catalog.py /Users/rahulrg/Kea-Data/dbt_runner/uploads/20260930_165955_714403/simulation.ducklake /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-g74h4zwh/simulation.ducklake
+Cloned DuckLake metadata catalog to /private/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-g74h4zwh/simulation.ducklake
+
+[exit code: 0; duration: 0.10s]
+
+--- Parse dbt DAG ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/dbt parse --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-g74h4zwh/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-g74h4zwh/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-g74h4zwh/dbt_logs
+[0m11:29:57  Running with dbt=1.12.5
+[0m11:29:58  Registered adapter: duckdb=1.11.0
+[0m11:29:58  Unable to do partial parsing because saved manifest not found. Starting full parse.
+[0m11:29:58  Performance info: /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-g74h4zwh/target/perf_info.json
+
+[exit code: 0; duration: 2.42s]
+
+--- Materialize dbt seeds ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/dbt seed --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-g74h4zwh/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-g74h4zwh/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-g74h4zwh/dbt_logs
+[0m11:30:00  Running with dbt=1.12.5
+[0m11:30:00  Registered adapter: duckdb=1.11.0
+[0m11:30:00  Found 8 models, 54 data tests, 1 seed, 500 macros, 1 unit test
+[0m11:30:00  
+[0m11:30:00  Concurrency: 1 threads (target='runner')
+[0m11:30:00  
+[0m11:30:00  1 of 1 START seed file main.store_orders ....................................... [RUN]
+[0m11:30:00  1 of 1 ERROR loading seed file main.store_orders ............................... [[31mERROR[0m in 0.03s]
+[0m11:30:00  
+[0m11:30:00  Finished running 1 seed in 0 hours 0 minutes and 0.16 seconds (0.16s).
+[0m11:30:00  
+[0m11:30:00  [31mCompleted with 1 error, 0 partial successes, and 0 warnings:[0m
+[0m11:30:00  
+[0m11:30:00  [[31mERROR[0m]: in seed store_orders (seeds/store_orders.csv)
+[0m11:30:00    Runtime Error in seed store_orders (seeds/store_orders.csv)
+  IO Error: Cannot open file "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-g74h4zwh/lake_data/main/store_orders/ducklake-01a0d8a8-d143-7e2d-a1a1-2549fadc960c.parquet": No such file or directory
+[0m11:30:00  
+[0m11:30:00  Done. PASS=0 WARN=0 ERROR=1 SKIP=0 NO-OP=0 REUSED=0 TOTAL=1
+
+[exit code: 1; duration: 1.79s]

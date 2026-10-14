@@ -1,0 +1,989 @@
+{
+  "run_id": "20261013_175154_117675",
+  "started_at": "2026-10-13T12:21:55.517058+00:00",
+  "finished_at": "2026-10-13T12:22:00.534281+00:00",
+  "project_dir": "/Users/rahulrg/Kea-Data/dbt_runner/uploads/20261013_175154_117675/project",
+  "data_location": "/Users/rahulrg/Kea-Data/dbt_runner/uploads/20261013_175154_117675/lake_data",
+  "ducklake_metadata_location": "/Users/rahulrg/Kea-Data/dbt_runner/uploads/20261013_175154_117675/lake.ducklake",
+  "overall_status": "passed",
+  "steps": [
+    {
+      "name": "Clone DuckLake metadata catalog",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.13/bin/python3",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-0o4xbkc7/clone_ducklake_catalog.py",
+        "/Users/rahulrg/Kea-Data/dbt_runner/uploads/20261013_175154_117675/lake.ducklake",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-0o4xbkc7/simulation.ducklake"
+      ],
+      "return_code": 0,
+      "status": "passed",
+      "duration_seconds": 0.08544366690330207,
+      "error": null
+    },
+    {
+      "name": "Parse dbt DAG",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.13/bin/dbt",
+        "--no-version-check",
+        "parse",
+        "--project-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-0o4xbkc7/project",
+        "--profiles-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-0o4xbkc7/profiles",
+        "--log-path",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-0o4xbkc7/dbt_logs"
+      ],
+      "return_code": 0,
+      "status": "passed",
+      "duration_seconds": 2.325904749915935,
+      "error": null
+    },
+    {
+      "name": "Validate rerun-safe materializations",
+      "command": [],
+      "return_code": 0,
+      "status": "passed",
+      "duration_seconds": 0.0,
+      "error": null
+    },
+    {
+      "name": "Compile dbt models & validate references (dbt compile)",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.13/bin/dbt",
+        "--no-version-check",
+        "compile",
+        "--project-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-0o4xbkc7/project",
+        "--profiles-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-0o4xbkc7/profiles",
+        "--log-path",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-0o4xbkc7/dbt_logs"
+      ],
+      "return_code": 0,
+      "status": "passed",
+      "duration_seconds": 1.7565671659540385,
+      "error": null
+    }
+  ],
+  "model_test_results": [
+    {
+      "node": "seed.jaffle_shop.raw_customers",
+      "model": "raw_customers",
+      "resource_type": "seed",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "main.raw_customers",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.0025043487548828125,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "seed.jaffle_shop.raw_orders",
+      "model": "raw_orders",
+      "resource_type": "seed",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "main.raw_orders",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.0005788803100585938,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "seed.jaffle_shop.raw_payments",
+      "model": "raw_payments",
+      "resource_type": "seed",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "main.raw_payments",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.0005252361297607422,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.jaffle_shop.stg_customers",
+      "model": "stg_customers",
+      "resource_type": "model",
+      "object_type": "view",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"stg_customers\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.001459360122680664,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.jaffle_shop.stg_orders",
+      "model": "stg_orders",
+      "resource_type": "model",
+      "object_type": "view",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"stg_orders\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.0012977123260498047,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.jaffle_shop.stg_payments",
+      "model": "stg_payments",
+      "resource_type": "model",
+      "object_type": "view",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"stg_payments\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.0010089874267578125,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.jaffle_shop.not_null_stg_customers_customer_id.e2cfb1f9aa",
+      "model": "not_null_stg_customers_customer_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_stg_customers_customer_id",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.0058209896087646484,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.jaffle_shop.unique_stg_customers_customer_id.c7614daada",
+      "model": "unique_stg_customers_customer_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.unique_stg_customers_customer_id",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.003731966018676758,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.jaffle_shop.accepted_values_stg_orders_status__placed__shipped__completed__return_pending__returned.080fb20aad",
+      "model": "accepted_values_stg_orders_4f514bf94b77b7ea437830eec4421c58",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.accepted_values_stg_orders_4f514bf94b77b7ea437830eec4421c58",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.010361909866333008,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.jaffle_shop.not_null_stg_orders_order_id.81cfe2fe64",
+      "model": "not_null_stg_orders_order_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_stg_orders_order_id",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.0025899410247802734,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.jaffle_shop.unique_stg_orders_order_id.e3b841c71a",
+      "model": "unique_stg_orders_order_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.unique_stg_orders_order_id",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.0026628971099853516,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.jaffle_shop.customers",
+      "model": "customers",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"customers\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.001219034194946289,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.jaffle_shop.orders",
+      "model": "orders",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"orders\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.001508951187133789,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.jaffle_shop.accepted_values_stg_payments_payment_method__credit_card__coupon__bank_transfer__gift_card.3c3820f278",
+      "model": "accepted_values_stg_payments_c7909fb19b1f0177c2bf99c7912f06ef",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.accepted_values_stg_payments_c7909fb19b1f0177c2bf99c7912f06ef",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.00805807113647461,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.jaffle_shop.not_null_stg_payments_payment_id.c19cc50075",
+      "model": "not_null_stg_payments_payment_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_stg_payments_payment_id",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.0024950504302978516,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.jaffle_shop.unique_stg_payments_payment_id.3744510712",
+      "model": "unique_stg_payments_payment_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.unique_stg_payments_payment_id",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.002457857131958008,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.jaffle_shop.not_null_customers_customer_id.5c9bf9911d",
+      "model": "not_null_customers_customer_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_customers_customer_id",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.0027227401733398438,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.jaffle_shop.unique_customers_customer_id.c5af1ff4b1",
+      "model": "unique_customers_customer_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.unique_customers_customer_id",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.0024521350860595703,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.jaffle_shop.accepted_values_orders_status__placed__shipped__completed__return_pending__returned.be6b5b5ec3",
+      "model": "accepted_values_orders_1ce6ab157c285f7cd2ac656013faf758",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.accepted_values_orders_1ce6ab157c285f7cd2ac656013faf758",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.0025589466094970703,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.jaffle_shop.not_null_orders_amount.106140f9fd",
+      "model": "not_null_orders_amount",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_orders_amount",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.0026040077209472656,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.jaffle_shop.not_null_orders_bank_transfer_amount.7743500c49",
+      "model": "not_null_orders_bank_transfer_amount",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_orders_bank_transfer_amount",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.0025548934936523438,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.jaffle_shop.not_null_orders_coupon_amount.ab90c90625",
+      "model": "not_null_orders_coupon_amount",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_orders_coupon_amount",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.002588033676147461,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.jaffle_shop.not_null_orders_credit_card_amount.d3ca593b59",
+      "model": "not_null_orders_credit_card_amount",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_orders_credit_card_amount",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.002782106399536133,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.jaffle_shop.not_null_orders_customer_id.c5f02694af",
+      "model": "not_null_orders_customer_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_orders_customer_id",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.002554178237915039,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.jaffle_shop.not_null_orders_gift_card_amount.413a0d2d7a",
+      "model": "not_null_orders_gift_card_amount",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_orders_gift_card_amount",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.0027420520782470703,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.jaffle_shop.not_null_orders_order_id.cf6c17daed",
+      "model": "not_null_orders_order_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.not_null_orders_order_id",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.003718852996826172,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.jaffle_shop.relationships_orders_customer_id__customer_id__ref_customers_.c6ec7f58f2",
+      "model": "relationships_orders_customer_id__customer_id__ref_customers_",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.relationships_orders_customer_id__customer_id__ref_customers_",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.006317853927612305,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "test.jaffle_shop.unique_orders_order_id.fed79b3a6e",
+      "model": "unique_orders_order_id",
+      "resource_type": "test",
+      "object_type": "test",
+      "database": "ducklake",
+      "schema": "main_dbt_test__audit",
+      "relation_name": "main_dbt_test__audit.unique_orders_order_id",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.0024938583374023438,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    }
+  ],
+  "model_executions": [
+    {
+      "node": "seed.jaffle_shop.raw_customers",
+      "model": "raw_customers",
+      "resource_type": "seed",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "main.raw_customers",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.0025043487548828125,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "seed.jaffle_shop.raw_orders",
+      "model": "raw_orders",
+      "resource_type": "seed",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "main.raw_orders",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.0005788803100585938,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "seed.jaffle_shop.raw_payments",
+      "model": "raw_payments",
+      "resource_type": "seed",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "main.raw_payments",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.0005252361297607422,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.jaffle_shop.stg_customers",
+      "model": "stg_customers",
+      "resource_type": "model",
+      "object_type": "view",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"stg_customers\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.001459360122680664,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.jaffle_shop.stg_orders",
+      "model": "stg_orders",
+      "resource_type": "model",
+      "object_type": "view",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"stg_orders\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.0012977123260498047,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.jaffle_shop.stg_payments",
+      "model": "stg_payments",
+      "resource_type": "model",
+      "object_type": "view",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"stg_payments\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.0010089874267578125,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.jaffle_shop.customers",
+      "model": "customers",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"customers\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.001219034194946289,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.jaffle_shop.orders",
+      "model": "orders",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"orders\"",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.001508951187133789,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    }
+  ],
+  "log_file": "/Users/rahulrg/Kea-Data/dbt_runner/run_logs/run_20261013_175154_117675.log",
+  "structured_log_file": "/Users/rahulrg/Kea-Data/dbt_runner/run_logs/run_20261013_175154_117675.events.jsonl",
+  "report_file": "/Users/rahulrg/Kea-Data/dbt_runner/run_logs/run_20261013_175154_117675.json",
+  "config_file": "/Users/rahulrg/Kea-Data/dbt_runner/runner_config.json",
+  "rerun_policy": "dry-run syntax and DAG topology verification (no data mutations)",
+  "sandbox_workspace": "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-0o4xbkc7",
+  "sandbox_cleanup_status": "cleaned",
+  "object_validation": {
+    "status": "passed",
+    "expected_objects": [
+      {
+        "unique_id": "model.jaffle_shop.customers",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "customers",
+        "materialized": "table",
+        "expected_type": "table",
+        "columns": [
+          {
+            "name": "customer_id",
+            "data_type": ""
+          },
+          {
+            "name": "first_name",
+            "data_type": ""
+          },
+          {
+            "name": "last_name",
+            "data_type": ""
+          },
+          {
+            "name": "first_order",
+            "data_type": ""
+          },
+          {
+            "name": "most_recent_order",
+            "data_type": ""
+          },
+          {
+            "name": "number_of_orders",
+            "data_type": ""
+          },
+          {
+            "name": "total_order_amount",
+            "data_type": ""
+          }
+        ]
+      },
+      {
+        "unique_id": "model.jaffle_shop.orders",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "orders",
+        "materialized": "table",
+        "expected_type": "table",
+        "columns": [
+          {
+            "name": "order_id",
+            "data_type": ""
+          },
+          {
+            "name": "customer_id",
+            "data_type": ""
+          },
+          {
+            "name": "order_date",
+            "data_type": ""
+          },
+          {
+            "name": "status",
+            "data_type": ""
+          },
+          {
+            "name": "amount",
+            "data_type": ""
+          },
+          {
+            "name": "credit_card_amount",
+            "data_type": ""
+          },
+          {
+            "name": "coupon_amount",
+            "data_type": ""
+          },
+          {
+            "name": "bank_transfer_amount",
+            "data_type": ""
+          },
+          {
+            "name": "gift_card_amount",
+            "data_type": ""
+          }
+        ]
+      },
+      {
+        "unique_id": "model.jaffle_shop.stg_customers",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "stg_customers",
+        "materialized": "view",
+        "expected_type": "view",
+        "columns": [
+          {
+            "name": "customer_id",
+            "data_type": ""
+          }
+        ]
+      },
+      {
+        "unique_id": "model.jaffle_shop.stg_payments",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "stg_payments",
+        "materialized": "view",
+        "expected_type": "view",
+        "columns": [
+          {
+            "name": "payment_id",
+            "data_type": ""
+          },
+          {
+            "name": "payment_method",
+            "data_type": ""
+          }
+        ]
+      },
+      {
+        "unique_id": "model.jaffle_shop.stg_orders",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "stg_orders",
+        "materialized": "view",
+        "expected_type": "view",
+        "columns": [
+          {
+            "name": "order_id",
+            "data_type": ""
+          },
+          {
+            "name": "status",
+            "data_type": ""
+          }
+        ]
+      },
+      {
+        "unique_id": "seed.jaffle_shop.raw_customers",
+        "resource_type": "seed",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "raw_customers",
+        "materialized": "seed",
+        "expected_type": "table",
+        "columns": []
+      },
+      {
+        "unique_id": "seed.jaffle_shop.raw_orders",
+        "resource_type": "seed",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "raw_orders",
+        "materialized": "seed",
+        "expected_type": "table",
+        "columns": []
+      },
+      {
+        "unique_id": "seed.jaffle_shop.raw_payments",
+        "resource_type": "seed",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "raw_payments",
+        "materialized": "seed",
+        "expected_type": "table",
+        "columns": []
+      }
+    ],
+    "actual_objects": [
+      {
+        "unique_id": "model.jaffle_shop.customers",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "customers",
+        "materialized": "table",
+        "expected_type": "table",
+        "columns": [
+          {
+            "name": "customer_id",
+            "data_type": ""
+          },
+          {
+            "name": "first_name",
+            "data_type": ""
+          },
+          {
+            "name": "last_name",
+            "data_type": ""
+          },
+          {
+            "name": "first_order",
+            "data_type": ""
+          },
+          {
+            "name": "most_recent_order",
+            "data_type": ""
+          },
+          {
+            "name": "number_of_orders",
+            "data_type": ""
+          },
+          {
+            "name": "total_order_amount",
+            "data_type": ""
+          }
+        ]
+      },
+      {
+        "unique_id": "model.jaffle_shop.orders",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "orders",
+        "materialized": "table",
+        "expected_type": "table",
+        "columns": [
+          {
+            "name": "order_id",
+            "data_type": ""
+          },
+          {
+            "name": "customer_id",
+            "data_type": ""
+          },
+          {
+            "name": "order_date",
+            "data_type": ""
+          },
+          {
+            "name": "status",
+            "data_type": ""
+          },
+          {
+            "name": "amount",
+            "data_type": ""
+          },
+          {
+            "name": "credit_card_amount",
+            "data_type": ""
+          },
+          {
+            "name": "coupon_amount",
+            "data_type": ""
+          },
+          {
+            "name": "bank_transfer_amount",
+            "data_type": ""
+          },
+          {
+            "name": "gift_card_amount",
+            "data_type": ""
+          }
+        ]
+      },
+      {
+        "unique_id": "model.jaffle_shop.stg_customers",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "stg_customers",
+        "materialized": "view",
+        "expected_type": "view",
+        "columns": [
+          {
+            "name": "customer_id",
+            "data_type": ""
+          }
+        ]
+      },
+      {
+        "unique_id": "model.jaffle_shop.stg_payments",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "stg_payments",
+        "materialized": "view",
+        "expected_type": "view",
+        "columns": [
+          {
+            "name": "payment_id",
+            "data_type": ""
+          },
+          {
+            "name": "payment_method",
+            "data_type": ""
+          }
+        ]
+      },
+      {
+        "unique_id": "model.jaffle_shop.stg_orders",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "stg_orders",
+        "materialized": "view",
+        "expected_type": "view",
+        "columns": [
+          {
+            "name": "order_id",
+            "data_type": ""
+          },
+          {
+            "name": "status",
+            "data_type": ""
+          }
+        ]
+      },
+      {
+        "unique_id": "seed.jaffle_shop.raw_customers",
+        "resource_type": "seed",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "raw_customers",
+        "materialized": "seed",
+        "expected_type": "table",
+        "columns": []
+      },
+      {
+        "unique_id": "seed.jaffle_shop.raw_orders",
+        "resource_type": "seed",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "raw_orders",
+        "materialized": "seed",
+        "expected_type": "table",
+        "columns": []
+      },
+      {
+        "unique_id": "seed.jaffle_shop.raw_payments",
+        "resource_type": "seed",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "raw_payments",
+        "materialized": "seed",
+        "expected_type": "table",
+        "columns": []
+      }
+    ],
+    "failures": [],
+    "additional_or_preexisting_objects": []
+  },
+  "dag_validation": {
+    "status": "passed",
+    "models_count": 5,
+    "models_by_materialization": {
+      "table": 2,
+      "view": 3
+    },
+    "seeds_count": 3,
+    "snapshots_count": 0,
+    "tests_count": 20,
+    "sources_count": 0,
+    "dependencies_checked": 29,
+    "failures": []
+  },
+  "rerun_verification": {
+    "status": "passed",
+    "duration_seconds": 0.0,
+    "message": "Compilation & DAG verification mode: models and sequence verified without data."
+  },
+  "database_type": "ducklake",
+  "execution_mode": "compile_only",
+  "failure_details": [],
+  "warning_details": []
+}

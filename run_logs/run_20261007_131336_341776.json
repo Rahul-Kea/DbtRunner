@@ -1,0 +1,433 @@
+{
+  "run_id": "20261007_131336_341776",
+  "started_at": "2026-10-07T07:43:37.800238+00:00",
+  "finished_at": "2026-10-07T07:43:46.723607+00:00",
+  "project_dir": "/Users/rahulrg/Kea-Data/dbt_runner/uploads/20261007_131336_341776/project/dbt-project/nyc_taxi_analytics",
+  "data_location": "/Users/rahulrg/Kea-Data/dbt_runner/uploads/20261007_131336_341776/lake_data",
+  "ducklake_metadata_location": "/Users/rahulrg/Kea-Data/dbt_runner/uploads/20261007_131336_341776/lake.ducklake",
+  "overall_status": "failed",
+  "steps": [
+    {
+      "name": "Clone DuckLake metadata catalog",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.13/bin/python3",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-n0uc3itt/clone_ducklake_catalog.py",
+        "/Users/rahulrg/Kea-Data/dbt_runner/uploads/20261007_131336_341776/lake.ducklake",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-n0uc3itt/simulation.ducklake"
+      ],
+      "return_code": 0,
+      "status": "passed",
+      "duration_seconds": 0.08884404099080712,
+      "error": null
+    },
+    {
+      "name": "Parse dbt DAG",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.13/bin/dbt",
+        "--no-version-check",
+        "parse",
+        "--project-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-n0uc3itt/project",
+        "--profiles-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-n0uc3itt/profiles",
+        "--log-path",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-n0uc3itt/dbt_logs"
+      ],
+      "return_code": 0,
+      "status": "passed",
+      "duration_seconds": 2.571832250105217,
+      "error": null
+    },
+    {
+      "name": "Validate rerun-safe materializations",
+      "command": [],
+      "return_code": 0,
+      "status": "passed",
+      "duration_seconds": 0.0,
+      "error": null
+    },
+    {
+      "name": "Materialize dbt seeds",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.13/bin/dbt",
+        "--no-version-check",
+        "seed",
+        "--project-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-n0uc3itt/project",
+        "--profiles-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-n0uc3itt/profiles",
+        "--log-path",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-n0uc3itt/dbt_logs"
+      ],
+      "return_code": 0,
+      "status": "passed",
+      "duration_seconds": 1.7674556249985471,
+      "error": null
+    },
+    {
+      "name": "Materialize dbt models (dbt run)",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.13/bin/dbt",
+        "--no-version-check",
+        "run",
+        "--project-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-n0uc3itt/project",
+        "--profiles-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-n0uc3itt/profiles",
+        "--log-path",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-n0uc3itt/dbt_logs"
+      ],
+      "return_code": 1,
+      "status": "failed",
+      "duration_seconds": 1.7682848749682307,
+      "error": null
+    }
+  ],
+  "model_test_results": [
+    {
+      "node": "seed.nyc_taxi_analytics.payment_types",
+      "model": "payment_types",
+      "resource_type": "seed",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "main.payment_types",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.03389787673950195,
+      "message": "INSERT 6",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.nyc_taxi_analytics.stg_taxi_trips_yellow",
+      "model": "stg_taxi_trips_yellow",
+      "resource_type": "model",
+      "object_type": "view",
+      "database": "ducklake",
+      "schema": "analytics_stg",
+      "relation_name": "\"ducklake\".\"analytics_stg\".\"stg_taxi_trips_yellow\"",
+      "status": "error",
+      "execution_status": "error",
+      "duration_seconds": 0.023793935775756836,
+      "message": "Runtime Error in model stg_taxi_trips_yellow (models/staging/stg_taxi_trips_yellow.sql)\n  Catalog Error: Table with name \"raw.taxi_trips_yellow\" does not exist because schema \"raw\" does not exist.\n  \n  LINE 5:     with src as (select * from \"ducklake\".\"raw\".\"taxi_trips_yellow\")\n                                         ^",
+      "error_message": "Runtime Error in model stg_taxi_trips_yellow (models/staging/stg_taxi_trips_yellow.sql)\n  Catalog Error: Table with name \"raw.taxi_trips_yellow\" does not exist because schema \"raw\" does not exist.\n  \n  LINE 5:     with src as (select * from \"ducklake\".\"raw\".\"taxi_trips_yellow\")\n                                         ^",
+      "is_warning": false
+    },
+    {
+      "node": "model.nyc_taxi_analytics.stg_taxi_zones",
+      "model": "stg_taxi_zones",
+      "resource_type": "model",
+      "object_type": "view",
+      "database": "ducklake",
+      "schema": "analytics_stg",
+      "relation_name": "\"ducklake\".\"analytics_stg\".\"stg_taxi_zones\"",
+      "status": "error",
+      "execution_status": "error",
+      "duration_seconds": 0.00600123405456543,
+      "message": "Runtime Error in model stg_taxi_zones (models/staging/stg_taxi_zones.sql)\n  Catalog Error: Table with name \"raw.taxi_zones\" does not exist because schema \"raw\" does not exist.\n  \n  LINE 5:     with src as (select * from \"ducklake\".\"raw\".\"taxi_zones\")\n                                         ^",
+      "error_message": "Runtime Error in model stg_taxi_zones (models/staging/stg_taxi_zones.sql)\n  Catalog Error: Table with name \"raw.taxi_zones\" does not exist because schema \"raw\" does not exist.\n  \n  LINE 5:     with src as (select * from \"ducklake\".\"raw\".\"taxi_zones\")\n                                         ^",
+      "is_warning": false
+    },
+    {
+      "node": "model.nyc_taxi_analytics.int_trips_validated",
+      "model": "int_trips_validated",
+      "resource_type": "model",
+      "object_type": "view",
+      "database": "ducklake",
+      "schema": "analytics_int",
+      "relation_name": "\"ducklake\".\"analytics_int\".\"int_trips_validated\"",
+      "status": "skipped",
+      "execution_status": "skipped",
+      "duration_seconds": 0.0,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.nyc_taxi_analytics.dim_zone",
+      "model": "dim_zone",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "analytics_mart",
+      "relation_name": "\"ducklake\".\"analytics_mart\".\"dim_zone\"",
+      "status": "skipped",
+      "execution_status": "skipped",
+      "duration_seconds": 0.0,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.nyc_taxi_analytics.int_trips_enriched",
+      "model": "int_trips_enriched",
+      "resource_type": "model",
+      "object_type": "view",
+      "database": "ducklake",
+      "schema": "analytics_int",
+      "relation_name": "\"ducklake\".\"analytics_int\".\"int_trips_enriched\"",
+      "status": "skipped",
+      "execution_status": "skipped",
+      "duration_seconds": 0.0,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.nyc_taxi_analytics.fct_trip",
+      "model": "fct_trip",
+      "resource_type": "model",
+      "object_type": "incremental",
+      "database": "ducklake",
+      "schema": "analytics_mart",
+      "relation_name": "\"ducklake\".\"analytics_mart\".\"fct_trip\"",
+      "status": "skipped",
+      "execution_status": "skipped",
+      "duration_seconds": 0.0,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    }
+  ],
+  "model_executions": [
+    {
+      "node": "seed.nyc_taxi_analytics.payment_types",
+      "model": "payment_types",
+      "resource_type": "seed",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "main.payment_types",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.03389787673950195,
+      "message": "INSERT 6",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.nyc_taxi_analytics.stg_taxi_trips_yellow",
+      "model": "stg_taxi_trips_yellow",
+      "resource_type": "model",
+      "object_type": "view",
+      "database": "ducklake",
+      "schema": "analytics_stg",
+      "relation_name": "\"ducklake\".\"analytics_stg\".\"stg_taxi_trips_yellow\"",
+      "status": "error",
+      "execution_status": "error",
+      "duration_seconds": 0.023793935775756836,
+      "message": "Runtime Error in model stg_taxi_trips_yellow (models/staging/stg_taxi_trips_yellow.sql)\n  Catalog Error: Table with name \"raw.taxi_trips_yellow\" does not exist because schema \"raw\" does not exist.\n  \n  LINE 5:     with src as (select * from \"ducklake\".\"raw\".\"taxi_trips_yellow\")\n                                         ^",
+      "error_message": "Runtime Error in model stg_taxi_trips_yellow (models/staging/stg_taxi_trips_yellow.sql)\n  Catalog Error: Table with name \"raw.taxi_trips_yellow\" does not exist because schema \"raw\" does not exist.\n  \n  LINE 5:     with src as (select * from \"ducklake\".\"raw\".\"taxi_trips_yellow\")\n                                         ^",
+      "is_warning": false
+    },
+    {
+      "node": "model.nyc_taxi_analytics.stg_taxi_zones",
+      "model": "stg_taxi_zones",
+      "resource_type": "model",
+      "object_type": "view",
+      "database": "ducklake",
+      "schema": "analytics_stg",
+      "relation_name": "\"ducklake\".\"analytics_stg\".\"stg_taxi_zones\"",
+      "status": "error",
+      "execution_status": "error",
+      "duration_seconds": 0.00600123405456543,
+      "message": "Runtime Error in model stg_taxi_zones (models/staging/stg_taxi_zones.sql)\n  Catalog Error: Table with name \"raw.taxi_zones\" does not exist because schema \"raw\" does not exist.\n  \n  LINE 5:     with src as (select * from \"ducklake\".\"raw\".\"taxi_zones\")\n                                         ^",
+      "error_message": "Runtime Error in model stg_taxi_zones (models/staging/stg_taxi_zones.sql)\n  Catalog Error: Table with name \"raw.taxi_zones\" does not exist because schema \"raw\" does not exist.\n  \n  LINE 5:     with src as (select * from \"ducklake\".\"raw\".\"taxi_zones\")\n                                         ^",
+      "is_warning": false
+    },
+    {
+      "node": "model.nyc_taxi_analytics.int_trips_validated",
+      "model": "int_trips_validated",
+      "resource_type": "model",
+      "object_type": "view",
+      "database": "ducklake",
+      "schema": "analytics_int",
+      "relation_name": "\"ducklake\".\"analytics_int\".\"int_trips_validated\"",
+      "status": "skipped",
+      "execution_status": "skipped",
+      "duration_seconds": 0.0,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.nyc_taxi_analytics.dim_zone",
+      "model": "dim_zone",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "analytics_mart",
+      "relation_name": "\"ducklake\".\"analytics_mart\".\"dim_zone\"",
+      "status": "skipped",
+      "execution_status": "skipped",
+      "duration_seconds": 0.0,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.nyc_taxi_analytics.int_trips_enriched",
+      "model": "int_trips_enriched",
+      "resource_type": "model",
+      "object_type": "view",
+      "database": "ducklake",
+      "schema": "analytics_int",
+      "relation_name": "\"ducklake\".\"analytics_int\".\"int_trips_enriched\"",
+      "status": "skipped",
+      "execution_status": "skipped",
+      "duration_seconds": 0.0,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.nyc_taxi_analytics.fct_trip",
+      "model": "fct_trip",
+      "resource_type": "model",
+      "object_type": "incremental",
+      "database": "ducklake",
+      "schema": "analytics_mart",
+      "relation_name": "\"ducklake\".\"analytics_mart\".\"fct_trip\"",
+      "status": "skipped",
+      "execution_status": "skipped",
+      "duration_seconds": 0.0,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    }
+  ],
+  "log_file": "/Users/rahulrg/Kea-Data/dbt_runner/run_logs/run_20261007_131336_341776.log",
+  "structured_log_file": "/Users/rahulrg/Kea-Data/dbt_runner/run_logs/run_20261007_131336_341776.events.jsonl",
+  "report_file": "/Users/rahulrg/Kea-Data/dbt_runner/run_logs/run_20261007_131336_341776.json",
+  "config_file": "/Users/rahulrg/Kea-Data/dbt_runner/runner_config.json",
+  "rerun_policy": "isolated clone of the database/lake per run with idempotency validation",
+  "sandbox_workspace": "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-n0uc3itt",
+  "sandbox_cleanup_status": "cleaned",
+  "object_validation": {
+    "status": "failed",
+    "expected_objects": [
+      {
+        "unique_id": "model.nyc_taxi_analytics.stg_taxi_trips_yellow",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "analytics_stg",
+        "name": "stg_taxi_trips_yellow",
+        "materialized": "view",
+        "expected_type": "view",
+        "columns": [
+          {
+            "name": "pickup_ts",
+            "data_type": ""
+          },
+          {
+            "name": "dropoff_ts",
+            "data_type": ""
+          },
+          {
+            "name": "total_amount",
+            "data_type": ""
+          }
+        ]
+      },
+      {
+        "unique_id": "model.nyc_taxi_analytics.stg_taxi_zones",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "analytics_stg",
+        "name": "stg_taxi_zones",
+        "materialized": "view",
+        "expected_type": "view",
+        "columns": [
+          {
+            "name": "zone_id",
+            "data_type": ""
+          }
+        ]
+      },
+      {
+        "unique_id": "model.nyc_taxi_analytics.dim_zone",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "analytics_mart",
+        "name": "dim_zone",
+        "materialized": "table",
+        "expected_type": "table",
+        "columns": []
+      },
+      {
+        "unique_id": "model.nyc_taxi_analytics.fct_trip",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "analytics_mart",
+        "name": "fct_trip",
+        "materialized": "incremental",
+        "expected_type": "table",
+        "columns": []
+      },
+      {
+        "unique_id": "model.nyc_taxi_analytics.int_trips_validated",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "analytics_int",
+        "name": "int_trips_validated",
+        "materialized": "view",
+        "expected_type": "view",
+        "columns": []
+      },
+      {
+        "unique_id": "model.nyc_taxi_analytics.int_trips_enriched",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "analytics_int",
+        "name": "int_trips_enriched",
+        "materialized": "view",
+        "expected_type": "view",
+        "columns": []
+      },
+      {
+        "unique_id": "seed.nyc_taxi_analytics.payment_types",
+        "resource_type": "seed",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "payment_types",
+        "materialized": "seed",
+        "expected_type": "table",
+        "columns": []
+      }
+    ],
+    "actual_objects": [],
+    "failures": [
+      "Direct DuckDB inspection error: Catalog Error: Table with name \"information_schema.tables\" does not exist because schema \"information_schema\" does not exist.\n\nLINE 1: ... table_catalog, table_schema, table_name, table_type FROM ducklake.information_schema.tables\n                                                                     ^"
+    ]
+  },
+  "dag_validation": {
+    "status": "passed",
+    "models_count": 6,
+    "models_by_materialization": {
+      "view": 4,
+      "table": 1,
+      "incremental": 1
+    },
+    "seeds_count": 1,
+    "snapshots_count": 0,
+    "tests_count": 5,
+    "sources_count": 2,
+    "dependencies_checked": 12,
+    "failures": []
+  },
+  "rerun_verification": {},
+  "database_type": "ducklake",
+  "execution_mode": "full",
+  "failure_details": [
+    "stg_taxi_trips_yellow (view) error after 0.024s: Runtime Error in model stg_taxi_trips_yellow (models/staging/stg_taxi_trips_yellow.sql)\n  Catalog Error: Table with name \"raw.taxi_trips_yellow\" does not exist because schema \"raw\" does not exist.\n  \n  LINE 5:     with src as (select * from \"ducklake\".\"raw\".\"taxi_trips_yellow\")\n                                         ^",
+    "stg_taxi_zones (view) error after 0.006s: Runtime Error in model stg_taxi_zones (models/staging/stg_taxi_zones.sql)\n  Catalog Error: Table with name \"raw.taxi_zones\" does not exist because schema \"raw\" does not exist.\n  \n  LINE 5:     with src as (select * from \"ducklake\".\"raw\".\"taxi_zones\")\n                                         ^",
+    "int_trips_validated (view) skipped after 0.000s (model.nyc_taxi_analytics.int_trips_validated)",
+    "dim_zone (table) skipped after 0.000s (model.nyc_taxi_analytics.dim_zone)",
+    "int_trips_enriched (view) skipped after 0.000s (model.nyc_taxi_analytics.int_trips_enriched)",
+    "fct_trip (incremental) skipped after 0.000s (model.nyc_taxi_analytics.fct_trip)",
+    "Materialize dbt models (dbt run) failed (exit code 1)",
+    "Direct DuckDB inspection error: Catalog Error: Table with name \"information_schema.tables\" does not exist because schema \"information_schema\" does not exist.\n\nLINE 1: ... table_catalog, table_schema, table_name, table_type FROM ducklake.information_schema.tables\n                                                                     ^"
+  ],
+  "warning_details": []
+}

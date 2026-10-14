@@ -1,0 +1,28 @@
+version: 2
+
+models:
+  - name: stg_store_orders
+    description: Cleaned store order lines, with one row per product line.
+    columns:
+      - name: order_id
+        data_tests: [not_null]
+      - name: order_date
+        data_tests: [not_null]
+      - name: customer_id
+        data_tests: [not_null]
+      - name: customer_name
+        data_tests: [not_null]
+      - name: product_id
+        data_tests: [not_null]
+      - name: product_name
+        data_tests: [not_null]
+      - name: unit_price
+        data_tests: [not_null]
+      - name: quantity
+        data_tests: [not_null]
+      - name: store_id
+        data_tests: [not_null]
+      - name: payment_method
+        data_tests: [not_null]
+      - name: line_amount
+        data_tests: [not_null]

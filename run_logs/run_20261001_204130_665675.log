@@ -1,0 +1,30 @@
+dbt runner execution 20261001_204130_665675
+Project input: /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261001_204130_665675/project/snowflake-dbt-demo-project-main
+Database input: /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261001_204130_665675/lake.ducklake (ducklake)
+Data input: /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261001_204130_665675/lake_data
+Execution mode: isolated temporary sandbox with safe repeated execution verification.
+
+--- Clone DuckLake metadata catalog ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-rzj2gct1/clone_ducklake_catalog.py /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261001_204130_665675/lake.ducklake /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-rzj2gct1/simulation.ducklake
+Cloned DuckLake metadata catalog to /private/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-rzj2gct1/simulation.ducklake
+
+[exit code: 0; duration: 0.09s]
+
+--- Install project packages (dbt deps) ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/dbt deps --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-rzj2gct1/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-rzj2gct1/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-rzj2gct1/dbt_logs
+[0m15:11:32  Running with dbt=1.12.5
+[0m15:11:36  [[33mWARNING[0m]: The git package "https://github.com/dpguthrie/instagram_module" 
+	is pinned to the "main" branch.
+	This can introduce breaking changes into your project without warning!
+
+See https://docs.getdbt.com/docs/package-management#section-specifying-package-versions
+[0m15:11:39  [[33mWARNING[0m]: The git package "https://github.com/dpguthrie/facebook_module" 
+	is pinned to the "main" branch.
+	This can introduce breaking changes into your project without warning!
+
+See https://docs.getdbt.com/docs/package-management#section-specifying-package-versions
+[0m15:11:39  [[31mERROR[0m]: Encountered an error:
+Runtime Error
+  Version error for package dbt-labs/dbt_utils: Could not find a satisfactory version from options: ['>=1.0.0', '<2.0.0', '>=0.8.0', '<2.0.0', '>=0.8.1', '<0.9.0']
+
+[exit code: 2; duration: 8.41s]

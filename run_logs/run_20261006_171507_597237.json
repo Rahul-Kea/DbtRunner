@@ -1,0 +1,449 @@
+{
+  "run_id": "20261006_171507_597237",
+  "started_at": "2026-10-06T11:45:09.601141+00:00",
+  "finished_at": "2026-10-06T11:45:32.544032+00:00",
+  "project_dir": "/Users/rahulrg/Kea-Data/dbt_runner/uploads/20261006_171507_597237/project/transformation",
+  "data_location": "/Users/rahulrg/Kea-Data/dbt_runner/uploads/20261006_171507_597237/lake_data",
+  "ducklake_metadata_location": "/Users/rahulrg/Kea-Data/dbt_runner/uploads/20261006_171507_597237/lake.ducklake",
+  "overall_status": "failed",
+  "steps": [
+    {
+      "name": "Clone DuckLake metadata catalog",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.13/bin/python3",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6tj4avxu/clone_ducklake_catalog.py",
+        "/Users/rahulrg/Kea-Data/dbt_runner/uploads/20261006_171507_597237/lake.ducklake",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6tj4avxu/simulation.ducklake"
+      ],
+      "return_code": 0,
+      "status": "passed",
+      "duration_seconds": 0.11726554192136973,
+      "error": null
+    },
+    {
+      "name": "Install project packages (dbt deps)",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.13/bin/dbt",
+        "deps",
+        "--project-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6tj4avxu/project",
+        "--profiles-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6tj4avxu/profiles",
+        "--log-path",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6tj4avxu/dbt_logs"
+      ],
+      "return_code": 0,
+      "status": "passed",
+      "duration_seconds": 13.54846395808272,
+      "error": null
+    },
+    {
+      "name": "Parse dbt DAG",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.13/bin/dbt",
+        "parse",
+        "--project-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6tj4avxu/project",
+        "--profiles-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6tj4avxu/profiles",
+        "--log-path",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6tj4avxu/dbt_logs"
+      ],
+      "return_code": 0,
+      "status": "passed",
+      "duration_seconds": 3.127791375038214,
+      "error": null
+    },
+    {
+      "name": "Validate rerun-safe materializations",
+      "command": [],
+      "return_code": 0,
+      "status": "passed",
+      "duration_seconds": 0.0,
+      "error": null
+    },
+    {
+      "name": "Materialize dbt seeds",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.13/bin/dbt",
+        "seed",
+        "--project-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6tj4avxu/project",
+        "--profiles-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6tj4avxu/profiles",
+        "--log-path",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6tj4avxu/dbt_logs"
+      ],
+      "return_code": 0,
+      "status": "passed",
+      "duration_seconds": 2.9857236250536516,
+      "error": null
+    },
+    {
+      "name": "Materialize dbt models (dbt run)",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.13/bin/dbt",
+        "run",
+        "--project-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6tj4avxu/project",
+        "--profiles-dir",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6tj4avxu/profiles",
+        "--log-path",
+        "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6tj4avxu/dbt_logs"
+      ],
+      "return_code": 1,
+      "status": "failed",
+      "duration_seconds": 1.987723416998051,
+      "error": null
+    }
+  ],
+  "model_test_results": [
+    {
+      "node": "seed.dwh_on_a_lake.ref_topic_categories",
+      "model": "ref_topic_categories",
+      "resource_type": "seed",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "main.ref_topic_categories",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.04097604751586914,
+      "message": "INSERT 11",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.dwh_on_a_lake.src_newsapi__articles_us_en",
+      "model": "src_newsapi__articles_us_en",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"src_newsapi__articles_us_en\"",
+      "status": "error",
+      "execution_status": "error",
+      "duration_seconds": 0.03346991539001465,
+      "message": "Runtime Error in model src_newsapi__articles_us_en (models/staging/newsapi/raw/src_newsapi__articles_us_en.sql)\n  Binder Error: Catalog \"newsapi_ducklake\" does not exist!",
+      "error_message": "Runtime Error in model src_newsapi__articles_us_en (models/staging/newsapi/raw/src_newsapi__articles_us_en.sql)\n  Binder Error: Catalog \"newsapi_ducklake\" does not exist!",
+      "is_warning": false
+    },
+    {
+      "node": "model.dwh_on_a_lake.stg_newsapi__articles_us_en",
+      "model": "stg_newsapi__articles_us_en",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"stg_newsapi__articles_us_en\"",
+      "status": "skipped",
+      "execution_status": "skipped",
+      "duration_seconds": 0.0,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.dwh_on_a_lake.int_newsapi__articles",
+      "model": "int_newsapi__articles",
+      "resource_type": "model",
+      "object_type": "view",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"int_newsapi__articles\"",
+      "status": "skipped",
+      "execution_status": "skipped",
+      "duration_seconds": 0.0,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.dwh_on_a_lake.mart_newsapi__articles",
+      "model": "mart_newsapi__articles",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"mart_newsapi__articles\"",
+      "status": "skipped",
+      "execution_status": "skipped",
+      "duration_seconds": 0.0,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    }
+  ],
+  "model_executions": [
+    {
+      "node": "seed.dwh_on_a_lake.ref_topic_categories",
+      "model": "ref_topic_categories",
+      "resource_type": "seed",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "main.ref_topic_categories",
+      "status": "success",
+      "execution_status": "success",
+      "duration_seconds": 0.04097604751586914,
+      "message": "INSERT 11",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.dwh_on_a_lake.src_newsapi__articles_us_en",
+      "model": "src_newsapi__articles_us_en",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"src_newsapi__articles_us_en\"",
+      "status": "error",
+      "execution_status": "error",
+      "duration_seconds": 0.03346991539001465,
+      "message": "Runtime Error in model src_newsapi__articles_us_en (models/staging/newsapi/raw/src_newsapi__articles_us_en.sql)\n  Binder Error: Catalog \"newsapi_ducklake\" does not exist!",
+      "error_message": "Runtime Error in model src_newsapi__articles_us_en (models/staging/newsapi/raw/src_newsapi__articles_us_en.sql)\n  Binder Error: Catalog \"newsapi_ducklake\" does not exist!",
+      "is_warning": false
+    },
+    {
+      "node": "model.dwh_on_a_lake.stg_newsapi__articles_us_en",
+      "model": "stg_newsapi__articles_us_en",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"stg_newsapi__articles_us_en\"",
+      "status": "skipped",
+      "execution_status": "skipped",
+      "duration_seconds": 0.0,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.dwh_on_a_lake.int_newsapi__articles",
+      "model": "int_newsapi__articles",
+      "resource_type": "model",
+      "object_type": "view",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"int_newsapi__articles\"",
+      "status": "skipped",
+      "execution_status": "skipped",
+      "duration_seconds": 0.0,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    },
+    {
+      "node": "model.dwh_on_a_lake.mart_newsapi__articles",
+      "model": "mart_newsapi__articles",
+      "resource_type": "model",
+      "object_type": "table",
+      "database": "ducklake",
+      "schema": "main",
+      "relation_name": "\"ducklake\".\"main\".\"mart_newsapi__articles\"",
+      "status": "skipped",
+      "execution_status": "skipped",
+      "duration_seconds": 0.0,
+      "message": "",
+      "error_message": "",
+      "is_warning": false
+    }
+  ],
+  "log_file": "/Users/rahulrg/Kea-Data/dbt_runner/run_logs/run_20261006_171507_597237.log",
+  "structured_log_file": "/Users/rahulrg/Kea-Data/dbt_runner/run_logs/run_20261006_171507_597237.events.jsonl",
+  "report_file": "/Users/rahulrg/Kea-Data/dbt_runner/run_logs/run_20261006_171507_597237.json",
+  "config_file": "/Users/rahulrg/Kea-Data/dbt_runner/runner_config.json",
+  "rerun_policy": "isolated clone of the database/lake per run with idempotency validation",
+  "sandbox_workspace": "/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-6tj4avxu",
+  "sandbox_cleanup_status": "cleaned",
+  "object_validation": {
+    "status": "failed",
+    "expected_objects": [
+      {
+        "unique_id": "model.dwh_on_a_lake.stg_newsapi__articles_us_en",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "stg_newsapi__articles_us_en",
+        "materialized": "table",
+        "expected_type": "table",
+        "columns": [
+          {
+            "name": "source_name",
+            "data_type": ""
+          },
+          {
+            "name": "author",
+            "data_type": ""
+          },
+          {
+            "name": "title",
+            "data_type": ""
+          },
+          {
+            "name": "description",
+            "data_type": ""
+          },
+          {
+            "name": "url",
+            "data_type": ""
+          },
+          {
+            "name": "image_url",
+            "data_type": ""
+          },
+          {
+            "name": "published_at",
+            "data_type": ""
+          },
+          {
+            "name": "content",
+            "data_type": ""
+          },
+          {
+            "name": "language_code",
+            "data_type": ""
+          },
+          {
+            "name": "_dlt_load_id",
+            "data_type": ""
+          },
+          {
+            "name": "_dlt_id",
+            "data_type": ""
+          }
+        ]
+      },
+      {
+        "unique_id": "model.dwh_on_a_lake.src_newsapi__articles_us_en",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "src_newsapi__articles_us_en",
+        "materialized": "table",
+        "expected_type": "table",
+        "columns": []
+      },
+      {
+        "unique_id": "model.dwh_on_a_lake.int_newsapi__articles",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "int_newsapi__articles",
+        "materialized": "view",
+        "expected_type": "view",
+        "columns": [
+          {
+            "name": "source_name",
+            "data_type": ""
+          },
+          {
+            "name": "author",
+            "data_type": ""
+          },
+          {
+            "name": "title",
+            "data_type": ""
+          },
+          {
+            "name": "url",
+            "data_type": ""
+          },
+          {
+            "name": "published_at",
+            "data_type": ""
+          },
+          {
+            "name": "article_date",
+            "data_type": ""
+          },
+          {
+            "name": "topic_category",
+            "data_type": ""
+          },
+          {
+            "name": "is_data_engineering_related",
+            "data_type": ""
+          },
+          {
+            "name": "is_ai_related",
+            "data_type": ""
+          },
+          {
+            "name": "_dlt_id",
+            "data_type": ""
+          }
+        ]
+      },
+      {
+        "unique_id": "model.dwh_on_a_lake.mart_newsapi__articles",
+        "resource_type": "model",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "mart_newsapi__articles",
+        "materialized": "table",
+        "expected_type": "table",
+        "columns": [
+          {
+            "name": "article_date",
+            "data_type": ""
+          },
+          {
+            "name": "source_name",
+            "data_type": ""
+          },
+          {
+            "name": "total_articles",
+            "data_type": ""
+          },
+          {
+            "name": "data_engineering_articles",
+            "data_type": ""
+          }
+        ]
+      },
+      {
+        "unique_id": "seed.dwh_on_a_lake.ref_topic_categories",
+        "resource_type": "seed",
+        "database": "ducklake",
+        "schema": "main",
+        "name": "ref_topic_categories",
+        "materialized": "seed",
+        "expected_type": "table",
+        "columns": []
+      }
+    ],
+    "actual_objects": [],
+    "failures": [
+      "Direct DuckDB inspection error: Catalog Error: Table with name \"information_schema.tables\" does not exist because schema \"information_schema\" does not exist.\n\nLINE 1: ... table_catalog, table_schema, table_name, table_type FROM ducklake.information_schema.tables\n                                                                     ^"
+    ]
+  },
+  "dag_validation": {
+    "status": "passed",
+    "models_count": 4,
+    "models_by_materialization": {
+      "table": 3,
+      "view": 1
+    },
+    "seeds_count": 1,
+    "snapshots_count": 0,
+    "tests_count": 28,
+    "sources_count": 1,
+    "dependencies_checked": 30,
+    "failures": []
+  },
+  "rerun_verification": {},
+  "database_type": "ducklake",
+  "execution_mode": "full",
+  "failure_details": [
+    "src_newsapi__articles_us_en (table) error after 0.033s: Runtime Error in model src_newsapi__articles_us_en (models/staging/newsapi/raw/src_newsapi__articles_us_en.sql)\n  Binder Error: Catalog \"newsapi_ducklake\" does not exist!",
+    "stg_newsapi__articles_us_en (table) skipped after 0.000s (model.dwh_on_a_lake.stg_newsapi__articles_us_en)",
+    "int_newsapi__articles (view) skipped after 0.000s (model.dwh_on_a_lake.int_newsapi__articles)",
+    "mart_newsapi__articles (table) skipped after 0.000s (model.dwh_on_a_lake.mart_newsapi__articles)",
+    "Materialize dbt models (dbt run) failed (exit code 1)",
+    "Direct DuckDB inspection error: Catalog Error: Table with name \"information_schema.tables\" does not exist because schema \"information_schema\" does not exist.\n\nLINE 1: ... table_catalog, table_schema, table_name, table_type FROM ducklake.information_schema.tables\n                                                                     ^"
+  ],
+  "warning_details": []
+}

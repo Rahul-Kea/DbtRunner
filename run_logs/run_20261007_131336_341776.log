@@ -1,0 +1,82 @@
+dbt runner execution 20261007_131336_341776
+Project input: /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261007_131336_341776/project/dbt-project/nyc_taxi_analytics
+Database input: /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261007_131336_341776/lake.ducklake (ducklake)
+Data input: /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261007_131336_341776/lake_data
+Execution mode: isolated temporary sandbox with safe repeated execution verification.
+
+--- Clone DuckLake metadata catalog ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-n0uc3itt/clone_ducklake_catalog.py /Users/rahulrg/Kea-Data/dbt_runner/uploads/20261007_131336_341776/lake.ducklake /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-n0uc3itt/simulation.ducklake
+Cloned DuckLake metadata catalog to /private/var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-n0uc3itt/simulation.ducklake
+
+[exit code: 0; duration: 0.09s]
+
+--- Parse dbt DAG ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/dbt --no-version-check parse --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-n0uc3itt/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-n0uc3itt/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-n0uc3itt/dbt_logs
+[0m07:43:40  Running with dbt=1.12.5
+[0m07:43:40  Registered adapter: duckdb=1.11.0
+[0m07:43:40  Unable to do partial parsing because saved manifest not found. Starting full parse.
+[0m07:43:40  Performance info: /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-n0uc3itt/target/perf_info.json
+
+[exit code: 0; duration: 2.57s]
+
+--- Materialize dbt seeds ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/dbt --no-version-check seed --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-n0uc3itt/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-n0uc3itt/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-n0uc3itt/dbt_logs
+[0m07:43:42  Running with dbt=1.12.5
+[0m07:43:42  Registered adapter: duckdb=1.11.0
+[0m07:43:42  Found 6 models, 1 seed, 5 data tests, 2 sources, 1 exposure, 501 macros
+[0m07:43:42  
+[0m07:43:42  Concurrency: 1 threads (target='runner')
+[0m07:43:42  
+[0m07:43:42  1 of 1 START seed file main.payment_types ...................................... [RUN]
+[0m07:43:42  1 of 1 OK loaded seed file main.payment_types .................................. [[32mINSERT 6[0m in 0.03s]
+[0m07:43:42  
+[0m07:43:42  Finished running 1 seed in 0 hours 0 minutes and 0.11 seconds (0.11s).
+[0m07:43:42  
+[0m07:43:42  [32mCompleted successfully[0m
+[0m07:43:42  
+[0m07:43:42  Done. PASS=1 WARN=0 ERROR=0 SKIP=0 NO-OP=0 REUSED=0 TOTAL=1
+
+[exit code: 0; duration: 1.77s]
+
+--- Materialize dbt models (dbt run) ---
+$ /Library/Frameworks/Python.framework/Versions/3.13/bin/dbt --no-version-check run --project-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-n0uc3itt/project --profiles-dir /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-n0uc3itt/profiles --log-path /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-n0uc3itt/dbt_logs
+[0m07:43:44  Running with dbt=1.12.5
+[0m07:43:44  Registered adapter: duckdb=1.11.0
+[0m07:43:44  Found 6 models, 1 seed, 5 data tests, 2 sources, 1 exposure, 501 macros
+[0m07:43:44  
+[0m07:43:44  Concurrency: 1 threads (target='runner')
+[0m07:43:44  
+[0m07:43:44  1 of 6 START sql view model analytics_stg.stg_taxi_trips_yellow ................ [RUN]
+[0m07:43:44  1 of 6 ERROR creating sql view model analytics_stg.stg_taxi_trips_yellow ....... [[31mERROR[0m in 0.02s]
+[0m07:43:44  2 of 6 START sql view model analytics_stg.stg_taxi_zones ....................... [RUN]
+[0m07:43:44  2 of 6 ERROR creating sql view model analytics_stg.stg_taxi_zones .............. [[31mERROR[0m in 0.01s]
+[0m07:43:44  3 of 6 SKIP relation analytics_int.int_trips_validated ......................... [[33mSKIP[0m]
+[0m07:43:44  4 of 6 SKIP relation analytics_mart.dim_zone ................................... [[33mSKIP[0m]
+[0m07:43:44  5 of 6 SKIP relation analytics_int.int_trips_enriched .......................... [[33mSKIP[0m]
+[0m07:43:44  6 of 6 SKIP relation analytics_mart.fct_trip ................................... [[33mSKIP[0m]
+[0m07:43:44  
+[0m07:43:44  Finished running 1 incremental model, 1 table model, 4 view models in 0 hours 0 minutes and 0.14 seconds (0.14s).
+[0m07:43:44  
+[0m07:43:44  [31mCompleted with 2 errors, 0 partial successes, and 0 warnings:[0m
+[0m07:43:44  
+[0m07:43:44  [[31mERROR[0m]: in model stg_taxi_trips_yellow (models/staging/stg_taxi_trips_yellow.sql)
+[0m07:43:44    Runtime Error in model stg_taxi_trips_yellow (models/staging/stg_taxi_trips_yellow.sql)
+  Catalog Error: Table with name "raw.taxi_trips_yellow" does not exist because schema "raw" does not exist.
+  
+  LINE 5:     with src as (select * from "ducklake"."raw"."taxi_trips_yellow")
+                                         ^
+[0m07:43:44  
+[0m07:43:44    compiled code at /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-n0uc3itt/target/compiled/nyc_taxi_analytics/models/staging/stg_taxi_trips_yellow.sql
+[0m07:43:44  
+[0m07:43:44  [[31mERROR[0m]: in model stg_taxi_zones (models/staging/stg_taxi_zones.sql)
+[0m07:43:44    Runtime Error in model stg_taxi_zones (models/staging/stg_taxi_zones.sql)
+  Catalog Error: Table with name "raw.taxi_zones" does not exist because schema "raw" does not exist.
+  
+  LINE 5:     with src as (select * from "ducklake"."raw"."taxi_zones")
+                                         ^
+[0m07:43:44  
+[0m07:43:44    compiled code at /var/folders/j5/1hw9mwc97rd8mhktg37f8rmr0000gn/T/dbt-runner-n0uc3itt/target/compiled/nyc_taxi_analytics/models/staging/stg_taxi_zones.sql
+[0m07:43:44  
+[0m07:43:44  Done. PASS=0 WARN=0 ERROR=2 SKIP=4 NO-OP=0 REUSED=0 TOTAL=6
+
+[exit code: 1; duration: 1.77s]
