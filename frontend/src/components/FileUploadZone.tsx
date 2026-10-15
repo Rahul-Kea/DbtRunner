@@ -12,6 +12,7 @@ import {
   FileCode,
   GitBranch,
   Globe,
+  Search,
 } from 'lucide-react'
 
 interface FileUploadZoneProps {
@@ -29,8 +30,9 @@ export const FileUploadZone: React.FC<FileUploadZoneProps> = ({
   const [projectZip, setProjectZip] = useState<File | null>(null)
   const [rawDataFiles, setRawDataFiles] = useState<File[]>([])
 
+  const [executionMode, setExecutionMode] = useState<'run' | 'compile'>('run')
+  const [modelSelect, setModelSelect] = useState<string>('')
   const [verifyRerun, setVerifyRerun] = useState<boolean>(true)
-  const [compileOnly, setCompileOnly] = useState<boolean>(false)
   const [dragOverZone, setDragOverZone] = useState<string | null>(null)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
@@ -121,9 +123,13 @@ export const FileUploadZone: React.FC<FileUploadZoneProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     const data = new FormData()
-    data.append('threads', '1')
     data.append('verify_rerun', verifyRerun.toString())
-    data.append('compile_only', compileOnly.toString())
+    data.append('compile_only', (executionMode === 'compile').toString())
+    data.append('execution_mode', executionMode)
+    data.append('full_refresh', 'false')
+    if (modelSelect.trim()) {
+      data.append('select', modelSelect.trim())
+    }
 
     if (projectSource === 'zip') {
       if (!projectZip) {
@@ -149,6 +155,12 @@ export const FileUploadZone: React.FC<FileUploadZoneProps> = ({
     }
 
     onStartRun(data)
+  }
+
+  const getSubmitButtonLabel = () => {
+    if (isLoading) return 'Running...'
+    if (executionMode === 'compile') return 'Compile Models (Dry Run)'
+    return 'Run Pipeline (dbt run)'
   }
 
   return (
@@ -442,36 +454,122 @@ export const FileUploadZone: React.FC<FileUploadZoneProps> = ({
           </div>
         </div>
 
-        {/* Options & Action Bar */}
-        <div className="p-4 rounded-2xl bg-[#161b22] border border-[#30363d] flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center space-x-5">
-            <label className="flex items-center space-x-2 cursor-pointer select-none">
-              <input
-                type="checkbox"
-                checked={compileOnly}
-                onChange={(e) => setCompileOnly(e.target.checked)}
-                className="rounded border-[#30363d] text-orange-500 focus:ring-0 bg-[#0d1117] w-4 h-4"
-              />
-              <span className="text-xs text-gray-300 font-medium">
-                Dry Run (Validate models without data)
-              </span>
-            </label>
+        {/* 2. Execution Options & Model Selection */}
+        <div className="p-5 rounded-2xl bg-[#161b22] border border-[#30363d] space-y-4">
+          <div className="flex items-center justify-between border-b border-[#30363d]/60 pb-3">
+            <span className="text-xs font-bold text-gray-300 uppercase tracking-wider">
+              2. Execution Options & Scope
+            </span>
+          </div>
 
-            {!compileOnly && (
-              <label className="flex items-center space-x-2 cursor-pointer select-none">
+          {/* Mode Selector */}
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-gray-300">Command / Mode</label>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <button
+                type="button"
+                onClick={() => setExecutionMode('run')}
+                className={`flex flex-col items-start p-3.5 rounded-xl border text-left transition-all ${
+                  executionMode === 'run'
+                    ? 'border-orange-500 bg-orange-500/10 text-white shadow-sm ring-1 ring-orange-500/30'
+                    : 'border-[#30363d] bg-[#0d1117] text-gray-400 hover:text-gray-200 hover:border-gray-600'
+                }`}
+              >
+                <div className="flex items-center space-x-2 text-xs font-bold">
+                  <Play className="w-4 h-4 text-orange-400" />
+                  <span>dbt run</span>
+                </div>
+                <span className="text-[11px] text-gray-400 mt-1">
+                  Materialize models, seeds & snapshots in the sandbox
+                </span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setExecutionMode('compile')}
+                className={`flex flex-col items-start p-3.5 rounded-xl border text-left transition-all ${
+                  executionMode === 'compile'
+                    ? 'border-orange-500 bg-orange-500/10 text-white shadow-sm ring-1 ring-orange-500/30'
+                    : 'border-[#30363d] bg-[#0d1117] text-gray-400 hover:text-gray-200 hover:border-gray-600'
+                }`}
+              >
+                <div className="flex items-center space-x-2 text-xs font-bold">
+                  <FileCode className="w-4 h-4 text-blue-400" />
+                  <span>dbt compile (Dry Run)</span>
+                </div>
+                <span className="text-[11px] text-gray-400 mt-1">
+                  Compile SQL, validate DAG & references (no DB writes)
+                </span>
+              </button>
+            </div>
+          </div>
+
+          {/* Model Selection Input */}
+          <div className="space-y-1.5">
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-semibold text-gray-300">
+                Model Selection <span className="font-mono text-gray-500 font-normal">(--select / -s)</span>
+              </label>
+              <span className="text-[10px] text-gray-500">Optional: leave empty to run entire project</span>
+            </div>
+            <div className="relative">
+              <Search className="w-4 h-4 absolute left-3 top-2.5 text-gray-500" />
+              <input
+                type="text"
+                value={modelSelect}
+                onChange={(e) => setModelSelect(e.target.value)}
+                placeholder="e.g. model_a model_b model_c or +my_model or tag:daily"
+                className="w-full bg-[#0d1117] border border-[#30363d] rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 font-mono"
+              />
+            </div>
+            {/* Quick Syntax Hints */}
+            <div className="flex flex-wrap items-center gap-1.5 pt-0.5 text-[11px] text-gray-400">
+              <span className="text-gray-500 font-medium">Examples:</span>
+              <span className="inline-flex items-center space-x-1 font-mono bg-[#0d1117] px-1.5 py-0.5 rounded border border-[#30363d] text-gray-300">
+                <span>m1 m2 m3</span>
+                <span className="text-gray-500 font-sans text-[10px]">(multiple models)</span>
+              </span>
+              <span className="inline-flex items-center space-x-1 font-mono bg-[#0d1117] px-1.5 py-0.5 rounded border border-[#30363d] text-gray-300">
+                <span>+model</span>
+                <span className="text-gray-500 font-sans text-[10px]">(+ upstream)</span>
+              </span>
+              <span className="inline-flex items-center space-x-1 font-mono bg-[#0d1117] px-1.5 py-0.5 rounded border border-[#30363d] text-gray-300">
+                <span>model+</span>
+                <span className="text-gray-500 font-sans text-[10px]">(+ downstream)</span>
+              </span>
+              <span className="inline-flex items-center space-x-1 font-mono bg-[#0d1117] px-1.5 py-0.5 rounded border border-[#30363d] text-gray-300">
+                <span>path:models/marts</span>
+              </span>
+              <span className="inline-flex items-center space-x-1 font-mono bg-[#0d1117] px-1.5 py-0.5 rounded border border-[#30363d] text-gray-300">
+                <span>tag:daily</span>
+              </span>
+            </div>
+          </div>
+
+          {/* Flags (Rerun Verification) */}
+          <div className="flex flex-wrap items-center gap-6 pt-2 border-t border-[#30363d]/40">
+
+            {executionMode !== 'compile' && (
+              <label className="flex items-start space-x-2.5 cursor-pointer select-none">
                 <input
                   type="checkbox"
                   checked={verifyRerun}
                   onChange={(e) => setVerifyRerun(e.target.checked)}
-                  className="rounded border-[#30363d] text-orange-500 focus:ring-0 bg-[#0d1117] w-4 h-4"
+                  className="rounded border-[#30363d] text-orange-500 focus:ring-0 bg-[#0d1117] w-4 h-4 mt-0.5"
                 />
-                <span className="text-xs text-gray-300 font-medium">
-                  Check Idempotency (Rerun verification)
-                </span>
+                <div className="flex flex-col">
+                  <span className="text-xs text-gray-200 font-medium">
+                    Verify Idempotency
+                  </span>
+                  <span className="text-[10px] text-gray-500">Automated rerun to ensure repeated executions are safe</span>
+                </div>
               </label>
             )}
           </div>
+        </div>
 
+        {/* Submit Action Bar */}
+        <div className="flex items-center justify-end pt-2">
           <button
             type="submit"
             disabled={
@@ -479,16 +577,10 @@ export const FileUploadZone: React.FC<FileUploadZoneProps> = ({
               (projectSource === 'zip' && !projectZip) ||
               (projectSource === 'git' && !gitUrl.trim())
             }
-            className="flex items-center space-x-2 px-6 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
+            className="flex items-center space-x-2 px-8 py-3 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-orange-500/20"
           >
             <Play className="w-4 h-4 fill-current" />
-            <span>
-              {isLoading
-                ? 'Running...'
-                : compileOnly
-                ? 'Validate DAG'
-                : 'Run dbt'}
-            </span>
+            <span>{getSubmitButtonLabel()}</span>
           </button>
         </div>
       </form>

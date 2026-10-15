@@ -1,0 +1,12 @@
+.git
+.venv
+.venv_runner
+venv
+__pycache__
+*.py[cod]
+uploads
+container_runs
+run_logs
+frontend
+tests
+.pytest_cache

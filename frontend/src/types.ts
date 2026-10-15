@@ -86,7 +86,10 @@ export interface RunReport {
   ducklake_metadata_location: string
   overall_status: 'running' | 'passed' | 'failed' | 'unknown'
   database_type: string
-  execution_mode?: 'full' | 'compile_only'
+  execution_mode?: 'build' | 'run' | 'compile' | 'compile_only' | 'full' | string
+  full_refresh?: boolean
+  select?: string | null
+  container_destroyed?: boolean
   ingested_tables?: IngestedTable[]
   steps: StepResult[]
   model_test_results: ModelExecution[]
@@ -114,4 +117,7 @@ export interface RunSummary {
   database_type: string
   steps_count?: number
   models_count?: number
+  execution_mode?: string
+  full_refresh?: boolean
+  select?: string | null
 }

@@ -37,6 +37,8 @@ class RunReport:
     dag_validation: dict[str, object] = field(default_factory=dict)
     rerun_verification: dict[str, object] = field(default_factory=dict)
     database_type: str = "ducklake"
-    execution_mode: str = "full"
+    execution_mode: str = "run"
+    full_refresh: bool = False
+    select: str | None = None
     failure_details: list[str] = field(default_factory=list)
     warning_details: list[str] = field(default_factory=list)

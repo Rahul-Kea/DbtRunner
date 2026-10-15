@@ -1,17 +1,20 @@
 import React from 'react'
-import { Database, Play, History } from 'lucide-react'
+import { Database, Play, History, Container } from 'lucide-react'
 
 interface HeaderProps {
   onNewRun: () => void
   onToggleHistory: () => void
   showHistory: boolean
-  activeRunId?: string | null
+  onToggleContainers: () => void
+  showContainers: boolean
 }
 
 export const Header: React.FC<HeaderProps> = ({
   onNewRun,
   onToggleHistory,
   showHistory,
+  onToggleContainers,
+  showContainers,
 }) => {
   return (
     <header className="border-b border-[#30363d] bg-[#161b22] px-6 py-4 sticky top-0 z-30 shadow-md">
@@ -27,6 +30,18 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
 
         <div className="flex items-center space-x-3">
+
+          <button
+            onClick={onToggleContainers}
+            className={`flex items-center space-x-2 px-3 py-1.5 rounded-lg border text-xs font-medium transition-colors ${
+              showContainers
+                ? 'bg-orange-500/20 border-orange-500/40 text-orange-300'
+                : 'bg-[#21262d] border-[#30363d] text-gray-300 hover:bg-[#30363d]'
+            }`}
+          >
+            <Container className="w-3.5 h-3.5" />
+            <span>Containers</span>
+          </button>
 
           <button
             onClick={onToggleHistory}

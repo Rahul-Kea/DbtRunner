@@ -27,8 +27,6 @@ def build_frontend_if_needed() -> None:
 def run_dev() -> None:
     """Run both Vite dev server and FastAPI backend in parallel."""
     import uvicorn
-    import threading
-
     print("\n" + "=" * 60)
     print("Starting dbt Runner in DEV mode:")
     print("  • Vite Frontend Dev: http://localhost:5173")

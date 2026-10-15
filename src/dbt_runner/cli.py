@@ -1,12 +1,9 @@
 import argparse
-import sys
-from datetime import datetime, timezone
 from pathlib import Path
 
 from .config import load_config
-from .models import RunReport
-from .project import clean_path, detect_database_type, validate_database_inputs, validate_project_directory
-from .runner import print_report, run_project, save_report
+from .project import clean_path, detect_database_type, validate_project_directory
+from .runner import print_report, run_project
 
 
 def prompt_location(label: str, optional: bool = False) -> Path | None:
@@ -41,7 +38,6 @@ def parse_args(args: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--project-dir", type=str, help="Path to dbt project directory")
     parser.add_argument("--database", type=str, help="Path to DuckDB database file (.duckdb) or DuckLake catalog (.ducklake)")
     parser.add_argument("--data-dir", type=str, default=None, help="Path to DuckLake Parquet data directory (optional for DuckDB)")
-    parser.add_argument("--threads", type=int, default=None, help="Number of dbt execution threads")
     parser.add_argument("--verify-rerun", dest="verify_rerun", action="store_true", default=None, help="Verify repeated execution idempotency")
     parser.add_argument("--no-verify-rerun", dest="verify_rerun", action="store_false", help="Skip repeated execution idempotency check")
     parser.add_argument("--non-interactive", action="store_true", help="Run once without interactive menu and exit")
@@ -58,7 +54,6 @@ def main(argv: list[str] | None = None) -> int:
         return 2
 
     # Override config with CLI flags if provided
-    threads = args.threads or config.threads
     verify_rerun = args.verify_rerun if args.verify_rerun is not None else config.verify_rerun
 
     project: Path | None = Path(args.project_dir).expanduser().resolve() if args.project_dir else config.project_dir

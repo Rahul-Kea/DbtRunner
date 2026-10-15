@@ -6,19 +6,33 @@ import { PipelineStepsView } from './components/PipelineStepsView'
 import { ModelExecutionsTable } from './components/ModelExecutionsTable'
 import { TerminalLogView } from './components/TerminalLogView'
 import { RunHistorySidebar } from './components/RunHistorySidebar'
+import { ContainerPanel } from './components/ContainerPanel'
 import type { RunReport, RunSummary } from './types'
 
 export const App: React.FC = () => {
   const [runsList, setRunsList] = useState<RunSummary[]>([])
   const [activeRunId, setActiveRunId] = useState<string | null>(null)
+  const [activeShellToken, setActiveShellToken] = useState<string | undefined>()
   const [activeReport, setActiveReport] = useState<RunReport | null>(null)
   const [activeLogs, setActiveLogs] = useState<string[]>([])
   const [isStreaming, setIsStreaming] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isDestroyingContainer, setIsDestroyingContainer] = useState<boolean>(false)
   const [showHistory, setShowHistory] = useState<boolean>(false)
+  const [showContainers, setShowContainers] = useState<boolean>(false)
   const [activeTab, setActiveTab] = useState<'models' | 'steps' | 'terminal'>('terminal')
 
   const eventSourceRef = useRef<EventSource | null>(null)
+
+  const rememberShellToken = (runId: string, token?: string) => {
+    setActiveShellToken(token)
+    if (!token) return
+    try {
+      sessionStorage.setItem(`dbt-runner-shell:${runId}`, token)
+    } catch {
+      // The console remains unavailable if browser session storage is disabled.
+    }
+  }
 
   const fetchRuns = async () => {
     try {
@@ -123,11 +137,82 @@ export const App: React.FC = () => {
 
       const data = await res.json()
       setActiveRunId(data.run_id)
+      rememberShellToken(data.run_id, data.shell_token)
       setActiveTab('terminal')
       startStream(data.run_id)
       fetchRuns()
     } catch (err: any) {
       alert(`Error starting dbt run: ${err.message}`)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleTriggerRun = async (runId: string) => {
+    setIsLoading(true)
+    try {
+      if (eventSourceRef.current) {
+        eventSourceRef.current.close()
+        eventSourceRef.current = null
+        setIsStreaming(false)
+      }
+      const res = await fetch(`/api/runs/${runId}/run`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({}),
+      })
+
+      if (!res.ok) {
+        const errorData = await res.json()
+        throw new Error(errorData.detail || 'Pipeline run execution failed')
+      }
+
+      const data = await res.json()
+      setActiveRunId(data.run_id)
+      rememberShellToken(data.run_id, data.shell_token)
+      setActiveLogs([])
+      setActiveReport(null)
+      setActiveTab('terminal')
+      startStream(data.run_id)
+      fetchRuns()
+    } catch (err: any) {
+      alert(`Error starting pipeline run: ${err.message}`)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleTriggerFullRefresh = async (runId: string) => {
+    setIsLoading(true)
+    try {
+      if (eventSourceRef.current) {
+        eventSourceRef.current.close()
+        eventSourceRef.current = null
+        setIsStreaming(false)
+      }
+      const res = await fetch(`/api/runs/${runId}/full-refresh`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          execution_mode: activeReport?.execution_mode || undefined,
+        }),
+      })
+
+      if (!res.ok) {
+        const errorData = await res.json()
+        throw new Error(errorData.detail || 'Full refresh run execution failed')
+      }
+
+      const data = await res.json()
+      setActiveRunId(data.run_id)
+      rememberShellToken(data.run_id, data.shell_token)
+      setActiveLogs([])
+      setActiveReport(null)
+      setActiveTab('terminal')
+      startStream(data.run_id)
+      fetchRuns()
+    } catch (err: any) {
+      alert(`Error starting full refresh: ${err.message}`)
     } finally {
       setIsLoading(false)
     }
@@ -141,12 +226,46 @@ export const App: React.FC = () => {
     }
 
     setActiveRunId(runId)
+    try {
+      setActiveShellToken(sessionStorage.getItem(`dbt-runner-shell:${runId}`) || undefined)
+    } catch {
+      setActiveShellToken(undefined)
+    }
     setActiveLogs([])
     setIsLoading(true)
 
     await Promise.all([loadRunReport(runId), loadRunLogs(runId)])
     setActiveTab('models')
     setIsLoading(false)
+  }
+
+  const handleDestroyContainer = async () => {
+    if (!activeRunId || !activeShellToken) return
+    setIsDestroyingContainer(true)
+    try {
+      const res = await fetch(`/api/runs/${encodeURIComponent(activeRunId)}/destroy-container`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ shell_token: activeShellToken }),
+      })
+      if (!res.ok) {
+        const errorData = await res.json()
+        throw new Error(errorData.detail || 'Could not destroy the run container')
+      }
+      setActiveReport((current) => current ? { ...current, container_destroyed: true } : current)
+      setActiveLogs((current) => [...current, 'Run container destroyed; sandbox files and reports were preserved.'])
+      setActiveShellToken(undefined)
+      try {
+        sessionStorage.removeItem(`dbt-runner-shell:${activeRunId}`)
+      } catch {
+        // The server has already invalidated container access.
+      }
+      fetchRuns()
+    } catch (err: any) {
+      alert(`Error destroying run container: ${err.message}`)
+    } finally {
+      setIsDestroyingContainer(false)
+    }
   }
 
   const handleNewRun = () => {
@@ -156,18 +275,39 @@ export const App: React.FC = () => {
       setIsStreaming(false)
     }
     setActiveRunId(null)
+    setActiveShellToken(undefined)
     setActiveReport(null)
     setActiveLogs([])
     setActiveTab('terminal')
+  }
+
+  const handlePanelContainerDestroyed = (runId: string) => {
+    if (activeRunId === runId) {
+      setActiveReport((current) => current ? { ...current, container_destroyed: true } : current)
+      setActiveShellToken(undefined)
+      try {
+        sessionStorage.removeItem(`dbt-runner-shell:${runId}`)
+      } catch {
+        // Container removal is complete even if browser storage is unavailable.
+      }
+    }
+    fetchRuns()
   }
 
   return (
     <div className="min-h-screen bg-[#0d1117] text-white flex flex-col">
       <Header
         onNewRun={handleNewRun}
-        onToggleHistory={() => setShowHistory((prev) => !prev)}
+        onToggleHistory={() => {
+          setShowHistory((prev) => !prev)
+          setShowContainers(false)
+        }}
         showHistory={showHistory}
-        activeRunId={activeRunId}
+        onToggleContainers={() => {
+          setShowContainers((prev) => !prev)
+          setShowHistory(false)
+        }}
+        showContainers={showContainers}
       />
 
       {/* Main Content Area */}
@@ -209,6 +349,9 @@ export const App: React.FC = () => {
               activeTab={activeTab}
               onSelectTab={setActiveTab}
               isStreaming={isStreaming}
+              onTriggerRun={handleTriggerRun}
+              onTriggerFullRefresh={handleTriggerFullRefresh}
+              isTriggeringAction={isLoading}
             />
 
             {/* Tab Views (Condensed to 3 views) */}
@@ -231,6 +374,11 @@ export const App: React.FC = () => {
                 logs={activeLogs}
                 isStreaming={isStreaming}
                 runId={activeRunId}
+                shellToken={activeShellToken}
+                runStatus={activeReport?.overall_status || 'running'}
+                containerDestroyed={activeReport?.container_destroyed || false}
+                isDestroyingContainer={isDestroyingContainer}
+                onDestroyContainer={handleDestroyContainer}
               />
             )}
           </div>
@@ -246,6 +394,11 @@ export const App: React.FC = () => {
         onSelectRun={handleSelectRun}
         onRefresh={fetchRuns}
         isLoading={isLoading}
+      />
+      <ContainerPanel
+        isOpen={showContainers}
+        onClose={() => setShowContainers(false)}
+        onContainerDestroyed={handlePanelContainerDestroyed}
       />
     </div>
   )

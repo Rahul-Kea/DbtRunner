@@ -6,6 +6,8 @@ import {
   Layers,
   Terminal,
   ShieldCheck,
+  RefreshCw,
+  Play,
 } from 'lucide-react'
 import type { RunReport } from '../types'
 
@@ -14,6 +16,9 @@ interface RunStatusBarProps {
   activeTab: 'models' | 'steps' | 'terminal'
   onSelectTab: (tab: 'models' | 'steps' | 'terminal') => void
   isStreaming: boolean
+  onTriggerRun?: (runId: string) => void
+  onTriggerFullRefresh?: (runId: string) => void
+  isTriggeringAction?: boolean
 }
 
 export const RunStatusBar: React.FC<RunStatusBarProps> = ({
@@ -21,6 +26,9 @@ export const RunStatusBar: React.FC<RunStatusBarProps> = ({
   activeTab,
   onSelectTab,
   isStreaming,
+  onTriggerRun,
+  onTriggerFullRefresh,
+  isTriggeringAction,
 }) => {
   if (!report) return null
 
@@ -70,11 +78,27 @@ export const RunStatusBar: React.FC<RunStatusBarProps> = ({
               <span className="px-2 py-0.5 rounded-md text-xs font-semibold bg-[#21262d] text-gray-300 border border-[#30363d] uppercase">
                 {report.database_type || 'DUCKLAKE'}
               </span>
-              {report.execution_mode === 'compile_only' && (
-                <span className="px-2 py-0.5 rounded-md text-xs font-semibold bg-amber-500/10 text-amber-300 border border-amber-500/30 uppercase">
-                  Dry Run (Compile Only)
+              {/* Execution Mode Badge */}
+              <span className="px-2 py-0.5 rounded-md text-xs font-semibold bg-[#21262d] text-gray-300 border border-[#30363d] uppercase">
+                {report.execution_mode === 'compile' || report.execution_mode === 'compile_only'
+                  ? 'dbt compile'
+                  : 'dbt run'}
+              </span>
+
+              {/* Full Refresh Badge */}
+              {report.full_refresh && (
+                <span className="px-2 py-0.5 rounded-md text-xs font-semibold bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 uppercase">
+                  Full Refresh
                 </span>
               )}
+
+              {/* Model Select Badge */}
+              {report.select && (
+                <span className="px-2 py-0.5 rounded-md text-xs font-mono font-medium bg-purple-500/10 text-purple-300 border border-purple-500/30 truncate max-w-xs" title={`--select ${report.select}`}>
+                  -s {report.select}
+                </span>
+              )}
+
               {failureCount > 0 && (
                 <span className="px-2 py-0.5 rounded-md text-xs font-semibold bg-rose-500/20 text-rose-300 border border-rose-500/30">
                   {failureCount} {failureCount === 1 ? 'Error' : 'Errors'}
@@ -87,8 +111,42 @@ export const RunStatusBar: React.FC<RunStatusBarProps> = ({
           </div>
         </div>
 
-        {/* Tab Navigation (Condensed to 3 tabs) */}
-        <div className="flex items-center space-x-1 bg-[#0d1117] p-1 rounded-xl border border-[#30363d] overflow-x-auto">
+        <div className="flex items-center space-x-2 flex-wrap gap-y-2">
+          {/* Action: Run Pipeline (dbt run) if previous run was a compile / DAG run */}
+          {!isRunning && (report.execution_mode === 'compile' || report.execution_mode === 'compile_only') && onTriggerRun && (
+            <button
+              type="button"
+              onClick={() => onTriggerRun(report.run_id)}
+              disabled={isTriggeringAction}
+              className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-orange-500 hover:bg-orange-600 text-white transition-all shadow-sm disabled:opacity-50"
+              title="Execute dbt run on this validated project"
+            >
+              <Play className="w-3.5 h-3.5 fill-current" />
+              <span>Run Pipeline (dbt run)</span>
+            </button>
+          )}
+
+          {/* Action: Run Full Refresh on database matching earlier run mode */}
+          {!isRunning && onTriggerFullRefresh && (
+            <button
+              type="button"
+              onClick={() => onTriggerFullRefresh(report.run_id)}
+              disabled={isTriggeringAction}
+              className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 transition-all shadow-sm disabled:opacity-50"
+              title={`Execute dbt ${report.execution_mode === 'compile' || report.execution_mode === 'compile_only' ? 'compile' : 'run'} --full-refresh (matching earlier execution mode)`}
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${isTriggeringAction ? 'animate-spin' : ''}`} />
+              <span>
+                Perform Full Refresh{' '}
+                <span className="opacity-80 font-normal">
+                  ({report.execution_mode === 'compile' || report.execution_mode === 'compile_only' ? 'dbt compile' : 'dbt run'})
+                </span>
+              </span>
+            </button>
+          )}
+
+          {/* Tab Navigation (Condensed to 3 tabs) */}
+          <div className="flex items-center space-x-1 bg-[#0d1117] p-1 rounded-xl border border-[#30363d] overflow-x-auto">
           <button
             onClick={() => onSelectTab('models')}
             className={`flex items-center space-x-1.5 px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all ${
@@ -130,5 +188,6 @@ export const RunStatusBar: React.FC<RunStatusBarProps> = ({
         </div>
       </div>
     </div>
+  </div>
   )
 }

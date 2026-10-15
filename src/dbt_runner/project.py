@@ -43,11 +43,6 @@ def validate_database_inputs(database_path: Path, data_dir: Path | None = None) 
     return db_type, None
 
 
-def validate_ducklake_inputs(data_dir: Path, metadata: Path) -> str | None:
-    _, err = validate_database_inputs(metadata, data_dir)
-    return err
-
-
 def read_profile_name(project_dir: Path) -> str:
     project_file = project_dir / "dbt_project.yml"
     if not project_file.is_file():
@@ -77,7 +72,6 @@ def write_profile(
     data_dir: Path | None,
     metadata: Path,
     duckdb_extensions: Path,
-    threads: int = 1,
     db_type: str = "ducklake",
     default_schema: str = "main",
 ) -> None:
@@ -91,8 +85,7 @@ def write_profile(
             '      path: ":memory:"',
             "      database: ducklake",
             f"      schema: {default_schema}",
-            f"      threads: {threads}",
-            "      settings:",
+            "      config_options:",
             f"        extension_directory: {yaml_quote(str(duckdb_extensions))}",
             "      extensions:",
             "        - ducklake",
@@ -113,8 +106,7 @@ def write_profile(
             "      type: duckdb",
             f"      path: {yaml_quote(str(metadata))}",
             f"      schema: {default_schema}",
-            f"      threads: {threads}",
-            "      settings:",
+            "      config_options:",
             f"        extension_directory: {yaml_quote(str(duckdb_extensions))}",
             "",
         ]

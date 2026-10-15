@@ -1,23 +1,25 @@
 from __future__ import annotations
 
 import asyncio
+import atexit
 import json
 import os
 import re
+import secrets
 import shutil
+import signal
 import subprocess
 import sys
 import threading
 import time
 import zipfile
-from dataclasses import asdict
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, AsyncGenerator
 
-from fastapi import FastAPI, File, Form, HTTPException, UploadFile
+from fastapi import BackgroundTasks, FastAPI, File, Form, HTTPException, UploadFile, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
+from fastapi.responses import StreamingResponse
 from fastapi.staticfiles import StaticFiles
 
 # Ensure src/ is importable
@@ -26,9 +28,7 @@ SRC_DIR = ROOT_DIR / "src"
 if str(SRC_DIR) not in sys.path:
     sys.path.insert(0, str(SRC_DIR))
 
-from dbt_runner.config import PROJECT_ROOT, RunnerConfig, load_config
-from dbt_runner.models import RunReport
-from dbt_runner.runner import run_project, save_report
+from dbt_runner.config import PROJECT_ROOT
 
 app = FastAPI(title="dbt Runner API", version="1.0.0")
 
@@ -44,9 +44,18 @@ UPLOADS_DIR = PROJECT_ROOT / "uploads"
 UPLOADS_DIR.mkdir(parents=True, exist_ok=True)
 RUN_LOGS_DIR = PROJECT_ROOT / "run_logs"
 RUN_LOGS_DIR.mkdir(parents=True, exist_ok=True)
+CONTAINER_RUNS_DIR = PROJECT_ROOT / "container_runs"
+CONTAINER_RUNS_DIR.mkdir(parents=True, exist_ok=True)
+RUN_IMAGE = "dbt-runner-execution:local"
 
 # In-memory tracking of active/recent runs
 RUNS_IN_FLIGHT: dict[str, dict[str, Any]] = {}
+
+SHELL_SESSIONS: dict[str, dict[str, Any]] = {}
+SHELL_SESSION_LOCK = asyncio.Lock()
+RUN_IMAGE_BUILD_LOCK = threading.Lock()
+DOCKER_EXECUTABLE = shutil.which("docker")
+RUN_IMAGE_BUILT = False
 
 
 def _extract_zip(zip_path: Path, target_dir: Path) -> None:
@@ -122,38 +131,230 @@ def _find_project_dir(extract_dir: Path, target_subpath: str | None = None) -> P
     return candidates[0].parent
 
 
+def _container_input_path(path: Path, staging_dir: Path) -> str:
+    resolved = path.resolve(strict=True)
+    relative = resolved.relative_to(staging_dir.resolve(strict=True))
+    return "/input/" + relative.as_posix()
+
+
+def _ensure_run_image() -> None:
+    global RUN_IMAGE_BUILT
+    docker = DOCKER_EXECUTABLE or shutil.which("docker")
+    if not docker:
+        raise RuntimeError("Docker is required to run projects. Install Docker Engine and start its daemon.")
+    with RUN_IMAGE_BUILD_LOCK:
+        if RUN_IMAGE_BUILT:
+            return
+        result = subprocess.run(
+            [docker, "build", "-t", RUN_IMAGE, "-f", str(ROOT_DIR / "Dockerfile"), str(ROOT_DIR)],
+            capture_output=True,
+            text=True,
+            timeout=1800,
+        )
+        if result.returncode:
+            details = (result.stdout + result.stderr)[-5000:]
+            raise RuntimeError(f"Could not build the dbt execution image: {details}")
+        RUN_IMAGE_BUILT = True
+
+
+def _replace_container_paths(value: Any, replacements: list[tuple[str, str]]) -> Any:
+    if isinstance(value, str):
+        for container_path, host_path in replacements:
+            value = value.replace(container_path, host_path)
+        return value
+    if isinstance(value, list):
+        return [_replace_container_paths(item, replacements) for item in value]
+    if isinstance(value, dict):
+        return {key: _replace_container_paths(item, replacements) for key, item in value.items()}
+    return value
+
+
+def _fail_container_run(run_id: str, message: str) -> None:
+    finished_at = datetime.now(timezone.utc).isoformat()
+    log_path = RUN_LOGS_DIR / f"run_{run_id}.log"
+    report_path = RUN_LOGS_DIR / f"run_{run_id}.json"
+    try:
+        with log_path.open("a", encoding="utf-8") as log:
+            log.write(f"\nContainer run failed: {message}\n")
+        report_path.write_text(json.dumps({
+            "run_id": run_id,
+            "finished_at": finished_at,
+            "overall_status": "failed",
+            "failure_details": [message],
+            "log_file": str(log_path),
+            "structured_log_file": str(RUN_LOGS_DIR / f"run_{run_id}.events.jsonl"),
+            "report_file": str(report_path),
+        }, indent=2) + "\n", encoding="utf-8")
+    except OSError:
+        pass
+    info = RUNS_IN_FLIGHT.get(run_id)
+    if info is not None:
+        info["status"] = "failed"
+        info["finished_at"] = finished_at
+        info["error"] = message
+
 
 def _execute_run_worker(
     run_id: str,
     project_dir: Path,
     database_path: Path,
     data_dir: Path,
-    threads: int,
     verify_rerun: bool,
     compile_only: bool = False,
+    execution_mode: str = "run",
+    full_refresh: bool = False,
+    select: str | None = None,
 ) -> None:
-    try:
-        from dataclasses import replace
-        base_config = load_config()
-        config = replace(base_config, threads=threads, verify_rerun=verify_rerun, compile_only=compile_only)
+    staging_dir = (UPLOADS_DIR / run_id).resolve()
+    workspace = (CONTAINER_RUNS_DIR / run_id).resolve()
+    container_name = f"dbt-run-{run_id}"
+    info = RUNS_IN_FLIGHT.get(run_id)
+    log_path = RUN_LOGS_DIR / f"run_{run_id}.log"
+    event_path = RUN_LOGS_DIR / f"run_{run_id}.events.jsonl"
+    report_path = RUN_LOGS_DIR / f"run_{run_id}.json"
 
-        report = run_project(
-            project=project_dir,
-            database_or_data=database_path,
-            metadata_or_none=data_dir,
-            config=config,
-            verify_rerun=verify_rerun,
-            run_id=run_id,
-        )
-        if run_id in RUNS_IN_FLIGHT:
-            RUNS_IN_FLIGHT[run_id]["status"] = report.overall_status
-            RUNS_IN_FLIGHT[run_id]["finished_at"] = report.finished_at
-            RUNS_IN_FLIGHT[run_id]["report"] = asdict(report)
+    try:
+        if not project_dir.resolve(strict=True).is_relative_to(staging_dir):
+            raise ValueError("Project path is outside this run's uploaded workspace")
+        if not database_path.resolve(strict=True).is_relative_to(staging_dir):
+            raise ValueError("Database path is outside this run's uploaded workspace")
+        if data_dir and not data_dir.resolve(strict=True).is_relative_to(staging_dir):
+            raise ValueError("Data path is outside this run's uploaded workspace")
+        if os.getuid() == 0:
+            raise RuntimeError("Run the web server as an unprivileged user so run containers do not run as root.")
+
+        workspace.mkdir(parents=True, exist_ok=False)
+        (workspace / "home").mkdir()
+        container_log_dir = workspace / "logs"
+        container_log_dir.mkdir()
+        container_log_files = {
+            log_path: container_log_dir / log_path.name,
+            event_path: container_log_dir / event_path.name,
+            report_path: container_log_dir / report_path.name,
+        }
+        for host_path, isolated_path in container_log_files.items():
+            host_path.parent.mkdir(parents=True, exist_ok=True)
+            if host_path.is_symlink() or host_path.exists():
+                raise FileExistsError(f"Run log path already exists: {host_path}")
+            isolated_path.touch()
+            host_path.symlink_to(isolated_path)
+
+        if info is not None:
+            info["container_name"] = container_name
+            info["container_workspace"] = str(workspace)
+
+        _ensure_run_image()
+        docker = DOCKER_EXECUTABLE or shutil.which("docker")
+        assert docker is not None
+        project_input = _container_input_path(project_dir, staging_dir)
+        database_input = _container_input_path(database_path, staging_dir)
+        data_input = _container_input_path(data_dir, staging_dir) if data_dir else None
+
+        docker_args = [
+            docker, "run", "--detach", "--init", "--name", container_name,
+            "--label", "dbt-runner.managed=true",
+            "--label", f"dbt-runner.run-id={run_id}",
+            "--network=none", "--read-only", "--cap-drop=ALL",
+            "--security-opt=no-new-privileges", "--pids-limit=256",
+            "--memory=2g", "--cpus=2", "--ulimit", "nofile=1024:1024",
+            "--ulimit", "fsize=2147483648:2147483648",
+            "--tmpfs", "/tmp:rw,nosuid,nodev,size=512m",
+            "--mount", f"type=bind,src={staging_dir},dst=/input,readonly",
+            "--mount", f"type=bind,src={workspace},dst=/workspace",
+            "--mount", f"type=bind,src={container_log_dir},dst=/app/run_logs",
+            "--workdir", "/app",
+            "--user", f"{os.getuid()}:{os.getgid()}",
+            "--env", "HOME=/workspace/home",
+            "--env", "DBT_SEND_ANONYMOUS_USAGE_STATS=false",
+            "--env", "DBT_VERSION_CHECK=false",
+            RUN_IMAGE,
+            "python", "/app/server/container_worker.py",
+            "--run-id", run_id,
+            "--project-dir", project_input,
+            "--database", database_input,
+            "--sandbox-dir", "/workspace/runtime",
+            "--execution-mode", "compile" if compile_only or execution_mode == "compile" else "run",
+        ]
+        if data_input:
+            docker_args.extend(["--data-dir", data_input])
+        if verify_rerun:
+            docker_args.append("--verify-rerun")
+        if compile_only:
+            docker_args.append("--compile-only")
+        if full_refresh:
+            docker_args.append("--full-refresh")
+        if select:
+            docker_args.extend(["--select", select])
+
+        launched = subprocess.run(docker_args, capture_output=True, text=True, timeout=120)
+        if launched.returncode:
+            raise RuntimeError((launched.stderr or launched.stdout or "Docker did not start the run container.").strip())
+        if info is not None:
+            info["container_id"] = launched.stdout.strip()
+            info["container_name"] = container_name
+
+        deadline = time.monotonic() + 8 * 60 * 60
+        next_inspect = 0.0
+        while time.monotonic() < deadline:
+            try:
+                container_report = json.loads(report_path.read_text(encoding="utf-8"))
+                if container_report.get("finished_at") and container_report.get("overall_status") in {"passed", "failed"}:
+                    replacements = [
+                        ("/app/run_logs", str(RUN_LOGS_DIR)),
+                        ("/workspace", str(workspace)),
+                        ("/input", str(staging_dir)),
+                    ]
+                    normalized = _replace_container_paths(container_report, replacements)
+                    report_path.write_text(json.dumps(normalized, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+                    if info is not None:
+                        info["status"] = normalized["overall_status"]
+                        info["finished_at"] = normalized.get("finished_at", datetime.now(timezone.utc).isoformat())
+                        info["report"] = normalized
+                        info["database_location"] = normalized.get("ducklake_metadata_location", info.get("database_location"))
+                        info["data_location"] = normalized.get("data_location") or None
+                    return
+            except (OSError, json.JSONDecodeError):
+                pass
+
+            now = time.monotonic()
+            if now >= next_inspect:
+                next_inspect = now + 5
+                inspect = subprocess.run(
+                    [docker, "inspect", "--format", "{{.State.Running}}", container_name],
+                    capture_output=True,
+                    text=True,
+                    timeout=10,
+                )
+                if inspect.returncode or inspect.stdout.strip().lower() != "true":
+                    logs = subprocess.run([docker, "logs", container_name], capture_output=True, text=True, timeout=10)
+                    detail = (logs.stdout + logs.stderr)[-4000:]
+                    raise RuntimeError(f"The run container exited before writing its report. {detail}")
+            time.sleep(0.25)
+        raise TimeoutError("The container run exceeded its 8-hour limit")
     except Exception as exc:
-        if run_id in RUNS_IN_FLIGHT:
-            RUNS_IN_FLIGHT[run_id]["status"] = "failed"
-            RUNS_IN_FLIGHT[run_id]["error"] = str(exc)
-            RUNS_IN_FLIGHT[run_id]["finished_at"] = datetime.now(timezone.utc).isoformat()
+        docker = DOCKER_EXECUTABLE or shutil.which("docker")
+        if docker:
+            try:
+                subprocess.run([docker, "rm", "--force", container_name], capture_output=True, timeout=15)
+            except (OSError, subprocess.TimeoutExpired):
+                pass
+        _fail_container_run(run_id, str(exc))
+
+
+def _cleanup_run_containers() -> None:
+    docker = DOCKER_EXECUTABLE or shutil.which("docker")
+    if not docker:
+        return
+    for info in list(RUNS_IN_FLIGHT.values()):
+        container_name = info.get("container_name")
+        if container_name:
+            try:
+                subprocess.run([docker, "rm", "--force", container_name], capture_output=True, timeout=15)
+            except (OSError, subprocess.TimeoutExpired):
+                pass
+
+
+atexit.register(_cleanup_run_containers)
 
 
 from .ingestion import build_ducklake_from_raw_data
@@ -161,15 +362,19 @@ from .ingestion import build_ducklake_from_raw_data
 
 @app.post("/api/run")
 async def start_run(
+    background_tasks: BackgroundTasks,
     project_zip: UploadFile | None = File(None, description="Zip file containing dbt project"),
     git_url: str | None = Form(None, description="Git repository URL containing dbt project"),
     git_branch: str | None = Form(None, description="Git branch, tag or commit"),
     raw_data_files: list[UploadFile] = File(default=[], description="Raw data files (.csv, .parquet, .json, .zip)"),
-    threads: int = Form(1),
     verify_rerun: bool = Form(True),
     compile_only: bool = Form(False),
+    execution_mode: str = Form("run", description="Execution mode: 'run' (dbt run), 'compile' (dbt compile)"),
+    full_refresh: bool = Form(False, description="Whether to run with --full-refresh"),
+    select: str | None = Form(None, description="Model selection expression (--select)"),
 ) -> dict[str, Any]:
     run_id = datetime.now().astimezone().strftime("%Y%m%d_%H%M%S_%f")
+    shell_token = secrets.token_urlsafe(32)
     staging_dir = UPLOADS_DIR / run_id
     staging_dir.mkdir(parents=True, exist_ok=True)
 
@@ -247,17 +452,20 @@ async def start_run(
             raw_data_staging = staging_dir / "raw_data"
             raw_data_staging.mkdir(parents=True, exist_ok=True)
 
-            for upload in all_raw_uploads:
+            for upload_index, upload in enumerate(all_raw_uploads):
                 filename = upload.filename or "data.csv"
-                is_zip = filename.lower().endswith(".zip")
+                safe_filename = Path(filename.replace("\\", "/")).name
+                if safe_filename in {"", ".", ".."}:
+                    raise ValueError("Uploaded data file has an invalid filename.")
+                is_zip = safe_filename.lower().endswith(".zip")
 
                 if is_zip:
-                    temp_raw_zip = staging_dir / f"raw_zip_{filename}"
+                    temp_raw_zip = staging_dir / f"raw_zip_{upload_index}_{safe_filename}"
                     with temp_raw_zip.open("wb") as f:
                         shutil.copyfileobj(upload.file, f)
                     _extract_zip(temp_raw_zip, raw_data_staging)
                 else:
-                    dest_file = raw_data_staging / filename
+                    dest_file = raw_data_staging / safe_filename
                     with dest_file.open("wb") as f:
                         shutil.copyfileobj(upload.file, f)
 
@@ -297,8 +505,13 @@ async def start_run(
         shutil.rmtree(staging_dir, ignore_errors=True)
         raise HTTPException(status_code=500, detail=f"Failed to process uploaded data: {exc}")
 
+    clean_select = select.strip() if select and select.strip() else None
+    effective_compile = compile_only or execution_mode == "compile"
+    effective_mode = "compile" if effective_compile else "run"
+
     RUNS_IN_FLIGHT[run_id] = {
         "run_id": run_id,
+        "shell_token": shell_token,
         "status": "running",
         "started_at": datetime.now(timezone.utc).isoformat(),
         "finished_at": "",
@@ -309,32 +522,47 @@ async def start_run(
         "git_branch": branch if (has_git and branch) else None,
         "database_location": str(db_dest),
         "data_location": str(data_dir),
-        "threads": threads,
         "verify_rerun": verify_rerun,
         "staging_dir": str(staging_dir),
         "ingested_tables": ingested_tables,
         "log_file": str(RUN_LOGS_DIR / f"run_{run_id}.log"),
         "structured_log_file": str(RUN_LOGS_DIR / f"run_{run_id}.events.jsonl"),
         "report_file": str(RUN_LOGS_DIR / f"run_{run_id}.json"),
-        "compile_only": compile_only,
+        "compile_only": effective_compile,
+        "execution_mode": effective_mode,
+        "full_refresh": full_refresh,
+        "select": clean_select,
         "error": None,
+        "container_name": f"dbt-run-{run_id}",
+        "container_workspace": str(CONTAINER_RUNS_DIR / run_id),
+        "container_project_dir": "/workspace/runtime/project",
+        "container_input_project": "/input/" + project_dir.resolve().relative_to(staging_dir.resolve()).as_posix(),
     }
 
-    # Run in background worker thread
-    thread = threading.Thread(
-        target=_execute_run_worker,
-        args=(run_id, project_dir, db_dest, data_dir, threads, verify_rerun, compile_only),
-        daemon=True,
+    background_tasks.add_task(
+        _execute_run_worker,
+        run_id,
+        project_dir,
+        db_dest,
+        data_dir,
+        verify_rerun,
+        effective_compile,
+        execution_mode,
+        full_refresh,
+        clean_select,
     )
-    thread.start()
 
     return {
         "run_id": run_id,
+        "shell_token": shell_token,
         "status": "running",
         "started_at": RUNS_IN_FLIGHT[run_id]["started_at"],
         "project_name": display_name,
         "source_type": "git" if has_git else "zip",
-        "compile_only": compile_only,
+        "compile_only": effective_compile,
+        "execution_mode": execution_mode,
+        "full_refresh": full_refresh,
+        "select": clean_select,
     }
 
 
@@ -354,6 +582,10 @@ def list_runs() -> list[dict[str, Any]]:
             "finished_at": info.get("finished_at", ""),
             "project_name": Path(info.get("project_dir", "dbt_project")).name,
             "database_type": "ducklake",
+            "execution_mode": info.get("execution_mode", "run"),
+            "full_refresh": info.get("full_refresh", False),
+            "select": info.get("select"),
+            "container_destroyed": info.get("container_destroyed", False),
         })
 
     # Saved reports from disk
@@ -374,11 +606,312 @@ def list_runs() -> list[dict[str, Any]]:
                     "database_type": data.get("database_type", "ducklake"),
                     "steps_count": len(data.get("steps", [])),
                     "models_count": len(data.get("model_executions", [])),
+                    "execution_mode": data.get("execution_mode", "run"),
+                    "full_refresh": data.get("full_refresh", False),
+                    "select": data.get("select"),
                 })
             except Exception:
                 pass
 
     return runs
+
+
+@app.websocket("/api/runs/{run_id}/shell")
+async def project_shell(websocket: WebSocket, run_id: str) -> None:
+    """Attach a shell to the same per-run container that executed dbt."""
+    run_info = RUNS_IN_FLIGHT.get(run_id)
+    expected_token = str((run_info or {}).get("shell_token") or "")
+    protocols = [value.strip() for value in websocket.headers.get("sec-websocket-protocol", "").split(",")]
+    supplied_token = next((value for value in protocols if value != "dbt-shell"), "")
+    if not expected_token or not secrets.compare_digest(supplied_token, expected_token):
+        await websocket.close(code=4403, reason="Console access token is invalid or expired")
+        return
+
+    await websocket.accept(subprotocol="dbt-shell")
+    try:
+        docker = DOCKER_EXECUTABLE or shutil.which("docker")
+        if not docker:
+            raise RuntimeError("Docker is required for this run's interactive console.")
+
+        async with SHELL_SESSION_LOCK:
+            session = SHELL_SESSIONS.get(run_id)
+            if session is None:
+                session = {"lock": asyncio.Lock()}
+                SHELL_SESSIONS[run_id] = session
+
+        if session["lock"].locked():
+            await websocket.send_text("This run already has an active shell connection.\r\n")
+            await websocket.close(code=4409, reason="Shell is already connected")
+            return
+
+        async with session["lock"]:
+            import pty
+
+            container_name = run_info.get("container_name")
+            if not container_name:
+                raise RuntimeError("The run container has not been assigned yet.")
+
+            await websocket.send_text("Waiting for the run container…\r\n")
+            container_ready = False
+            for _ in range(2400):
+                if run_info.get("status") == "failed":
+                    raise RuntimeError(run_info.get("error") or "Run container startup failed.")
+                inspect = await asyncio.create_subprocess_exec(
+                    docker, "inspect", "--format", "{{.State.Running}}", container_name,
+                    stdout=asyncio.subprocess.PIPE,
+                    stderr=asyncio.subprocess.DEVNULL,
+                )
+                output, _ = await inspect.communicate()
+                if inspect.returncode == 0 and output.decode().strip().lower() == "true":
+                    container_ready = True
+                    break
+                await asyncio.sleep(0.25)
+            if not container_ready:
+                raise RuntimeError("The run container did not start. Check the run log for Docker errors.")
+
+            host_workspace = Path(run_info["container_workspace"])
+            expected_project = host_workspace / "runtime" / "project"
+            container_workdir = "/workspace/runtime/project"
+            for _ in range(600):
+                if expected_project.is_dir() or run_info.get("status") in {"passed", "failed"}:
+                    break
+                await asyncio.sleep(0.1)
+            if not expected_project.is_dir():
+                container_workdir = run_info.get("container_input_project", "/workspace")
+
+            master_fd, slave_fd = pty.openpty()
+            docker_args = [
+                docker, "exec", "--interactive", "--tty",
+                "--workdir", container_workdir,
+                "--env", "HOME=/workspace/home",
+                "--env", "DBT_PROFILES_DIR=/workspace/runtime/profiles",
+                "--env", "DBT_TARGET_PATH=/workspace/runtime/target",
+                "--env", "DBT_SEND_ANONYMOUS_USAGE_STATS=false",
+                "--env", "DBT_VERSION_CHECK=false",
+                "--env", "DUCKDB_EXTENSION_DIRECTORY=/opt/duckdb/extensions",
+                container_name,
+                "/bin/bash", "--noprofile", "--norc", "-i",
+            ]
+            process = await asyncio.create_subprocess_exec(
+                *docker_args,
+                stdin=slave_fd,
+                stdout=slave_fd,
+                stderr=slave_fd,
+                start_new_session=True,
+            )
+            os.close(slave_fd)
+            await websocket.send_text(f"Connected to run container: {container_name}\r\n")
+
+            async def forward_terminal_output() -> None:
+                bytes_sent = 0
+                loop = asyncio.get_running_loop()
+                while True:
+                    readable = loop.create_future()
+
+                    def notify_readable() -> None:
+                        if not readable.done():
+                            readable.set_result(None)
+
+                    loop.add_reader(master_fd, notify_readable)
+                    try:
+                        await readable
+                    except OSError:
+                        return
+                    finally:
+                        loop.remove_reader(master_fd)
+                    try:
+                        data = os.read(master_fd, 4096)
+                    except OSError:
+                        return
+                    if not data:
+                        return
+                    bytes_sent += len(data)
+                    if bytes_sent > 5_000_000:
+                        await websocket.send_text("\r\nShell output limit reached; reconnect to start a new session.\r\n")
+                        return
+                    try:
+                        await websocket.send_text(data.decode("utf-8", errors="replace"))
+                    except (WebSocketDisconnect, RuntimeError):
+                        return
+
+            async def forward_terminal_input() -> None:
+                try:
+                    while True:
+                        text = await websocket.receive_text()
+                        if len(text) > 16_384:
+                            await websocket.send_text("\r\nInput limit exceeded (16 KB per message).\r\n")
+                            continue
+                        os.write(master_fd, text.encode("utf-8"))
+                except WebSocketDisconnect:
+                    return
+
+            output_task = asyncio.create_task(forward_terminal_output())
+            input_task = asyncio.create_task(forward_terminal_input())
+            try:
+                done, pending = await asyncio.wait(
+                    {output_task, input_task}, return_when=asyncio.FIRST_COMPLETED
+                )
+                for task in pending:
+                    task.cancel()
+                if pending:
+                    await asyncio.gather(*pending, return_exceptions=True)
+                for task in done:
+                    task.result()
+            finally:
+                if process.returncode is None:
+                    try:
+                        os.killpg(process.pid, signal.SIGTERM)
+                    except ProcessLookupError:
+                        pass
+                    try:
+                        await asyncio.wait_for(process.wait(), timeout=3)
+                    except asyncio.TimeoutError:
+                        try:
+                            os.killpg(process.pid, signal.SIGKILL)
+                        except ProcessLookupError:
+                            pass
+                        await process.wait()
+                os.close(master_fd)
+    except WebSocketDisconnect:
+        return
+    except Exception as exc:
+        try:
+            await websocket.send_text(f"\r\nShell unavailable: {exc}\r\n")
+            await websocket.close(code=1011)
+        except Exception:
+            pass
+
+
+@app.post("/api/runs/{run_id}/destroy-container")
+def destroy_run_container(run_id: str, payload: dict[str, Any]) -> dict[str, Any]:
+    """Remove a finished run's container while preserving its sandbox files."""
+    run_info = RUNS_IN_FLIGHT.get(run_id)
+    expected_token = run_info.get("shell_token", "") if run_info else ""
+    supplied_token = str(payload.get("shell_token") or "")
+    if not expected_token or not secrets.compare_digest(supplied_token, expected_token):
+        raise HTTPException(status_code=403, detail="Run access token is invalid or expired")
+    if run_info.get("status") not in {"passed", "failed"}:
+        raise HTTPException(status_code=409, detail="The run container can only be destroyed after the run finishes")
+    if run_info.get("container_destroyed"):
+        return {"run_id": run_id, "container_destroyed": True, "workspace_preserved": True}
+
+    container_name = run_info.get("container_name")
+    if not container_name:
+        raise HTTPException(status_code=404, detail="Run container was not found")
+    docker = DOCKER_EXECUTABLE or shutil.which("docker")
+    if not docker:
+        raise HTTPException(status_code=503, detail="Docker is unavailable")
+    try:
+        result = subprocess.run(
+            [docker, "rm", "--force", container_name],
+            capture_output=True,
+            text=True,
+            timeout=30,
+        )
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        raise HTTPException(status_code=503, detail=f"Could not remove the run container: {exc}") from exc
+    if result.returncode:
+        detail = (result.stderr or result.stdout or "Docker could not remove the run container.").strip()
+        if "No such container" in detail or "No such object" in detail:
+            run_info["container_destroyed"] = True
+            SHELL_SESSIONS.pop(run_id, None)
+            return {"run_id": run_id, "container_destroyed": True, "workspace_preserved": True}
+        raise HTTPException(status_code=502, detail=detail)
+
+    run_info["container_destroyed"] = True
+    SHELL_SESSIONS.pop(run_id, None)
+    return {"run_id": run_id, "container_destroyed": True, "workspace_preserved": True}
+
+
+@app.get("/api/containers")
+def list_application_containers() -> list[dict[str, str]]:
+    """List containers marked as managed by this application, including stopped ones."""
+    docker = DOCKER_EXECUTABLE or shutil.which("docker")
+    if not docker:
+        raise HTTPException(status_code=503, detail="Docker is unavailable")
+    try:
+        result = subprocess.run(
+            [docker, "ps", "--all", "--filter", "label=dbt-runner.managed=true", "--format", "{{json .}}"],
+            capture_output=True,
+            text=True,
+            timeout=15,
+        )
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        raise HTTPException(status_code=503, detail=f"Could not list Docker containers: {exc}") from exc
+    if result.returncode:
+        detail = (result.stderr or result.stdout or "Docker could not list containers.").strip()
+        raise HTTPException(status_code=503, detail=detail)
+
+    containers: list[dict[str, str]] = []
+    for line in result.stdout.splitlines():
+        try:
+            docker_row = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        labels: dict[str, str] = {}
+        for label in str(docker_row.get("Labels") or "").split(","):
+            key, separator, value = label.partition("=")
+            if separator:
+                labels[key] = value
+        if labels.get("dbt-runner.managed") != "true":
+            continue
+        containers.append({
+            "container_id": str(docker_row.get("ID") or ""),
+            "name": str(docker_row.get("Names") or ""),
+            "image": str(docker_row.get("Image") or ""),
+            "status": str(docker_row.get("Status") or "unknown"),
+            "created": str(docker_row.get("CreatedAt") or ""),
+            "run_id": labels.get("dbt-runner.run-id", ""),
+        })
+    return containers
+
+
+@app.delete("/api/containers/{container_id}")
+def destroy_application_container(container_id: str, payload: dict[str, Any]) -> dict[str, Any]:
+    """Remove a container only after verifying the application-managed label."""
+    if not re.fullmatch(r"[0-9a-fA-F]{12,64}", container_id):
+        raise HTTPException(status_code=400, detail="Invalid Docker container ID")
+    docker = DOCKER_EXECUTABLE or shutil.which("docker")
+    if not docker:
+        raise HTTPException(status_code=503, detail="Docker is unavailable")
+    label_format = '{{ index .Config.Labels "dbt-runner.managed" }}|{{ index .Config.Labels "dbt-runner.run-id" }}'
+    try:
+        inspected = subprocess.run(
+            [docker, "inspect", "--format", label_format, container_id],
+            capture_output=True,
+            text=True,
+            timeout=15,
+        )
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        raise HTTPException(status_code=503, detail=f"Could not inspect Docker container: {exc}") from exc
+    if inspected.returncode:
+        raise HTTPException(status_code=404, detail="Docker container was not found")
+    managed_label, _, run_id = inspected.stdout.strip().partition("|")
+    if managed_label != "true":
+        raise HTTPException(status_code=403, detail="This container is not managed by dbt Runner")
+    run_info = RUNS_IN_FLIGHT.get(run_id)
+    expected_token = str((run_info or {}).get("shell_token") or "")
+    supplied_token = str(payload.get("shell_token") or "")
+    if not expected_token or not secrets.compare_digest(supplied_token, expected_token):
+        raise HTTPException(status_code=403, detail="Run access token is invalid or unavailable")
+
+    try:
+        removed = subprocess.run(
+            [docker, "rm", "--force", container_id],
+            capture_output=True,
+            text=True,
+            timeout=30,
+        )
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        raise HTTPException(status_code=503, detail=f"Could not remove Docker container: {exc}") from exc
+    if removed.returncode:
+        detail = (removed.stderr or removed.stdout or "Docker could not remove the container.").strip()
+        raise HTTPException(status_code=502, detail=detail)
+
+    if run_info:
+        run_info["container_destroyed"] = True
+    SHELL_SESSIONS.pop(run_id, None)
+    return {"container_id": container_id, "run_id": run_id, "container_destroyed": True}
 
 
 @app.get("/api/runs/{run_id}")
@@ -387,8 +920,11 @@ def get_run(run_id: str) -> dict[str, Any]:
     if report_file.is_file():
         try:
             data = json.loads(report_file.read_text(encoding="utf-8"))
-            if run_id in RUNS_IN_FLIGHT and RUNS_IN_FLIGHT[run_id].get("ingested_tables"):
-                data["ingested_tables"] = RUNS_IN_FLIGHT[run_id]["ingested_tables"]
+            run_info = RUNS_IN_FLIGHT.get(run_id)
+            if run_info and run_info.get("ingested_tables"):
+                data["ingested_tables"] = run_info["ingested_tables"]
+            if run_info:
+                data["container_destroyed"] = run_info.get("container_destroyed", False)
             return data
         except Exception as exc:
             raise HTTPException(status_code=500, detail=f"Could not read report file: {exc}")
@@ -524,6 +1060,185 @@ def preview_table_data(
         "refreshed_at": datetime.now(timezone.utc).isoformat(),
         "message": "No sample data available for this relation.",
     }
+
+
+def _launch_rerun(
+    run_id: str,
+    full_refresh: bool,
+    background_tasks: BackgroundTasks,
+    payload: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    prev_run = RUNS_IN_FLIGHT.get(run_id)
+    report_file = RUN_LOGS_DIR / f"run_{run_id}.json"
+    rep_data = None
+    if report_file.is_file():
+        try:
+            rep_data = json.loads(report_file.read_text(encoding="utf-8"))
+        except Exception:
+            pass
+
+    if not prev_run and not rep_data:
+        raise HTTPException(status_code=404, detail=f"Run {run_id} not found.")
+
+    staging_dir = Path(prev_run["staging_dir"]) if prev_run and "staging_dir" in prev_run else None
+    if not staging_dir or not staging_dir.is_dir():
+        candidate = UPLOADS_DIR / run_id
+        if candidate.is_dir():
+            staging_dir = candidate
+
+    project_dir_str = (prev_run.get("project_dir") if prev_run else None) or (rep_data.get("project_dir") if rep_data else None)
+    if not project_dir_str or not Path(project_dir_str).is_dir():
+        raise HTTPException(status_code=400, detail=f"Project directory for run {run_id} not found.")
+
+    old_project_dir = Path(project_dir_str)
+    old_db_str = (prev_run.get("database_location") if prev_run else None) or (rep_data.get("ducklake_metadata_location") if rep_data else "")
+    old_data_str = (prev_run.get("data_location") if prev_run else None) or (rep_data.get("data_location") if rep_data else "")
+
+    old_db = Path(old_db_str) if old_db_str else None
+    old_data = Path(old_data_str) if old_data_str else None
+
+    new_run_id = datetime.now().astimezone().strftime("%Y%m%d_%H%M%S_%f")
+    shell_token = secrets.token_urlsafe(32)
+    new_staging_dir = UPLOADS_DIR / new_run_id
+    new_staging_dir.mkdir(parents=True, exist_ok=True)
+
+    # Copy project
+    new_proj_extract = new_staging_dir / "project"
+    if staging_dir and (staging_dir / "project").is_dir():
+        shutil.copytree(staging_dir / "project", new_proj_extract)
+        try:
+            rel = old_project_dir.relative_to(staging_dir / "project")
+            new_project_dir = new_proj_extract / rel
+        except ValueError:
+            new_project_dir = new_proj_extract
+    else:
+        shutil.copytree(old_project_dir, new_proj_extract)
+        new_project_dir = new_proj_extract
+
+    # Copy database metadata file
+    new_db = None
+    if old_db and old_db.is_file():
+        new_db = new_staging_dir / old_db.name
+        shutil.copy2(old_db, new_db)
+    elif staging_dir and (staging_dir / "lake.ducklake").is_file():
+        new_db = new_staging_dir / "lake.ducklake"
+        shutil.copy2(staging_dir / "lake.ducklake", new_db)
+
+    # Copy data directory (e.g. Parquet storage)
+    new_data = None
+    if old_data and old_data.is_dir():
+        new_data = new_staging_dir / old_data.name
+        shutil.copytree(old_data, new_data)
+    elif staging_dir and (staging_dir / "lake_data").is_dir():
+        new_data = new_staging_dir / "lake_data"
+        shutil.copytree(staging_dir / "lake_data", new_data)
+
+    select_val = None
+    if payload and "select" in payload and payload["select"]:
+        select_val = str(payload["select"]).strip() or None
+    elif prev_run and prev_run.get("select"):
+        select_val = prev_run.get("select")
+    elif rep_data and rep_data.get("select"):
+        select_val = rep_data.get("select")
+
+    # Determine execution mode from payload or inherit from previous run
+    prev_mode = None
+    if prev_run:
+        prev_mode = prev_run.get("execution_mode")
+        if not prev_mode and prev_run.get("compile_only"):
+            prev_mode = "compile"
+    if not prev_mode and rep_data:
+        prev_mode = rep_data.get("execution_mode")
+        if not prev_mode and rep_data.get("compile_only"):
+            prev_mode = "compile"
+
+    if payload and "execution_mode" in payload and payload["execution_mode"]:
+        target_mode = str(payload["execution_mode"]).strip().lower()
+    elif prev_mode == "compile":
+        target_mode = "compile"
+    else:
+        target_mode = "run"
+
+    is_compile = (target_mode == "compile")
+
+    verify_rerun = prev_run.get("verify_rerun", True) if prev_run else True
+    display_name = prev_run.get("project_name", new_project_dir.name) if prev_run else new_project_dir.name
+
+    RUNS_IN_FLIGHT[new_run_id] = {
+        "run_id": new_run_id,
+        "shell_token": shell_token,
+        "status": "running",
+        "started_at": datetime.now(timezone.utc).isoformat(),
+        "finished_at": "",
+        "project_name": display_name,
+        "project_dir": str(new_project_dir),
+        "source_type": prev_run.get("source_type", "zip") if prev_run else "zip",
+        "git_url": prev_run.get("git_url") if prev_run else None,
+        "git_branch": prev_run.get("git_branch") if prev_run else None,
+        "database_location": str(new_db) if new_db else "",
+        "data_location": str(new_data) if new_data else "",
+        "verify_rerun": verify_rerun,
+        "staging_dir": str(new_staging_dir),
+        "ingested_tables": prev_run.get("ingested_tables", []) if prev_run else [],
+        "log_file": str(RUN_LOGS_DIR / f"run_{new_run_id}.log"),
+        "structured_log_file": str(RUN_LOGS_DIR / f"run_{new_run_id}.events.jsonl"),
+        "report_file": str(RUN_LOGS_DIR / f"run_{new_run_id}.json"),
+        "compile_only": is_compile,
+        "execution_mode": target_mode,
+        "full_refresh": full_refresh,
+        "select": select_val,
+        "error": None,
+        "container_name": f"dbt-run-{new_run_id}",
+        "container_workspace": str(CONTAINER_RUNS_DIR / new_run_id),
+        "container_project_dir": "/workspace/runtime/project",
+        "container_input_project": "/input/" + new_project_dir.resolve().relative_to(new_staging_dir.resolve()).as_posix(),
+    }
+
+    background_tasks.add_task(
+        _execute_run_worker,
+        new_run_id,
+        new_project_dir,
+        new_db,
+        new_data,
+        verify_rerun,
+        is_compile,
+        target_mode,
+        full_refresh,
+        select_val,
+    )
+
+    mode_name = "dbt compile" if is_compile else "dbt run"
+    run_desc = f"Full refresh ({mode_name})" if full_refresh else f"Pipeline run ({mode_name})"
+    return {
+        "status": "started",
+        "run_id": new_run_id,
+        "shell_token": shell_token,
+        "message": f"{run_desc} started ({new_run_id}).",
+        "execution_mode": target_mode,
+        "compile_only": is_compile,
+        "full_refresh": full_refresh,
+        "select": select_val,
+    }
+
+
+@app.post("/api/runs/{run_id}/full-refresh")
+async def trigger_full_refresh(
+    run_id: str,
+    background_tasks: BackgroundTasks,
+    payload: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    return _launch_rerun(run_id=run_id, full_refresh=True, background_tasks=background_tasks, payload=payload)
+
+
+@app.post("/api/runs/{run_id}/run")
+async def trigger_standard_run(
+    run_id: str,
+    background_tasks: BackgroundTasks,
+    payload: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    p = dict(payload or {})
+    p.setdefault("execution_mode", "run")
+    return _launch_rerun(run_id=run_id, full_refresh=False, background_tasks=background_tasks, payload=p)
 
 
 @app.get("/api/runs/{run_id}/stream")

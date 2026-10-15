@@ -36,9 +36,8 @@ Direct graph adjacency lists:
 ## Verification & Validation Rules
 
 1. **DAG Graph Verification**:
-   - Check that every upstream parent in `parent_map` exists in either `nodes` or `sources`.
-   - Run depth-first search (DFS) cycle detection to guarantee that the DAG is acyclic.
-   - Summarize models by materialization type, seeds, snapshots, sources, and tests.
+   - dbt's native parser verifies acyclic topological order and resolves all dependencies during `dbt parse`.
+   - Manifest metrics summarize models by materialization type, seeds, snapshots, sources, and tests.
 
 2. **Rerun-Safe Materialization Policy**:
    - Models must use materializations configured in `safe_materializations` (e.g. `table`, `view`, `incremental`, `ephemeral`, `materialized_view`).

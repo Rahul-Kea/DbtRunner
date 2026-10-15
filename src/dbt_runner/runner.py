@@ -3,17 +3,16 @@ from __future__ import annotations
 import json
 import os
 import shutil
-import signal
 import sys
 import tempfile
-import time
 import venv
+from contextlib import nullcontext
 from dataclasses import asdict
 from datetime import datetime, timezone
 from pathlib import Path
 
 from .commands import stream_command
-from .config import PROJECT_ROOT, RunnerConfig, load_config
+from .config import PROJECT_ROOT, RunnerConfig
 from .models import RunReport, StepResult
 from .project import (
     clone_database_file,
@@ -30,7 +29,6 @@ from .structured_logging import JsonlEventLogger
 from .validation import (
     enrich_objects_with_samples,
     expected_relations,
-    parse_log_results,
     parse_run_results,
     validate_catalog,
     validate_materialization_policy,
@@ -78,6 +76,7 @@ def run_project(
     config: RunnerConfig | None = None,
     verify_rerun: bool | None = None,
     run_id: str | None = None,
+    sandbox_dir: Path | None = None,
 ) -> RunReport:
     # Handle backwards compatibility with positional args:
     # Older signature: run_project(project, data_dir, metadata, config)
@@ -108,6 +107,9 @@ def run_project(
 
     db_type = detect_database_type(database_path, data_dir)
 
+    is_compile = config.compile_only or config.execution_mode == "compile"
+    mode_str = "compile" if is_compile else "run"
+
     report = RunReport(
         run_id=run_id,
         started_at=datetime.now(timezone.utc).isoformat(),
@@ -119,8 +121,10 @@ def run_project(
         structured_log_file=str(structured_log_path),
         report_file=str(report_path),
         config_file=str(config.config_path),
-        rerun_policy="dry-run syntax and DAG topology verification (no data mutations)" if config.compile_only else "isolated clone of the database/lake per run with idempotency validation",
-        execution_mode="compile_only" if config.compile_only else "full",
+        rerun_policy="dry-run syntax and DAG topology verification (no data mutations)" if is_compile else "isolated clone of the database/lake per run with idempotency validation",
+        execution_mode=mode_str,
+        full_refresh=config.full_refresh,
+        select=config.select,
     )
 
     print(f"\nStarting run {run_id} ({db_type.upper()})")
@@ -152,7 +156,16 @@ def run_project(
             if db_err:
                 raise ValueError(db_err)
 
-            with tempfile.TemporaryDirectory(prefix="dbt-runner-") as temp_name:
+            if sandbox_dir is None:
+                sandbox_context = tempfile.TemporaryDirectory(prefix="dbt-runner-")
+            else:
+                sandbox_dir = Path(sandbox_dir).resolve()
+                sandbox_dir.mkdir(parents=True, exist_ok=True)
+                if any(sandbox_dir.iterdir()):
+                    raise ValueError(f"Run sandbox directory must be empty: {sandbox_dir}")
+                sandbox_context = nullcontext(str(sandbox_dir))
+
+            with sandbox_context as temp_name:
                 sandbox_created = True
                 temp_root = Path(temp_name)
                 project_copy = temp_root / "project"
@@ -160,13 +173,20 @@ def run_project(
                 target_dir = temp_root / "target"
                 log_dir = temp_root / "dbt_logs"
                 temp_work_dir = temp_root / "tmp"
-                duckdb_extensions = temp_root / "duckdb_extensions"
+                extension_cache = os.environ.get("DBT_RUNNER_EXTENSION_CACHE")
+                if extension_cache and Path(extension_cache).is_dir():
+                    # Container images can provide preinstalled, read-only extensions.
+                    # Use that exact directory so offline runs don't try to redownload them.
+                    duckdb_extensions = Path(extension_cache).resolve()
+                else:
+                    duckdb_extensions = temp_root / "duckdb_extensions"
 
                 profile_dir.mkdir()
                 target_dir.mkdir()
                 log_dir.mkdir()
                 temp_work_dir.mkdir()
-                duckdb_extensions.mkdir()
+                if not duckdb_extensions.exists():
+                    duckdb_extensions.mkdir()
 
                 report.sandbox_workspace = str(temp_root)
                 print("Preparing isolated sandbox...", flush=True)
@@ -192,7 +212,6 @@ def run_project(
                     sandbox_data_dir,
                     sandbox_metadata,
                     duckdb_extensions,
-                    threads=config.threads,
                     db_type=db_type,
                 )
 
@@ -208,7 +227,6 @@ def run_project(
                         "TEMP": str(temp_work_dir),
                         "TMP": str(temp_work_dir),
                         "PYTHONUNBUFFERED": "1",
-                        "DBT_THREADS": str(config.threads),
                     }
                 )
 
@@ -234,16 +252,20 @@ def run_project(
                     StepResult("Parse dbt DAG", dbt_cmd + ["parse", "--project-dir", str(project_copy), "--profiles-dir", str(profile_dir), "--log-path", str(log_dir)])
                 )
 
-                if config.compile_only:
+                select_args = ["--select"] + config.select.strip().split() if config.select and config.select.strip() else []
+                refresh_args = ["--full-refresh"] if config.full_refresh else []
+
+                if is_compile:
+                    compile_label = "Compile dbt models & validate references (dbt compile" + (" --full-refresh" if config.full_refresh else "") + (f" -s {config.select}" if config.select else "") + ")"
                     steps.append(
-                        StepResult("Compile dbt models & validate references (dbt compile)", dbt_cmd + ["compile", "--project-dir", str(project_copy), "--profiles-dir", str(profile_dir), "--log-path", str(log_dir)])
+                        StepResult(compile_label, dbt_cmd + ["compile", "--project-dir", str(project_copy), "--profiles-dir", str(profile_dir), "--log-path", str(log_dir)] + refresh_args + select_args)
                     )
                 else:
                     # Check seeds
                     has_seeds = (project_copy / "seeds").is_dir() and any((project_copy / "seeds").glob("**/*.csv"))
                     if has_seeds:
                         steps.append(
-                            StepResult("Materialize dbt seeds", dbt_cmd + ["seed", "--project-dir", str(project_copy), "--profiles-dir", str(profile_dir), "--log-path", str(log_dir)])
+                            StepResult("Materialize dbt seeds", dbt_cmd + ["seed", "--project-dir", str(project_copy), "--profiles-dir", str(profile_dir), "--log-path", str(log_dir)] + refresh_args)
                         )
 
                     # Run snapshots BEFORE models so models can safely ref() snapshots
@@ -253,12 +275,13 @@ def run_project(
                             StepResult("Materialize dbt snapshots", dbt_cmd + ["snapshot", "--project-dir", str(project_copy), "--profiles-dir", str(profile_dir), "--log-path", str(log_dir)])
                         )
 
+                    run_label = "Materialize dbt models (dbt run" + (" --full-refresh" if config.full_refresh else "") + (f" -s {config.select}" if config.select else "") + ")"
                     steps.append(
-                        StepResult("Materialize dbt models (dbt run)", dbt_cmd + ["run", "--project-dir", str(project_copy), "--profiles-dir", str(profile_dir), "--log-path", str(log_dir)])
+                        StepResult(run_label, dbt_cmd + ["run", "--project-dir", str(project_copy), "--profiles-dir", str(profile_dir), "--log-path", str(log_dir)] + refresh_args + select_args)
                     )
 
                     steps.append(
-                        StepResult("Run dbt tests", dbt_cmd + ["test", "--project-dir", str(project_copy), "--profiles-dir", str(profile_dir), "--log-path", str(log_dir)])
+                        StepResult("Run dbt tests", dbt_cmd + ["test", "--project-dir", str(project_copy), "--profiles-dir", str(profile_dir), "--log-path", str(log_dir)] + select_args)
                     )
 
                     steps.append(
@@ -339,9 +362,11 @@ def run_project(
                         break
 
                 # Object and Database Validation
-                if config.compile_only:
+                if is_compile:
                     if manifest_path.is_file():
-                        expected, exp_failures = expected_relations(manifest_path)
+                        executed_nodes = {str(item.get("node")) for item in report.model_executions if item.get("node")}
+                        target_nodes = executed_nodes if (config.select and executed_nodes) else None
+                        expected, exp_failures = expected_relations(manifest_path, target_node_ids=target_nodes)
                         report.object_validation = {
                             "status": "passed" if not exp_failures else "failed",
                             "expected_objects": expected,
@@ -357,16 +382,18 @@ def run_project(
                             "failures": ["dbt manifest was not generated during compilation"],
                         }
                 elif manifest_path.is_file():
+                    executed_nodes = {str(item.get("node")) for item in report.model_executions if item.get("node")}
+                    target_nodes = executed_nodes if config.select and executed_nodes else None
                     catalog_path = target_dir / "catalog.json"
                     if catalog_path.is_file():
-                        report.object_validation = validate_catalog(manifest_path, catalog_path)
+                        report.object_validation = validate_catalog(manifest_path, catalog_path, target_node_ids=target_nodes)
                     else:
                         # Fallback to direct duckdb inspection
                         report.object_validation = verify_database_objects_direct(
-                            sandbox_metadata, manifest_path, db_type, sandbox_data_dir, duckdb_extensions
+                            sandbox_metadata, manifest_path, db_type, sandbox_data_dir, duckdb_extensions, target_node_ids=target_nodes
                         )
                     report.failure_details.extend(report.object_validation.get("failures", []))
-                    if not config.compile_only and report.object_validation.get("actual_objects"):
+                    if not is_compile and report.object_validation.get("actual_objects"):
                         enrich_objects_with_samples(
                             report.object_validation["actual_objects"],
                             sandbox_metadata,
@@ -382,7 +409,7 @@ def run_project(
                     }
 
                 # Safe Rerun Behavior Verification (Idempotency check)
-                if config.compile_only:
+                if is_compile:
                     report.rerun_policy = "dry-run syntax and DAG topology verification (no data mutations)"
                     report.rerun_verification = {
                         "status": "passed",
@@ -391,7 +418,7 @@ def run_project(
                     }
                 elif should_verify_rerun and not report.failure_details and all(s.status == "passed" for s in report.steps):
                     print("\n--- Verifying Safe Repeated Execution (Idempotency) ---", flush=True)
-                    rerun_cmd = dbt_cmd + ["run", "--project-dir", str(project_copy), "--profiles-dir", str(profile_dir), "--log-path", str(log_dir)]
+                    rerun_cmd = dbt_cmd + ["run", "--project-dir", str(project_copy), "--profiles-dir", str(profile_dir), "--log-path", str(log_dir)] + select_args
                     rerun_step = StepResult("Safe repeated execution (dbt run rerun)", rerun_cmd)
                     rerun_step.status = "running"
                     rerun_code, rerun_dur = stream_command(
@@ -413,7 +440,7 @@ def run_project(
                     event_logger.emit("rerun_verification", **report.rerun_verification)
 
                     # Refresh sample rows and database state after rerun!
-                    if not config.compile_only and report.object_validation.get("actual_objects"):
+                    if not is_compile and report.object_validation.get("actual_objects"):
                         enrich_objects_with_samples(
                             report.object_validation["actual_objects"],
                             sandbox_metadata,
@@ -423,38 +450,23 @@ def run_project(
                             sample_limit=15,
                         )
 
-                # Recover model executions from logs if missing
-                if not report.model_test_results and log_path.is_file():
-                    log_res = parse_log_results(log_path, manifest_path if manifest_path.is_file() else None)
-                    report.model_test_results = log_res
-                    report.model_executions = [r for r in log_res if r.get("resource_type") in {"model", "seed", "snapshot"}]
-
-                # Persist updated database and lake parquet files back to staging directory
-                if not config.compile_only and all(s.status == "passed" for s in report.steps):
-                    try:
-                        if db_type == "ducklake":
-                            if sandbox_metadata.is_file() and database_path:
-                                shutil.copy2(sandbox_metadata, database_path)
-                            if sandbox_data_dir and sandbox_data_dir.is_dir() and data_dir:
-                                data_dir.mkdir(parents=True, exist_ok=True)
-                                for item in sandbox_data_dir.iterdir():
-                                    target_item = data_dir / item.name
-                                    if item.is_dir():
-                                        shutil.copytree(item, target_item, dirs_exist_ok=True)
-                                    else:
-                                        shutil.copy2(item, target_item)
-                        else:
-                            if sandbox_metadata.is_file() and database_path:
-                                shutil.copy2(sandbox_metadata, database_path)
-                    except Exception as persist_err:
-                        pass
-
         except Exception as exc:
             report.failure_details.append(f"Runner execution failed: {exc}")
             event_logger.emit("runner_error", error_message=str(exc))
             log.write(f"\nRunner execution failed: {exc}\n")
 
-        report.sandbox_cleanup_status = "cleaned" if sandbox_created else "not_created"
+        report.sandbox_cleanup_status = (
+            "preserved for interactive console"
+            if sandbox_dir is not None and sandbox_created
+            else "cleaned" if sandbox_created else "not_created"
+        )
+        if sandbox_dir is not None and sandbox_created:
+            if "project_copy" in locals():
+                report.project_dir = str(project_copy)
+            if "sandbox_metadata" in locals():
+                report.ducklake_metadata_location = str(sandbox_metadata)
+            if "sandbox_data_dir" in locals():
+                report.data_location = str(sandbox_data_dir) if sandbox_data_dir else ""
         event_logger.emit("sandbox_cleanup", status=report.sandbox_cleanup_status)
 
     report.finished_at = datetime.now(timezone.utc).isoformat()
@@ -531,4 +543,3 @@ def print_report(report: RunReport) -> None:
     print(f"Structured Log: {report.structured_log_file}")
     print(f"Report JSON: {report.report_file}")
     print(f"=======================================================\n")
-

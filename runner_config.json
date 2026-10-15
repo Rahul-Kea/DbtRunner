@@ -1,6 +1,5 @@
 {
   "dbt_package": "dbt-duckdb",
-  "threads": 1,
   "run_logs_dir": "run_logs",
   "safe_materializations": [
     "table",

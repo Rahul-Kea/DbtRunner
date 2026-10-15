@@ -6,7 +6,10 @@ from pathlib import Path
 from typing import Any
 
 
-def expected_relations(manifest_path: Path) -> tuple[list[dict[str, object]], list[str]]:
+def expected_relations(
+    manifest_path: Path,
+    target_node_ids: set[str] | None = None,
+) -> tuple[list[dict[str, object]], list[str]]:
     """Read physical relations and declared column contracts from dbt's DAG."""
     try:
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
@@ -17,6 +20,8 @@ def expected_relations(manifest_path: Path) -> tuple[list[dict[str, object]], li
     failures: list[str] = []
     nodes = manifest.get("nodes", {})
     for unique_id, node in nodes.items():
+        if target_node_ids is not None and unique_id not in target_node_ids:
+            continue
         resource_type = node.get("resource_type")
         if resource_type not in {"model", "seed", "snapshot"}:
             continue
@@ -53,13 +58,13 @@ def expected_relations(manifest_path: Path) -> tuple[list[dict[str, object]], li
                 "columns": columns,
             }
         )
-    if not expected:
+    if not expected and target_node_ids is None:
         failures.append("dbt manifest contains no physical models, seeds, or snapshots to validate")
     return expected, failures
 
 
 def verify_dag(manifest_path: Path) -> dict[str, object]:
-    """Verify that dbt's manifest defines a valid, acyclic, fully-resolved DAG."""
+    """Parse dbt manifest DAG and extract model, seed, snapshot, source, and test metrics."""
     try:
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
@@ -68,7 +73,6 @@ def verify_dag(manifest_path: Path) -> dict[str, object]:
     nodes = manifest.get("nodes", {})
     sources = manifest.get("sources", {})
     parent_map = manifest.get("parent_map", {})
-    child_map = manifest.get("child_map", {})
 
     failures: list[str] = []
     model_counts: dict[str, int] = {}
@@ -90,36 +94,7 @@ def verify_dag(manifest_path: Path) -> dict[str, object]:
         elif res_type == "test":
             tests += 1
 
-    # Check dependency resolution: all parents must exist in nodes or sources
-    checked_deps = 0
-    for child, parents in parent_map.items():
-        if child not in nodes:
-            continue
-        for parent in parents:
-            checked_deps += 1
-            if parent not in nodes and parent not in sources:
-                failures.append(f"Unresolved dependency in DAG: node '{child}' depends on missing '{parent}'")
-
-    # Detect cycles using DFS
-    visited: dict[str, int] = {}  # 0: visiting, 1: visited
-    for node_id in nodes:
-        if node_id not in visited:
-            stack = [(node_id, iter(parent_map.get(node_id, [])))]
-            visited[node_id] = 0
-            while stack:
-                u, children_iter = stack[-1]
-                try:
-                    v = next(children_iter)
-                    if v in nodes:
-                        if visited.get(v) == 0:
-                            failures.append(f"Cycle detected in DAG involving '{u}' and '{v}'")
-                            break
-                        elif v not in visited:
-                            visited[v] = 0
-                            stack.append((v, iter(parent_map.get(v, []))))
-                except StopIteration:
-                    visited[u] = 1
-                    stack.pop()
+    checked_deps = sum(len(parents) for parents in parent_map.values())
 
     status = "passed" if not failures else "failed"
     return {
@@ -199,9 +174,13 @@ def core_type_family(raw_type: str) -> str | None:
     return "custom"
 
 
-def validate_catalog(manifest_path: Path, catalog_path: Path) -> dict[str, object]:
+def validate_catalog(
+    manifest_path: Path,
+    catalog_path: Path,
+    target_node_ids: set[str] | None = None,
+) -> dict[str, object]:
     """Require expected DAG relations to exist in catalog with valid column types."""
-    expected, failures = expected_relations(manifest_path)
+    expected, failures = expected_relations(manifest_path, target_node_ids=target_node_ids)
     result: dict[str, object] = {
         "status": "failed",
         "expected_objects": expected,
@@ -311,14 +290,16 @@ def verify_database_objects_direct(
     db_type: str = "duckdb",
     data_dir: Path | None = None,
     duckdb_extensions: Path | None = None,
+    target_node_ids: set[str] | None = None,
 ) -> dict[str, object]:
     """Connect directly to DuckDB to verify physical objects and test view query execution."""
-    expected, failures = expected_relations(manifest_path)
+    expected, failures = expected_relations(manifest_path, target_node_ids=target_node_ids)
     result: dict[str, object] = {
         "status": "failed",
         "expected_objects": expected,
         "actual_objects": [],
         "failures": failures,
+        "additional_or_preexisting_objects": [],
     }
     try:
         import duckdb
@@ -326,40 +307,111 @@ def verify_database_objects_direct(
         result["failures"].append("duckdb python package is not installed; direct verification skipped")
         return result
 
+    if not database_file.exists():
+        result["failures"].append(f"Database file does not exist: {database_file}")
+        return result
+
     try:
         conn = duckdb.connect(":memory:")
         if duckdb_extensions and duckdb_extensions.is_dir():
             conn.execute(f"SET extension_directory = '{duckdb_extensions}'")
 
-        if db_type == "ducklake" and data_dir:
+        if db_type == "ducklake" and data_dir and data_dir.is_dir():
             conn.execute("INSTALL ducklake; LOAD ducklake;")
             conn.execute(
-                f"ATTACH 'ducklake:{database_file}' AS ducklake (DATA_PATH '{data_dir}', OVERRIDE_DATA_PATH TRUE)"
+                f"ATTACH 'ducklake:{database_file}' AS ducklake (DATA_PATH '{data_dir}', OVERRIDE_DATA_PATH TRUE, READ_ONLY TRUE)"
             )
-            tables_query = "SELECT table_catalog, table_schema, table_name, table_type FROM ducklake.information_schema.tables"
+            cat_name = "ducklake"
         else:
             conn.execute(f"ATTACH '{database_file}' AS dbt_db (READ_ONLY)")
-            tables_query = "SELECT table_catalog, table_schema, table_name, table_type FROM dbt_db.information_schema.tables"
+            cat_name = "dbt_db"
 
+        tables_query = (
+            f"SELECT table_catalog, table_schema, table_name, table_type "
+            f"FROM information_schema.tables WHERE table_catalog = '{cat_name}'"
+        )
         rows = conn.execute(tables_query).fetchall()
-        actual = []
+
+        # Query columns
+        columns_query = (
+            f"SELECT table_schema, table_name, column_name, data_type "
+            f"FROM information_schema.columns WHERE table_catalog = '{cat_name}'"
+        )
+        cols_by_tbl: dict[tuple[str, str], list[dict[str, str]]] = {}
+        try:
+            for sch_col, tbl_col, cname, dtype in conn.execute(columns_query).fetchall():
+                cols_by_tbl.setdefault((sch_col.casefold(), tbl_col.casefold()), []).append({
+                    "name": str(cname),
+                    "data_type": str(dtype),
+                })
+        except Exception:
+            pass
+
+        actual: list[dict[str, object]] = []
         for cat, sch, name, t_type in rows:
             if sch.lower() in {"information_schema", "pg_catalog"}:
                 continue
+            cols = cols_by_tbl.get((sch.casefold(), name.casefold()), [])
             actual.append({
                 "database": cat,
                 "schema": sch,
                 "name": name,
                 "relation_type": t_type,
+                "columns": cols,
             })
             # If it's a view, verify that it can be queried without runtime errors
             if "VIEW" in t_type.upper():
                 try:
-                    conn.execute(f"SELECT * FROM {cat}.{sch}.{name} LIMIT 0")
+                    conn.execute(f'SELECT * FROM "{cat}"."{sch}"."{name}" LIMIT 0')
                 except Exception as view_err:
                     failures.append(f"View {sch}.{name} query execution failed: {view_err}")
 
         result["actual_objects"] = actual
+
+        key = lambda item: tuple(str(item.get(part, "")).casefold() for part in ("schema", "name"))
+        expected_by_key = {key(item): item for item in expected}
+        actual_by_key = {key(item): item for item in actual}
+
+        for rel_key in sorted(expected_by_key.keys() - actual_by_key.keys()):
+            item = expected_by_key[rel_key]
+            failures.append(
+                f"Missing expected {item['resource_type']} relation {item['schema']}.{item['name']}"
+            )
+
+        for rel_key in expected_by_key.keys() & actual_by_key.keys():
+            wanted = expected_by_key[rel_key]
+            found = actual_by_key[rel_key]
+            actual_type = str(found["relation_type"]).upper()
+            actual_family = "view" if "VIEW" in actual_type else "table" if "TABLE" in actual_type or actual_type == "SEED" else "unsupported"
+            if actual_family != wanted["expected_type"]:
+                failures.append(
+                    f"Wrong object type for {wanted['schema']}.{wanted['name']}: "
+                    f"expected {wanted['expected_type']}, got {found['relation_type']}"
+                )
+
+            found_columns = {str(c["name"]).casefold(): c for c in found.get("columns", [])}
+            for contract in wanted.get("columns", []):
+                col_name = str(contract["name"])
+                fc = found_columns.get(col_name.casefold())
+                if fc is None:
+                    failures.append(f"Missing declared column {wanted['schema']}.{wanted['name']}.{col_name}")
+                elif contract.get("data_type"):
+                    exp_fam = core_type_family(str(contract["data_type"]))
+                    act_fam = core_type_family(str(fc["data_type"]))
+                    if exp_fam and act_fam and exp_fam != act_fam and "custom" not in (exp_fam, act_fam):
+                        failures.append(
+                            f"Wrong data type for {wanted['schema']}.{wanted['name']}.{col_name}: "
+                            f"expected {contract['data_type']} ({exp_fam}), got {fc['data_type']} ({act_fam})"
+                        )
+
+        extra_objects = []
+        for rel_key in sorted(actual_by_key.keys() - expected_by_key.keys()):
+            item = actual_by_key[rel_key]
+            extra_objects.append(
+                f"{item['schema']}.{item['name']} ({item.get('relation_type', 'TABLE')})"
+            )
+        result["additional_or_preexisting_objects"] = extra_objects
+
         conn.close()
         result["status"] = "passed" if not failures else "failed"
     except Exception as exc:
@@ -509,69 +561,4 @@ def parse_run_results(
                 + (f": {message}" if message else f" ({node})")
             )
     return results, failures
-
-
-def parse_log_results(log_path: Path, manifest_path: Path | None = None) -> list[dict[str, object]]:
-    """Recover statuses printed before a crash prevents run_results.json."""
-    if not log_path.is_file():
-        return []
-
-    manifest_nodes: dict[str, dict[str, object]] = {}
-    if manifest_path and manifest_path.is_file():
-        try:
-            manifest_nodes = json.loads(manifest_path.read_text(encoding="utf-8")).get("nodes", {})
-        except Exception:
-            manifest_nodes = {}
-
-    ansi_escape = re.compile(r"\x1b\[[0-9;]*m")
-    event = re.compile(
-        r"^\s*\d+\s+of\s+\d+\s+(START|PASS|FAIL|ERROR|SKIP|WARN|NO-OP|OK)\s+(.*?)\s+\.{3,}\s+\[",
-        re.IGNORECASE,
-    )
-    nodes: dict[str, dict[str, object]] = {}
-    for line in log_path.read_text(encoding="utf-8", errors="replace").splitlines():
-        match = event.search(ansi_escape.sub("", line))
-        if not match:
-            continue
-        raw_status, name = match.group(1).lower(), match.group(2).strip()
-        manifest_node = manifest_nodes.get(name, {})
-        res_type = str(manifest_node.get("resource_type") or "model")
-        obj_type = str(manifest_node.get("config", {}).get("materialized") or "table")
-
-        if raw_status == "start":
-            nodes.setdefault(
-                name,
-                {
-                    "node": name,
-                    "model": str(manifest_node.get("name") or name),
-                    "resource_type": res_type,
-                    "object_type": obj_type,
-                    "database": str(manifest_node.get("database") or ""),
-                    "schema": str(manifest_node.get("schema") or ""),
-                    "relation_name": name,
-                    "status": "started",
-                    "execution_status": "started",
-                    "duration_seconds": 0.0,
-                    "message": "",
-                    "error_message": "",
-                },
-            )
-        else:
-            final_status = "success" if raw_status == "ok" else raw_status
-            is_err = final_status in {"fail", "error"}
-            nodes[name] = {
-                "node": name,
-                "model": str(manifest_node.get("name") or name),
-                "resource_type": res_type,
-                "object_type": obj_type,
-                "database": str(manifest_node.get("database") or ""),
-                "schema": str(manifest_node.get("schema") or ""),
-                "relation_name": name,
-                "status": final_status,
-                "execution_status": final_status,
-                "duration_seconds": 0.0,
-                "message": "",
-                "error_message": f"dbt node execution failed with status: {final_status}" if is_err else "",
-            }
-    return list(nodes.values())
 
