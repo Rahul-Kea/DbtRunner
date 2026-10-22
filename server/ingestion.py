@@ -19,9 +19,11 @@ def build_ducklake_from_raw_data(
     raw_data_dir: Path,
     lake_metadata_path: Path,
     lake_data_dir: Path,
-    default_schema: str = "main",
+    default_schema: str | None = None,
 ) -> list[dict[str, Any]]:
-    """Automatically ingest CSV, Parquet, and JSON files from raw_data_dir into a fresh DuckLake catalog."""
+    """Explicitly load supported files into a caller-selected schema."""
+    if not default_schema:
+        raise ValueError("A target schema must be specified for file ingestion")
     lake_data_dir.mkdir(parents=True, exist_ok=True)
     if lake_metadata_path.exists():
         lake_metadata_path.unlink()

@@ -128,11 +128,6 @@ export const TerminalLogView: React.FC<TerminalLogViewProps> = ({
       {/* Terminal Toolbar */}
       <div className="p-3 border-b border-[#30363d] bg-[#161b22] flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center space-x-3">
-          <div className="flex space-x-1.5">
-            <div className="w-3 h-3 rounded-full bg-rose-500/80" />
-            <div className="w-3 h-3 rounded-full bg-amber-500/80" />
-            <div className="w-3 h-3 rounded-full bg-emerald-500/80" />
-          </div>
           <div className="flex items-center space-x-2 text-xs font-mono text-gray-300">
             <Terminal className="w-3.5 h-3.5 text-orange-400" />
             <span>Execution Terminal Stream</span>
@@ -221,7 +216,7 @@ export const TerminalLogView: React.FC<TerminalLogViewProps> = ({
         )}
       </div>
 
-      <div className="h-[230px] shrink-0 border-t border-[#30363d] bg-[#090c10] flex flex-col font-mono text-xs">
+      <div className="h-[230px] min-h-[180px] max-h-[420px] shrink-0 resize-y overflow-auto border-t border-[#30363d] bg-[#090c10] flex flex-col font-mono text-xs">
         <div className="px-3 py-2 border-b border-[#21262d] flex items-center justify-between gap-3">
           <span className="text-gray-300">Project console</span>
           <div className="flex items-center gap-3">

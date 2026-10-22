@@ -1,14 +1,9 @@
 import React, { useRef, useState } from 'react'
 import {
   FileArchive,
-  Layers,
   CheckCircle2,
   X,
-  Play,
   AlertCircle,
-  FileSpreadsheet,
-  Plus,
-  Trash2,
   FileCode,
   GitBranch,
   Globe,
@@ -16,72 +11,31 @@ import {
 } from 'lucide-react'
 
 interface FileUploadZoneProps {
-  onStartRun: (formData: FormData) => void
+  onCompile: (formData: FormData) => void
   isLoading: boolean
 }
 
 export const FileUploadZone: React.FC<FileUploadZoneProps> = ({
-  onStartRun,
+  onCompile,
   isLoading,
 }) => {
   const [projectSource, setProjectSource] = useState<'zip' | 'git'>('zip')
   const [gitUrl, setGitUrl] = useState<string>('')
   const [gitBranch, setGitBranch] = useState<string>('')
   const [projectZip, setProjectZip] = useState<File | null>(null)
-  const [rawDataFiles, setRawDataFiles] = useState<File[]>([])
 
-  const [executionMode, setExecutionMode] = useState<'run' | 'compile'>('run')
   const [modelSelect, setModelSelect] = useState<string>('')
-  const [verifyRerun, setVerifyRerun] = useState<boolean>(true)
+  const [runTests, setRunTests] = useState<boolean>(true)
   const [dragOverZone, setDragOverZone] = useState<string | null>(null)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
   const projectInputRef = useRef<HTMLInputElement>(null)
-  const rawDataInputRef = useRef<HTMLInputElement>(null)
-
-  const formatFileSize = (bytes: number): string => {
-    if (bytes < 1024) return `${bytes} B`
-    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
-    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
-  }
-
-  const getFileIcon = (filename: string) => {
-    const ext = filename.split('.').pop()?.toLowerCase()
-    if (ext === 'parquet') return <Layers className="w-4 h-4 text-blue-400 flex-shrink-0" />
-    if (ext === 'json' || ext === 'ndjson') return <FileCode className="w-4 h-4 text-purple-400 flex-shrink-0" />
-    if (ext === 'zip') return <FileArchive className="w-4 h-4 text-orange-400 flex-shrink-0" />
-    return <FileSpreadsheet className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-  }
-
-  const handleDrop = (
-    e: React.DragEvent<HTMLDivElement>,
-    zone: 'project' | 'raw_data'
-  ) => {
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault()
     setDragOverZone(null)
     setErrorMessage(null)
 
-    if (zone === 'raw_data') {
-      if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-        const supported = ['zip', 'csv', 'tsv', 'parquet', 'json', 'ndjson']
-        const added: File[] = []
-        for (let i = 0; i < e.dataTransfer.files.length; i++) {
-          const f = e.dataTransfer.files[i]
-          const ext = f.name.split('.').pop()?.toLowerCase() || ''
-          if (supported.includes(ext)) {
-            added.push(f)
-          }
-        }
-        if (added.length === 0) {
-          setErrorMessage('None of the dropped files are supported data files (.csv, .parquet, .json, .zip)')
-          return
-        }
-        setRawDataFiles((prev) => {
-          const existing = new Set(prev.map((f) => f.name))
-          return [...prev, ...added.filter((f) => !existing.has(f.name))]
-        })
-      }
-    } else if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
       const file = e.dataTransfer.files[0]
       const ext = file.name.split('.').pop()?.toLowerCase() || ''
       if (ext !== 'zip') {
@@ -92,45 +46,17 @@ export const FileUploadZone: React.FC<FileUploadZoneProps> = ({
     }
   }
 
-  const handleRawFilesSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      const supported = ['zip', 'csv', 'tsv', 'parquet', 'json', 'ndjson']
-      const added: File[] = []
-      for (let i = 0; i < e.target.files.length; i++) {
-        const f = e.target.files[i]
-        const ext = f.name.split('.').pop()?.toLowerCase() || ''
-        if (supported.includes(ext)) {
-          added.push(f)
-        }
-      }
-      if (added.length === 0) {
-        setErrorMessage('None of the selected files are supported data files (.csv, .parquet, .json, .zip)')
-        return
-      }
-      setRawDataFiles((prev) => {
-        const existing = new Set(prev.map((f) => f.name))
-        return [...prev, ...added.filter((f) => !existing.has(f.name))]
-      })
-      setErrorMessage(null)
-      e.target.value = ''
-    }
-  }
-
-  const removeRawFile = (filename: string) => {
-    setRawDataFiles((prev) => prev.filter((f) => f.name !== filename))
-  }
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     const data = new FormData()
-    data.append('verify_rerun', verifyRerun.toString())
-    data.append('compile_only', (executionMode === 'compile').toString())
-    data.append('execution_mode', executionMode)
+    data.append('verify_rerun', 'false')
+    data.append('compile_only', 'true')
+    data.append('execution_mode', 'compile')
     data.append('full_refresh', 'false')
+    data.append('run_tests', String(runTests))
     if (modelSelect.trim()) {
       data.append('select', modelSelect.trim())
     }
-
     if (projectSource === 'zip') {
       if (!projectZip) {
         setErrorMessage('Please upload your dbt project (.zip).')
@@ -148,19 +74,7 @@ export const FileUploadZone: React.FC<FileUploadZoneProps> = ({
       }
     }
 
-    if (rawDataFiles.length > 0) {
-      rawDataFiles.forEach((file) => {
-        data.append('raw_data_files', file)
-      })
-    }
-
-    onStartRun(data)
-  }
-
-  const getSubmitButtonLabel = () => {
-    if (isLoading) return 'Running...'
-    if (executionMode === 'compile') return 'Compile Models (Dry Run)'
-    return 'Run Pipeline (dbt run)'
+    onCompile(data)
   }
 
   return (
@@ -168,10 +82,10 @@ export const FileUploadZone: React.FC<FileUploadZoneProps> = ({
       {/* Title */}
       <div className="text-center mb-6">
         <h2 className="text-2xl font-bold text-white tracking-tight">
-          Run dbt Project
+          Compile dbt Project
         </h2>
         <p className="mt-1 text-sm text-gray-400 max-w-lg mx-auto">
-          Upload a dbt project or provide a Git URL. Optionally add raw data files.
+          Upload a dbt project or provide a Git URL, then compile it in an isolated sandbox.
         </p>
       </div>
 
@@ -183,7 +97,7 @@ export const FileUploadZone: React.FC<FileUploadZoneProps> = ({
       )}
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-6">
           {/* 1. dbt Project Source (Zip or Git) */}
           <div
             className={`relative rounded-2xl border p-5 transition-all flex flex-col justify-between min-h-[300px] ${
@@ -204,11 +118,7 @@ export const FileUploadZone: React.FC<FileUploadZoneProps> = ({
               }
             }}
             onDragLeave={() => setDragOverZone(null)}
-            onDrop={(e) => {
-              if (projectSource === 'zip') {
-                handleDrop(e, 'project')
-              }
-            }}
+            onDrop={(e) => projectSource === 'zip' && handleDrop(e)}
           >
             {/* Header with Source Toggle Tabs */}
             <div className="flex items-center justify-between w-full mb-3">
@@ -342,165 +252,23 @@ export const FileUploadZone: React.FC<FileUploadZoneProps> = ({
             )}
           </div>
 
-          {/* 2. Raw Data Files Area */}
-          <div
-            onDragOver={(e) => {
-              e.preventDefault()
-              setDragOverZone('raw_data')
-            }}
-            onDragLeave={() => setDragOverZone(null)}
-            onDrop={(e) => handleDrop(e, 'raw_data')}
-            onClick={() => rawDataInputRef.current?.click()}
-            className={`relative rounded-2xl border p-5 transition-all flex flex-col justify-between min-h-[300px] cursor-pointer ${
-              rawDataFiles.length > 0
-                ? 'border-emerald-500/50 bg-emerald-950/10'
-                : dragOverZone === 'raw_data'
-                ? 'border-orange-500 bg-orange-950/20'
-                : 'border-[#30363d] bg-[#161b22]'
-            }`}
-          >
-            <input
-              ref={rawDataInputRef}
-              type="file"
-              multiple
-              accept=".zip,.csv,.tsv,.parquet,.json,.ndjson"
-              className="hidden"
-              onChange={handleRawFilesSelected}
-            />
-
-            <div>
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-xs font-bold text-gray-300 uppercase tracking-wider">
-                  2. Raw Data (Optional)
-                </span>
-                {rawDataFiles.length > 0 && (
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                    {rawDataFiles.length} {rawDataFiles.length === 1 ? 'file' : 'files'}
-                  </span>
-                )}
-              </div>
-
-              <div className="flex flex-col items-center justify-center py-2 text-center">
-                <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 mb-2">
-                  <FileSpreadsheet className="w-5 h-5" />
-                </div>
-                <span className="text-xs font-medium text-white">
-                  Add CSV, Parquet, or JSON files
-                </span>
-                <span className="text-[11px] text-gray-500 mt-0.5 max-w-xs">
-                  Leave empty if your project contains seeds or when running a dry run
-                </span>
-              </div>
-            </div>
-
-            {rawDataFiles.length > 0 ? (
-              <div
-                className="mt-2 w-full space-y-1.5 max-h-32 overflow-y-auto pr-1"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <div className="flex items-center justify-between text-[11px] text-gray-400 pb-1 border-b border-[#30363d]/50">
-                  <span className="font-medium">Files to Load:</span>
-                  <div className="flex items-center space-x-2">
-                    <button
-                      type="button"
-                      onClick={() => rawDataInputRef.current?.click()}
-                      className="text-orange-400 hover:text-orange-300 font-semibold flex items-center space-x-0.5 text-[11px]"
-                    >
-                      <Plus className="w-3 h-3" />
-                      <span>Add</span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setRawDataFiles([])}
-                      className="text-gray-500 hover:text-rose-400 transition-colors"
-                      title="Clear all"
-                    >
-                      <Trash2 className="w-3 h-3" />
-                    </button>
-                  </div>
-                </div>
-
-                {rawDataFiles.map((f) => (
-                  <div
-                    key={f.name}
-                    className="p-1.5 rounded-lg bg-[#0d1117] border border-[#30363d] flex items-center justify-between gap-2"
-                  >
-                    <div className="flex items-center space-x-2 truncate">
-                      {getFileIcon(f.name)}
-                      <div className="flex flex-col text-left truncate">
-                        <span className="text-xs text-gray-200 truncate font-mono">
-                          {f.name}
-                        </span>
-                        <span className="text-[10px] text-gray-400 font-mono">
-                          {formatFileSize(f.size)}
-                        </span>
-                      </div>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => removeRawFile(f.name)}
-                      className="text-gray-500 hover:text-white p-1 flex-shrink-0"
-                    >
-                      <X className="w-3 h-3" />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center text-[11px] text-gray-500 py-2">
-                Click or drag data files here
-              </div>
-            )}
-          </div>
         </div>
 
-        {/* 2. Execution Options & Model Selection */}
+        {/* 2. Compile Scope */}
         <div className="p-5 rounded-2xl bg-[#161b22] border border-[#30363d] space-y-4">
           <div className="flex items-center justify-between border-b border-[#30363d]/60 pb-3">
             <span className="text-xs font-bold text-gray-300 uppercase tracking-wider">
-              2. Execution Options & Scope
+              2. Compile Scope
             </span>
           </div>
 
-          {/* Mode Selector */}
-          <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-gray-300">Command / Mode</label>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <button
-                type="button"
-                onClick={() => setExecutionMode('run')}
-                className={`flex flex-col items-start p-3.5 rounded-xl border text-left transition-all ${
-                  executionMode === 'run'
-                    ? 'border-orange-500 bg-orange-500/10 text-white shadow-sm ring-1 ring-orange-500/30'
-                    : 'border-[#30363d] bg-[#0d1117] text-gray-400 hover:text-gray-200 hover:border-gray-600'
-                }`}
-              >
-                <div className="flex items-center space-x-2 text-xs font-bold">
-                  <Play className="w-4 h-4 text-orange-400" />
-                  <span>dbt run</span>
-                </div>
-                <span className="text-[11px] text-gray-400 mt-1">
-                  Materialize models, seeds & snapshots in the sandbox
-                </span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setExecutionMode('compile')}
-                className={`flex flex-col items-start p-3.5 rounded-xl border text-left transition-all ${
-                  executionMode === 'compile'
-                    ? 'border-orange-500 bg-orange-500/10 text-white shadow-sm ring-1 ring-orange-500/30'
-                    : 'border-[#30363d] bg-[#0d1117] text-gray-400 hover:text-gray-200 hover:border-gray-600'
-                }`}
-              >
-                <div className="flex items-center space-x-2 text-xs font-bold">
-                  <FileCode className="w-4 h-4 text-blue-400" />
-                  <span>dbt compile (Dry Run)</span>
-                </div>
-                <span className="text-[11px] text-gray-400 mt-1">
-                  Compile SQL, validate DAG & references (no DB writes)
-                </span>
-              </button>
+          <div className="flex items-center gap-3 rounded-xl border border-[#30363d] bg-[#0d1117] p-3.5">
+            <FileCode className="h-4 w-4 shrink-0 text-blue-400" />
+            <div>
+              <div className="text-xs font-bold text-gray-200">dbt compile · Dry run</div>
+              <div className="mt-1 text-[11px] text-gray-400">
+                Compile SQL and validate the DAG and references. Run dbt commands from the project console when needed.
+              </div>
             </div>
           </div>
 
@@ -510,7 +278,7 @@ export const FileUploadZone: React.FC<FileUploadZoneProps> = ({
               <label className="text-xs font-semibold text-gray-300">
                 Model Selection <span className="font-mono text-gray-500 font-normal">(--select / -s)</span>
               </label>
-              <span className="text-[10px] text-gray-500">Optional: leave empty to run entire project</span>
+              <span className="text-[10px] text-gray-500">Optional: leave empty to compile the entire project</span>
             </div>
             <div className="relative">
               <Search className="w-4 h-4 absolute left-3 top-2.5 text-gray-500" />
@@ -546,30 +314,14 @@ export const FileUploadZone: React.FC<FileUploadZoneProps> = ({
             </div>
           </div>
 
-          {/* Flags (Rerun Verification) */}
-          <div className="flex flex-wrap items-center gap-6 pt-2 border-t border-[#30363d]/40">
-
-            {executionMode !== 'compile' && (
-              <label className="flex items-start space-x-2.5 cursor-pointer select-none">
-                <input
-                  type="checkbox"
-                  checked={verifyRerun}
-                  onChange={(e) => setVerifyRerun(e.target.checked)}
-                  className="rounded border-[#30363d] text-orange-500 focus:ring-0 bg-[#0d1117] w-4 h-4 mt-0.5"
-                />
-                <div className="flex flex-col">
-                  <span className="text-xs text-gray-200 font-medium">
-                    Verify Idempotency
-                  </span>
-                  <span className="text-[10px] text-gray-500">Automated rerun to ensure repeated executions are safe</span>
-                </div>
-              </label>
-            )}
-          </div>
         </div>
 
         {/* Submit Action Bar */}
-        <div className="flex items-center justify-end pt-2">
+        <div className="flex items-center justify-between pt-2">
+          <label className="flex items-center gap-2 text-xs text-gray-300">
+            <input type="checkbox" checked={runTests} onChange={(event) => setRunTests(event.target.checked)} />
+            Run dbt tests after model execution
+          </label>
           <button
             type="submit"
             disabled={
@@ -579,8 +331,8 @@ export const FileUploadZone: React.FC<FileUploadZoneProps> = ({
             }
             className="flex items-center space-x-2 px-8 py-3 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-orange-500/20"
           >
-            <Play className="w-4 h-4 fill-current" />
-            <span>{getSubmitButtonLabel()}</span>
+            <FileCode className="w-4 h-4" />
+            <span>{isLoading ? 'Compiling…' : 'Compile Models'}</span>
           </button>
         </div>
       </form>

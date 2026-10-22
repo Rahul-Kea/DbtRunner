@@ -8,6 +8,7 @@ interface AppContainer {
   status: string
   created: string
   run_id: string
+  session_id: string
 }
 
 interface ContainerPanelProps {
@@ -46,14 +47,14 @@ export const ContainerPanel: React.FC<ContainerPanelProps> = ({
   }, [isOpen, refreshContainers])
 
   const destroyContainer = async (container: AppContainer) => {
-    let shellToken: string | null = null
+    let sessionToken: string | null = null
     try {
-      shellToken = sessionStorage.getItem(`dbt-runner-shell:${container.run_id}`)
+      sessionToken = sessionStorage.getItem(`dbt-runner-session:${container.session_id}`)
     } catch {
       // Without the run token, the API will reject the destructive request.
     }
-    if (!shellToken) {
-      setError(`No console access token is available for run ${container.run_id}.`)
+    if (!sessionToken) {
+      setError(`No active project session token is available for ${container.session_id}.`)
       return
     }
     setRemovingId(container.container_id)
@@ -62,7 +63,7 @@ export const ContainerPanel: React.FC<ContainerPanelProps> = ({
       const response = await fetch(`/api/containers/${encodeURIComponent(container.container_id)}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ shell_token: shellToken }),
+        body: JSON.stringify({ session_token: sessionToken }),
       })
       const data = await response.json()
       if (!response.ok) throw new Error(data.detail || 'Could not destroy container')

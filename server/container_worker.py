@@ -30,6 +30,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--execution-mode", choices=("run", "compile"), default="run")
     parser.add_argument("--full-refresh", action="store_true")
     parser.add_argument("--select")
+    parser.add_argument("--run-config", type=Path)
     return parser.parse_args()
 
 
@@ -46,7 +47,7 @@ def main() -> None:
 
     try:
         config = replace(
-            load_config(),
+            load_config(path=args.run_config, project_dir=args.project_dir),
             run_logs_dir=log_dir,
             verify_rerun=args.verify_rerun,
             compile_only=args.compile_only or args.execution_mode == "compile",
@@ -63,7 +64,7 @@ def main() -> None:
             run_id=args.run_id,
             sandbox_dir=args.sandbox_dir,
         )
-        exit_code = 0 if report.overall_status == "passed" else 1
+        exit_code = 0 if report.overall_status in {"passed", "needs_configuration"} else 1
     except Exception as exc:
         report = RunReport(
             run_id=args.run_id,
@@ -88,9 +89,8 @@ def main() -> None:
     finally:
         exit_path.write_text(json.dumps({"exit_code": exit_code}), encoding="utf-8")
 
-    # Keep this run container available for its interactive console without
-    # retaining the Python/dbt process and its memory after execution.
-    os.execl("/bin/sleep", "sleep", "infinity")
+    # The session container's PID 1 is an idle shell process. This worker is
+    # invoked with `docker exec`, so it must exit to release its run resources.
 
 
 if __name__ == "__main__":

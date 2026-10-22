@@ -19,11 +19,6 @@ def validate_project_directory(project_dir: Path) -> str | None:
         return f"Project directory does not exist: {project_dir}"
     if not (project_dir / "dbt_project.yml").is_file():
         return f"No dbt_project.yml found in {project_dir}"
-    models_dir = project_dir / "models"
-    if not models_dir.is_dir():
-        return f"No models/ directory found in {project_dir}"
-    if not any(path.is_file() and path.suffix.lower() == ".sql" for path in models_dir.rglob("*")):
-        return f"No SQL model found under {models_dir}; add at least one .sql model, including in a nested folder if needed"
     return None
 
 
@@ -72,10 +67,66 @@ def write_profile(
     data_dir: Path | None,
     metadata: Path,
     duckdb_extensions: Path,
-    db_type: str = "ducklake",
-    default_schema: str = "main",
+    db_type: str,
+    default_schema: str | None = None,
+    target_database: str | None = None,
+    attachments: list[dict[str, object]] | tuple[dict[str, object], ...] | None = None,
+    catalog_mappings: dict[str, str] | None = None,
 ) -> None:
+    if not default_schema:
+        raise ValueError("A target schema must be resolved from the project profile or explicit run configuration")
+    attached_aliases: set[str] = set()
+    extra_attach_entries: list[list[str]] = []
+
+    # 1. Process explicit user-supplied attachments
+    if attachments:
+        for att in attachments:
+            alias = str(att.get("alias") or "").strip()
+            att_path = str(att.get("path") or ":memory:").strip()
+            if alias and alias not in attached_aliases:
+                attached_aliases.add(alias)
+                lines = [
+                    f"        - path: {yaml_quote(att_path)}",
+                    f"          alias: {alias}",
+                ]
+                if att.get("read_only"):
+                    lines.append("          read_only: true")
+                if att.get("options") and isinstance(att["options"], dict):
+                    lines.append("          options:")
+                    for opt_k, opt_v in att["options"].items():
+                        lines.append(f"            {opt_k}: {yaml_quote(str(opt_v))}")
+                extra_attach_entries.append(lines)
+
+    # 2. Process catalog mappings: provision in-memory databases for unattached mapped catalogs
+    if catalog_mappings:
+        for src_cat in catalog_mappings.keys():
+            clean_src = str(src_cat).strip()
+            if clean_src and clean_src not in attached_aliases:
+                attached_aliases.add(clean_src)
+                extra_attach_entries.append([
+                    f"        - path: \":memory:\"",
+                    f"          alias: {clean_src}",
+                ])
+
     if db_type == "ducklake" and data_dir is not None:
+        primary_alias = target_database or metadata.stem
+        active_db = target_database or metadata.stem
+        attached_aliases.add(primary_alias)
+
+        attach_block = [
+            "      attach:",
+            f"        - path: {yaml_quote('ducklake:' + str(metadata))}",
+            f"          alias: {primary_alias}",
+            "          options:",
+            f"            data_path: {yaml_quote(str(data_dir))}",
+            "            override_data_path: true",
+        ]
+        for lines in extra_attach_entries:
+            # Avoid re-attaching primary alias
+            if any(f"alias: {primary_alias}" in l for l in lines):
+                continue
+            attach_block.extend(lines)
+
         content = [
             f"{profile_name}:",
             "  target: runner",
@@ -83,21 +134,46 @@ def write_profile(
             "    runner:",
             "      type: duckdb",
             '      path: ":memory:"',
-            "      database: ducklake",
+            f"      database: {active_db}",
             f"      schema: {default_schema}",
             "      config_options:",
             f"        extension_directory: {yaml_quote(str(duckdb_extensions))}",
             "      extensions:",
             "        - ducklake",
+            *attach_block,
+            "",
+        ]
+    elif extra_attach_entries or target_database:
+        primary_alias = target_database or metadata.stem
+        active_db = target_database or primary_alias
+        attached_aliases.add(primary_alias)
+
+        attach_block = [
             "      attach:",
-            f"        - path: {yaml_quote('ducklake:' + str(metadata))}",
-            "          alias: ducklake",
-            "          options:",
-            f"            data_path: {yaml_quote(str(data_dir))}",
-            "            override_data_path: true",
+            f"        - path: {yaml_quote(str(metadata))}",
+            f"          alias: {primary_alias}",
+        ]
+        for lines in extra_attach_entries:
+            if any(f"alias: {primary_alias}" in l for l in lines):
+                continue
+            attach_block.extend(lines)
+
+        content = [
+            f"{profile_name}:",
+            "  target: runner",
+            "  outputs:",
+            "    runner:",
+            "      type: duckdb",
+            '      path: ":memory:"',
+            f"      database: {active_db}",
+            f"      schema: {default_schema}",
+            "      config_options:",
+            f"        extension_directory: {yaml_quote(str(duckdb_extensions))}",
+            *attach_block,
             "",
         ]
     else:
+        # Default single-file DuckDB output (full backward compatibility)
         content = [
             f"{profile_name}:",
             "  target: runner",
@@ -161,6 +237,12 @@ def copy_project_to_sandbox(
     source_data_dir: Path | None,
     source_metadata: Path,
 ) -> None:
+    for candidate in project.rglob("*"):
+        if candidate.is_symlink():
+            try:
+                candidate.resolve(strict=True).relative_to(project.resolve())
+            except (OSError, ValueError) as exc:
+                raise ValueError(f"Project symlink escapes the project workspace: {candidate.relative_to(project)}") from exc
     ignored_root_items = {".git", ".venv", "venv", "target", "dbt_packages", "logs", "run_logs"}
     source_data_dir = source_data_dir.resolve() if source_data_dir else None
     source_metadata = source_metadata.resolve()

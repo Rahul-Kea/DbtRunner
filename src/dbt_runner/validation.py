@@ -284,6 +284,42 @@ def validate_catalog(
     return result
 
 
+def validate_project_prerequisites(
+    manifest_path: Path,
+    database_file: Path,
+    db_type: str = "duckdb",
+    data_dir: Path | None = None,
+    duckdb_extensions: Path | None = None,
+    primary_database: str | None = None,
+    attachments: list[dict[str, object]] | tuple[dict[str, object], ...] | None = None,
+    catalog_mappings: dict[str, str] | None = None,
+    schema_mappings: dict[str, str] | None = None,
+    has_seeds: bool = False,
+    is_compile: bool = False,
+) -> dict[str, object]:
+    """Compatibility wrapper around dbt manifest and adapter catalog validation."""
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        return {"status": "failed", "failures": [f"Could not read dbt manifest: {exc}"], "snapshots_depend_on_models": False}
+    parent_map = manifest.get("parent_map", {})
+    nodes = manifest.get("nodes", {})
+    snapshots_depend_on_models = any(
+        node.get("resource_type") == "snapshot"
+        and any(str(parent).startswith("model.") for parent in parent_map.get(node_id, []))
+        for node_id, node in nodes.items()
+    )
+    if has_seeds and not is_compile:
+        return {"status": "passed", "failures": [], "snapshots_depend_on_models": snapshots_depend_on_models, "source_validation_deferred": True}
+    from .relations import RelationValidator
+    result = RelationValidator().validate(manifest_path, database_file, db_type, data_dir, primary_database, attachments or ())
+    return {
+        "status": result["status"], "failures": result["failures"],
+        "snapshots_depend_on_models": snapshots_depend_on_models,
+        "source_relation_validation": result,
+    }
+
+
 def verify_database_objects_direct(
     database_file: Path,
     manifest_path: Path,
@@ -291,6 +327,9 @@ def verify_database_objects_direct(
     data_dir: Path | None = None,
     duckdb_extensions: Path | None = None,
     target_node_ids: set[str] | None = None,
+    primary_database: str | None = None,
+    attachments: list[dict[str, object]] | tuple[dict[str, object], ...] | None = None,
+    catalog_mappings: dict[str, str] | None = None,
 ) -> dict[str, object]:
     """Connect directly to DuckDB to verify physical objects and test view query execution."""
     expected, failures = expected_relations(manifest_path, target_node_ids=target_node_ids)
@@ -316,26 +355,44 @@ def verify_database_objects_direct(
         if duckdb_extensions and duckdb_extensions.is_dir():
             conn.execute(f"SET extension_directory = '{duckdb_extensions}'")
 
+        primary_cat = primary_database or database_file.stem
+
         if db_type == "ducklake" and data_dir and data_dir.is_dir():
             conn.execute("INSTALL ducklake; LOAD ducklake;")
             conn.execute(
-                f"ATTACH 'ducklake:{database_file}' AS ducklake (DATA_PATH '{data_dir}', OVERRIDE_DATA_PATH TRUE, READ_ONLY TRUE)"
+                f"ATTACH 'ducklake:{database_file}' AS \"{primary_cat}\" (DATA_PATH '{data_dir}', OVERRIDE_DATA_PATH TRUE, READ_ONLY TRUE)"
             )
-            cat_name = "ducklake"
-        else:
-            conn.execute(f"ATTACH '{database_file}' AS dbt_db (READ_ONLY)")
-            cat_name = "dbt_db"
+        elif database_file.is_file() and database_file.stat().st_size > 0:
+            conn.execute(f"ATTACH '{database_file}' AS \"{primary_cat}\" (READ_ONLY)")
+
+        if attachments:
+            for att in attachments:
+                alias = str(att.get("alias") or "").strip()
+                p = str(att.get("path") or ":memory:").strip()
+                if alias and alias.casefold() != primary_cat.casefold():
+                    try:
+                        conn.execute(f"ATTACH '{p}' AS \"{alias}\"")
+                    except Exception:
+                        pass
+
+        if catalog_mappings:
+            for src_cat in catalog_mappings.keys():
+                clean_src = str(src_cat).strip()
+                if clean_src and clean_src.casefold() != primary_cat.casefold():
+                    try:
+                        conn.execute(f"ATTACH ':memory:' AS \"{clean_src}\"")
+                    except Exception:
+                        pass
 
         tables_query = (
-            f"SELECT table_catalog, table_schema, table_name, table_type "
-            f"FROM information_schema.tables WHERE table_catalog = '{cat_name}'"
+            "SELECT table_catalog, table_schema, table_name, table_type "
+            "FROM information_schema.tables WHERE table_schema NOT IN ('information_schema', 'pg_catalog')"
         )
         rows = conn.execute(tables_query).fetchall()
 
-        # Query columns
         columns_query = (
-            f"SELECT table_schema, table_name, column_name, data_type "
-            f"FROM information_schema.columns WHERE table_catalog = '{cat_name}'"
+            "SELECT table_schema, table_name, column_name, data_type "
+            "FROM information_schema.columns WHERE table_schema NOT IN ('information_schema', 'pg_catalog')"
         )
         cols_by_tbl: dict[tuple[str, str], list[dict[str, str]]] = {}
         try:
@@ -359,7 +416,6 @@ def verify_database_objects_direct(
                 "relation_type": t_type,
                 "columns": cols,
             })
-            # If it's a view, verify that it can be queried without runtime errors
             if "VIEW" in t_type.upper():
                 try:
                     conn.execute(f'SELECT * FROM "{cat}"."{sch}"."{name}" LIMIT 0')
@@ -428,6 +484,9 @@ def enrich_objects_with_samples(
     data_dir: Path | None = None,
     duckdb_extensions: Path | None = None,
     sample_limit: int = 15,
+    primary_database: str | None = None,
+    attachments: list[dict[str, object]] | tuple[dict[str, object], ...] | None = None,
+    catalog_mappings: dict[str, str] | None = None,
 ) -> None:
     """Connect to database and attach row count and sample rows to each actual object."""
     try:
@@ -443,32 +502,52 @@ def enrich_objects_with_samples(
         if duckdb_extensions and duckdb_extensions.is_dir():
             conn.execute(f"SET extension_directory = '{duckdb_extensions}'")
 
+        primary_cat = primary_database or database_file.stem
+
         if db_type == "ducklake" and data_dir and data_dir.is_dir():
             conn.execute("INSTALL ducklake; LOAD ducklake;")
             conn.execute(
-                f"ATTACH 'ducklake:{database_file}' AS ducklake (DATA_PATH '{data_dir}', OVERRIDE_DATA_PATH TRUE, READ_ONLY TRUE)"
+                f"ATTACH 'ducklake:{database_file}' AS \"{primary_cat}\" (DATA_PATH '{data_dir}', OVERRIDE_DATA_PATH TRUE, READ_ONLY TRUE)"
             )
-            cat_name = "ducklake"
-        else:
-            conn.execute(f"ATTACH '{database_file}' AS dbt_db (READ_ONLY)")
-            cat_name = "dbt_db"
+        elif database_file.is_file() and database_file.stat().st_size > 0:
+            conn.execute(f"ATTACH '{database_file}' AS \"{primary_cat}\" (READ_ONLY)")
+
+        if attachments:
+            for att in attachments:
+                alias = str(att.get("alias") or "").strip()
+                p = str(att.get("path") or ":memory:").strip()
+                if alias and alias.casefold() != primary_cat.casefold():
+                    try:
+                        conn.execute(f"ATTACH '{p}' AS \"{alias}\"")
+                    except Exception:
+                        pass
+
+        if catalog_mappings:
+            for src_cat in catalog_mappings.keys():
+                clean_src = str(src_cat).strip()
+                if clean_src and clean_src.casefold() != primary_cat.casefold():
+                    try:
+                        conn.execute(f"ATTACH ':memory:' AS \"{clean_src}\"")
+                    except Exception:
+                        pass
 
         for obj in actual_objects:
-            sch = str(obj.get("schema") or "main")
+            cat = str(obj.get("database") or primary_cat)
+            sch = str(obj.get("schema") or "")
             name = str(obj.get("name") or "")
-            if not name:
+            if not name or not sch:
                 continue
 
             # 1. Total row count
             try:
-                cnt_row = conn.execute(f'SELECT COUNT(*) FROM "{cat_name}"."{sch}"."{name}"').fetchone()
+                cnt_row = conn.execute(f'SELECT COUNT(*) FROM "{cat}"."{sch}"."{name}"').fetchone()
                 obj["row_count"] = cnt_row[0] if cnt_row else 0
             except Exception:
                 obj["row_count"] = None
 
             # 2. Sample rows
             try:
-                cur = conn.execute(f'SELECT * FROM "{cat_name}"."{sch}"."{name}" LIMIT {sample_limit}')
+                cur = conn.execute(f'SELECT * FROM "{cat}"."{sch}"."{name}" LIMIT {sample_limit}')
                 columns = [desc[0] for desc in cur.description] if cur.description else []
                 obj["sample_columns"] = columns
                 raw_rows = cur.fetchall()
@@ -562,3 +641,34 @@ def parse_run_results(
             )
     return results, failures
 
+
+def discover_incremental_models(manifest_path: Path) -> list[dict[str, object]]:
+    """Inspect dbt project manifest to discover all models configured with materialized='incremental'."""
+    if not manifest_path.is_file():
+        return []
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return []
+
+    incremental: list[dict[str, object]] = []
+    for unique_id, node in manifest.get("nodes", {}).items():
+        if node.get("resource_type") != "model":
+            continue
+        materialized = str(node.get("config", {}).get("materialized") or "").lower()
+        if materialized == "incremental":
+            name = str(node.get("name") or node.get("alias") or unique_id)
+            alias = str(node.get("alias") or name)
+            incremental.append({
+                "unique_id": unique_id,
+                "name": name,
+                "alias": alias,
+                "database": str(node.get("database") or ""),
+                "schema": str(node.get("schema") or ""),
+                "materialized": "incremental",
+                "description": str(node.get("description") or ""),
+                "package_name": str(node.get("package_name") or ""),
+            })
+
+    incremental.sort(key=lambda m: str(m.get("name") or ""))
+    return incremental

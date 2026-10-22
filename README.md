@@ -32,34 +32,29 @@ Open [http://localhost:8000](http://localhost:8000) in your browser.
 
 ### Interactive shell
 
-Each web run executes inside its own Docker container. The first run builds the execution image;
-Docker Engine must be installed and running. The uploaded run inputs are mounted read-only, while
-the run's sandbox workspace and its log/report files are the only writable host mounts. The
-container has no network, drops Linux capabilities, runs as the web server's unprivileged UID,
-and has CPU, memory, process, and file-size limits.
+Each active project page owns one Docker session container. Resumes, model runs, and refreshes
+reuse that container, while each execution receives a separate sandbox under
+`container_runs/<session>/runs/<run-id>/`. Uploaded inputs are mounted read-only; the session
+workspace and log/report files are the writable host mounts. The container has no network, drops
+Linux capabilities, runs as the web server's unprivileged UID, and has CPU, memory, process, and
+file-size limits.
 
-The Terminal tab opens Bash inside that same run container and at the project copy used by dbt.
-Its commands share the run's sandbox database and files. The container stays available while the
-web server process is running. After a run finishes, **Destroy container** stops and removes it;
-remaining containers are removed when the server shuts down. The per-run workspace remains under
-`container_runs/` so reports and table previews can use the completed sandbox results. Project
-packages that require internet access (`dbt deps`) need to be included in the project workspace;
-the run container has networking disabled.
+The Terminal tab opens Bash in the current run's project copy inside the shared session container.
+Leaving the project page removes the container; a 90-second heartbeat lease handles browser
+crashes or lost unload requests. Reports and per-run sandbox files remain under `container_runs/`
+for history and previews. Project packages that require internet access (`dbt deps`) need to be
+included in the project workspace because the run container has networking disabled.
 The **Containers** panel lists containers managed by this app, including stopped ones, and lets
-you stop and remove them. Destruction requires that run's console token in the current browser
+you end a project session. Destruction requires that session's token in the current browser
 session.
 
 From the web UI, the user can provide:
 1. **dbt Project Source**: Either upload a `.zip` archive or paste a **Git Repository URL** (cloned with shallow `--depth 1` automatically).
-2. **Raw Data Files (`.zip`, `.csv`, `.parquet`, or `.json`)**: The raw business data files (optional if project includes `seeds/`).
+2. **Optional source files** (`.zip`, `.csv`, `.parquet`, `.json`, or `.sql`): retained as candidate inputs for explicit mapping or approval.
 
-**The Application Automatically**:
-- Initializes an isolated **DuckLake** catalog metadata store.
-- Ingests raw data files into partitioned **Parquet** tables on the fly.
-- Configures profiles and connects the lakehouse.
-- Runs DAG validation, compiles models, seeds, snapshots, and tests.
-- Verifies physical catalog schemas and ensures repeated execution (rerun) idempotency.
-- Streams live terminal logs and metrics in real-time.
+Each run reports five pipeline stages: project discovery, environment readiness, source preparation, compilation and relation validation, and model execution. dbt seed CSVs run through `dbt seed`; other files are not loaded unless an explicit mapping supplies their target database, schema, and table. Setup SQL is never run without an explicit ordered approval policy. Source relations are checked against the exact locations in dbt's generated manifest; the runner does not rewrite project files or create compatibility views.
+
+DuckDB and DuckLake are supported by the built-in adapter plugin. Other dbt adapters are reported as requiring an adapter plugin. Target schema and database values are resolved from the selected dbt profile or run configuration; the runner does not assume a schema name.
 
 *(Advanced users who already have pre-built `.ducklake` catalogs can switch to Legacy Mode directly from the UI).*
 

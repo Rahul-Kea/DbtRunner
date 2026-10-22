@@ -18,6 +18,7 @@ interface RunStatusBarProps {
   isStreaming: boolean
   onTriggerRun?: (runId: string) => void
   onTriggerFullRefresh?: (runId: string) => void
+  onOpenIncrementalSelector?: () => void
   isTriggeringAction?: boolean
 }
 
@@ -28,6 +29,7 @@ export const RunStatusBar: React.FC<RunStatusBarProps> = ({
   isStreaming,
   onTriggerRun,
   onTriggerFullRefresh,
+  onOpenIncrementalSelector,
   isTriggeringAction,
 }) => {
   if (!report) return null
@@ -112,36 +114,45 @@ export const RunStatusBar: React.FC<RunStatusBarProps> = ({
         </div>
 
         <div className="flex items-center space-x-2 flex-wrap gap-y-2">
-          {/* Action: Run Pipeline (dbt run) if previous run was a compile / DAG run */}
-          {!isRunning && (report.execution_mode === 'compile' || report.execution_mode === 'compile_only') && onTriggerRun && (
+          {/* Action: Run Pipeline (dbt run) if previous run was compile and succeeded */}
+          {!isRunning && (report.execution_mode === 'compile' || report.execution_mode === 'compile_only') && isPassed && onTriggerRun && (
             <button
               type="button"
               onClick={() => onTriggerRun(report.run_id)}
               disabled={isTriggeringAction}
-              className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-orange-500 hover:bg-orange-600 text-white transition-all shadow-sm disabled:opacity-50"
-              title="Execute dbt run on this validated project"
+              className="flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-orange-500 hover:bg-orange-600 text-white transition-all shadow-md shadow-orange-900/20 disabled:opacity-50"
+              title="Compilation succeeded! Execute dbt run on this validated project"
             >
               <Play className="w-3.5 h-3.5 fill-current" />
-              <span>Run Pipeline (dbt run)</span>
+              <span>Run Project (dbt run)</span>
             </button>
           )}
 
-          {/* Action: Run Full Refresh on database matching earlier run mode */}
-          {!isRunning && onTriggerFullRefresh && (
+          {/* Action: Select Models for Full Refresh (available after successful dbt run) */}
+          {!isRunning && report.execution_mode === 'run' && isPassed && onOpenIncrementalSelector && (
+            <button
+              type="button"
+              onClick={onOpenIncrementalSelector}
+              disabled={isTriggeringAction}
+              className="flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white transition-all shadow-md shadow-orange-900/20 disabled:opacity-50"
+              title="Select specific incremental models for a full refresh run"
+            >
+              <Layers className="w-3.5 h-3.5" />
+              <span>Select Models for Full Refresh</span>
+            </button>
+          )}
+
+          {/* Action: Full Refresh Entire Project */}
+          {!isRunning && isPassed && onTriggerFullRefresh && (
             <button
               type="button"
               onClick={() => onTriggerFullRefresh(report.run_id)}
               disabled={isTriggeringAction}
               className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 transition-all shadow-sm disabled:opacity-50"
-              title={`Execute dbt ${report.execution_mode === 'compile' || report.execution_mode === 'compile_only' ? 'compile' : 'run'} --full-refresh (matching earlier execution mode)`}
+              title="Start a fresh dbt run with --full-refresh on the entire project"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${isTriggeringAction ? 'animate-spin' : ''}`} />
-              <span>
-                Perform Full Refresh{' '}
-                <span className="opacity-80 font-normal">
-                  ({report.execution_mode === 'compile' || report.execution_mode === 'compile_only' ? 'dbt compile' : 'dbt run'})
-                </span>
-              </span>
+              <span>{isTriggeringAction ? 'Starting…' : 'Full Refresh Project'}</span>
             </button>
           )}
 

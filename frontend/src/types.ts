@@ -2,9 +2,36 @@ export interface StepResult {
   name: string
   command: string[]
   return_code: number | null
-  status: 'not_started' | 'running' | 'passed' | 'failed'
+  status: 'pending' | 'not_started' | 'running' | 'passed' | 'failed' | 'skipped'
   duration_seconds: number
   error: string | null
+}
+
+export type StageStatus = 'pending' | 'running' | 'passed' | 'failed' | 'skipped' | 'needs_configuration'
+export type DiagnosticCategory = 'ConfigurationError' | 'CompilationError' | 'MissingSourceData' | 'LocationMismatch' | 'ExecutionError' | 'TestFailure'
+
+export interface PipelineStage {
+  stage_id: string
+  status: StageStatus
+  summary: string
+  details: Record<string, any>
+  remediation?: { action: string; message: string; options?: Array<Record<string, any>> } | null
+}
+
+export interface Diagnostic {
+  category: DiagnosticCategory
+  message: string
+  stage_id: string
+  details?: Record<string, any>
+  next_action: string
+}
+
+export interface PipelineRemediation {
+  file_mappings: Record<string, { database: string; schema: string; table: string }>
+  approved_sql_scripts: string[]
+  sql_target_compatibility?: string
+  target_database?: string
+  target_schema?: string
 }
 
 export interface ModelExecution {
@@ -77,18 +104,32 @@ export interface IngestedTable {
   columns: Array<{ name: string; type: string }>
 }
 
+export interface IncrementalModelInfo {
+  unique_id: string
+  name: string
+  alias?: string
+  database?: string
+  schema?: string
+  materialized: 'incremental'
+  description?: string
+  package_name?: string
+  execution_status?: string
+}
+
 export interface RunReport {
   run_id: string
+  session_id?: string
   started_at: string
   finished_at: string
   project_dir: string
   data_location: string
   ducklake_metadata_location: string
-  overall_status: 'running' | 'passed' | 'failed' | 'unknown'
+  overall_status: 'running' | 'passed' | 'failed' | 'needs_configuration' | 'cancelled' | 'unknown'
   database_type: string
   execution_mode?: 'build' | 'run' | 'compile' | 'compile_only' | 'full' | string
   full_refresh?: boolean
   select?: string | null
+  incremental_models?: IncrementalModelInfo[]
   container_destroyed?: boolean
   ingested_tables?: IngestedTable[]
   steps: StepResult[]
@@ -106,6 +147,12 @@ export interface RunReport {
   rerun_verification: RerunVerification
   failure_details: string[]
   warning_details: string[]
+  pipeline_stages?: PipelineStage[]
+  diagnostics?: Diagnostic[]
+  next_action?: string
+  effective_target_config?: Record<string, any>
+  project_manifest?: Record<string, any>
+  artifact_snapshots?: Record<string, any>
 }
 
 export interface RunSummary {

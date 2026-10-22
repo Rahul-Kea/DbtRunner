@@ -1,8 +1,8 @@
 import React from 'react'
-import { Database, Play, History, Container } from 'lucide-react'
+import { Database, FileCode, History, Container } from 'lucide-react'
 
 interface HeaderProps {
-  onNewRun: () => void
+  onNewProject: () => void
   onToggleHistory: () => void
   showHistory: boolean
   onToggleContainers: () => void
@@ -10,7 +10,7 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({
-  onNewRun,
+  onNewProject,
   onToggleHistory,
   showHistory,
   onToggleContainers,
@@ -19,7 +19,7 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <header className="border-b border-[#30363d] bg-[#161b22] px-6 py-4 sticky top-0 z-30 shadow-md">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
-        <div className="flex items-center space-x-3 cursor-pointer" onClick={onNewRun}>
+        <div className="flex items-center space-x-3 cursor-pointer" onClick={onNewProject}>
           <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-orange-600 flex items-center justify-center shadow-lg shadow-orange-950/40">
             <Database className="w-5 h-5 text-white" />
           </div>
@@ -56,11 +56,11 @@ export const Header: React.FC<HeaderProps> = ({
           </button>
 
           <button
-            onClick={onNewRun}
+            onClick={onNewProject}
             className="flex items-center space-x-2 px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-orange-500 to-amber-600 text-white text-xs font-semibold hover:from-orange-600 hover:to-amber-700 shadow-md shadow-orange-900/30 transition-all active:scale-95"
           >
-            <Play className="w-3.5 h-3.5 fill-current" />
-            <span>New Run</span>
+            <FileCode className="w-3.5 h-3.5" />
+            <span>New Project</span>
           </button>
         </div>
       </div>
